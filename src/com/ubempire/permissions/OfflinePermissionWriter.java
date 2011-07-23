@@ -73,6 +73,7 @@ public class OfflinePermissionWriter {
 
 	public void setGroup(String Group) {
 		PlayerConfig.setProperty(PlayerName, Group);
+		PlayerConfig.save();
 	}
 	public List<String> getNodes()
 	{

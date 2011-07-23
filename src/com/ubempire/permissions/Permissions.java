@@ -71,32 +71,32 @@ public class Permissions extends JavaPlugin {
 		if(cmd.getName().equalsIgnoreCase("setgroup") && args.length==3)
 		{
 		//setGroup(Player, World, Group);
-		// ./setgroup world group player
-		pf.setGroup(args[2], args[0], args[1]);
-		Log(player, "set " + args[2] + " to " + args[1]+"!");
+		// ./setgroup player group world
+		pf.setGroup(args[0], args[2], args[1]);
+		Log(player, "set " + args[0] + " to " + args[1]+"!");
 		return true;
 		}
 		if(cmd.getName().equalsIgnoreCase("addnode") && args.length==3)
 		{
 		//addNode(Group,World,Node);
-		// ./addnode world group node
-		pf.addNode(args[1], args[0], args[2]);
-		Log(player, args[2] + " added to " + args[1]);
+		// ./addnode node group world
+		pf.addNode(args[1], args[2], args[0]);
+		Log(player, args[0] + " added to " + args[1]);
 		return true;
 		}
 		if(cmd.getName().equalsIgnoreCase("rmnode") && args.length==3)
 		{
 		//removeNode(Group,World,Node);
-		// ./rmnode world group node
-		pf.removeNode(args[1], args[0], args[2]);
-		Log(player, args[2] + " removed from " + args[1]);
+		// ./rmnode node group world
+		pf.removeNode(args[1], args[2], args[0]);
+		Log(player, args[0] + " removed from " + args[1]);
 		return true;
 		}
 		if(cmd.getName().equalsIgnoreCase("lsnode") && args.length==2)
 		{
 		//listNodes(Group, World);
-		// ./lsnode world group
-		List<String> nodes = pf.getNodes(args[1], args[0]);
+		// ./lsnode group world
+		List<String> nodes = pf.getNodes(args[0], args[1]);
 		String nodelist = "";
 		for(String node : nodes)
 		{

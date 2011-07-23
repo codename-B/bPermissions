@@ -11,16 +11,16 @@ commands:
   setgroup:
     description: sets the group of a player in a particular world
     usage: |
-      /<command> world group player
+      /<command> player group world
   addnode:
     description: add a node to a group
     usage: |
-      /<command> world group node
+      /<command> node group world
   rmnode:
     description: removes a node from a group
     usage: |
-      /<command> world group node
+      /<command> node group world
   lsnode:
     description: lists the nodes of a group
     usage: |
-      /<command> world group
+      /<command> group world
