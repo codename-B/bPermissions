@@ -102,7 +102,7 @@ public class Permissions extends JavaPlugin {
 				for (String node : nodes) {
 					nodelist = nodelist + " " + node;
 				}
-				Log(player, args[1] + " has these nodes");
+				Log(player, args[0] + " has these nodes");
 				Log(player, nodelist);
 				return true;
 			}
@@ -136,7 +136,7 @@ public class Permissions extends JavaPlugin {
 			for (String node : nodes) {
 				nodelist = nodelist + " " + node;
 			}
-			Log(player, args[1] + " has these nodes");
+			Log(player, args[0] + " has these nodes");
 			Log(player, nodelist);
 			return true;
 		}
