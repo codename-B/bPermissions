@@ -111,6 +111,7 @@ public class Permissions extends JavaPlugin {
 			// setGroup(Player, World, Group);
 			// ./setgroup player group world
 			pf.setGroup(args[0], args[2], args[1]);
+			pf.refreshPermissions();
 			Log(player, "set " + args[0] + " to " + args[1] + "!");
 			return true;
 		}
