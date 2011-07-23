@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class EntityHandler extends PlayerListener {
 
 	private final Permissions plugin;
+
 	/*
 	 * Initiate the listener
 	 */
@@ -36,11 +37,11 @@ public class EntityHandler extends PlayerListener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		plugin.pf.unsetPermissions(event.getPlayer());
 	}
+
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if(event.getFrom().getWorld()!=event.getTo().getWorld())
-		{
-		plugin.pf.unsetPermissions(event.getPlayer());
-		plugin.pf.getPermissions(event.getPlayer());
+		if (event.getFrom().getWorld() != event.getTo().getWorld()) {
+			plugin.pf.unsetPermissions(event.getPlayer());
+			plugin.pf.getPermissions(event.getPlayer());
 		}
 	}
 }

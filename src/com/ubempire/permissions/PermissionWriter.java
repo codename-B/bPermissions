@@ -52,15 +52,13 @@ public class PermissionWriter {
 		Configuration playerConfig = new Configuration(playerFile);
 		groupConfig.load();
 		playerConfig.load();
-		String playerGroup = playerConfig.getString(PlayerName,
-				null);
-		if(playerGroup==null)
-		{
-		playerConfig.setProperty(PlayerName, Permissions.defaultGroup);
-		playerConfig.save();
-		playerGroup = playerConfig.getString(PlayerName,
-				Permissions.defaultGroup);
-		
+		String playerGroup = playerConfig.getString(PlayerName, null);
+		if (playerGroup == null) {
+			playerConfig.setProperty(PlayerName, Permissions.defaultGroup);
+			playerConfig.save();
+			playerGroup = playerConfig.getString(PlayerName,
+					Permissions.defaultGroup);
+
 		}
 		List<String> PlayerPermissions = groupConfig.getStringList(playerGroup,
 				null);
@@ -90,10 +88,9 @@ public class PermissionWriter {
 			PlayerPermissions.remove(node);
 		GroupConfig.setProperty(PlayerGroup, PlayerPermissions);
 	}
-	
-	public String getGroupFileName()
-	{
-	return GroupFileName;
+
+	public String getGroupFileName() {
+		return GroupFileName;
 	}
 
 	public void save() {

@@ -13,19 +13,22 @@ public class OfflinePermissionWriter {
 	private Configuration GroupConfig;
 	private Configuration PlayerConfig;
 	private String GroupFileName;
-	private String GroupName=null;
+	private String GroupName = null;
 
-	OfflinePermissionWriter(String PlayerName, String WorldName, Permissions Permissions) {
+	OfflinePermissionWriter(String PlayerName, String WorldName,
+			Permissions Permissions) {
 		this.PlayerName = PlayerName;
 		this.WorldName = WorldName;
 		this.Permissions = Permissions;
 	}
-	
-	OfflinePermissionWriter(boolean nothing, String GroupName, String WorldName, Permissions Permissions) {
+
+	OfflinePermissionWriter(boolean nothing, String GroupName,
+			String WorldName, Permissions Permissions) {
 		this.WorldName = WorldName;
 		this.GroupName = GroupName;
 		this.Permissions = Permissions;
 	}
+
 	/**
 	 * This should be called first. Reads the corresponding world.yml files.
 	 */
@@ -53,18 +56,15 @@ public class OfflinePermissionWriter {
 		Configuration playerConfig = new Configuration(playerFile);
 		groupConfig.load();
 		playerConfig.load();
-		if(GroupName==null)
-		{
-		String playerGroup = playerConfig.getString(PlayerName,
-				null);
-		if(playerGroup==null)
-		{
-		playerConfig.setProperty(PlayerName, Permissions.defaultGroup);
-		playerConfig.save();
-		playerGroup = playerConfig.getString(PlayerName,
-				Permissions.defaultGroup);
-		
-		}
+		if (GroupName == null) {
+			String playerGroup = playerConfig.getString(PlayerName, null);
+			if (playerGroup == null) {
+				playerConfig.setProperty(PlayerName, Permissions.defaultGroup);
+				playerConfig.save();
+				playerGroup = playerConfig.getString(PlayerName,
+						Permissions.defaultGroup);
+
+			}
 		}
 		this.GroupConfig = groupConfig;
 		this.PlayerConfig = playerConfig;
@@ -75,15 +75,16 @@ public class OfflinePermissionWriter {
 		PlayerConfig.setProperty(PlayerName, Group);
 		PlayerConfig.save();
 	}
-	public List<String> getNodes()
-	{
-	if(GroupName==null)
-	return null;
-	return GroupConfig.getStringList(GroupName, null);
-		
+
+	public List<String> getNodes() {
+		if (GroupName == null)
+			return null;
+		return GroupConfig.getStringList(GroupName, null);
+
 	}
+
 	public void addNode(String node) {
-		if(GroupName==null)
+		if (GroupName == null)
 			return;
 		List<String> gNodes = GroupConfig.getStringList(GroupName, null);
 		gNodes.add(node);
@@ -92,7 +93,7 @@ public class OfflinePermissionWriter {
 	}
 
 	public void removeNode(String node) {
-		if(GroupName==null)
+		if (GroupName == null)
 			return;
 		List<String> gNodes = GroupConfig.getStringList(GroupName, null);
 		if (gNodes.contains(node))
@@ -100,10 +101,9 @@ public class OfflinePermissionWriter {
 		GroupConfig.setProperty(GroupName, gNodes);
 		GroupConfig.save();
 	}
-	
-	public String getGroupFileName()
-	{
-	return GroupFileName;
+
+	public String getGroupFileName() {
+		return GroupFileName;
 	}
 
 	public void save() {

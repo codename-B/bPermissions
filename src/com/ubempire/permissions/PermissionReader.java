@@ -50,15 +50,13 @@ public class PermissionReader {
 		Configuration playerConfig = new Configuration(playerFile);
 		groupConfig.load();
 		playerConfig.load();
-		String playerGroup = playerConfig.getString(PlayerName,
-				null);
-		if(playerGroup==null)
-		{
-		playerConfig.setProperty(PlayerName, Permissions.defaultGroup);
-		playerConfig.save();
-		playerGroup = playerConfig.getString(PlayerName,
-				Permissions.defaultGroup);
-		
+		String playerGroup = playerConfig.getString(PlayerName, null);
+		if (playerGroup == null) {
+			playerConfig.setProperty(PlayerName, Permissions.defaultGroup);
+			playerConfig.save();
+			playerGroup = playerConfig.getString(PlayerName,
+					Permissions.defaultGroup);
+
 		}
 		List<String> PlayerPermissions = groupConfig.getStringList(playerGroup,
 				null);
@@ -87,9 +85,8 @@ public class PermissionReader {
 	public String getWorld() {
 		return WorldName;
 	}
-	
-	public String getGroupFileName()
-	{
-	return GroupFileName;
+
+	public String getGroupFileName() {
+		return GroupFileName;
 	}
 }
