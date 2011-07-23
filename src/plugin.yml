@@ -1,0 +1,26 @@
+name: bPermissions
+version: 1.0
+author: codename_B
+website: http://tetragaming.com/codename_B/
+main: com.ubempire.permissions.Permissions
+commands:
+  nodereload:
+    description: reloads the nodes
+    usage: |
+      /<command>
+  setgroup:
+    description: sets the group of a player in a particular world
+    usage: |
+      /<command> world group player
+  addnode:
+    description: add a node to a group
+    usage: |
+      /<command> world group node
+  rmnode:
+    description: removes a node from a group
+    usage: |
+      /<command> world group node
+  lsnode:
+    description: lists the nodes of a group
+    usage: |
+      /<command> world group
