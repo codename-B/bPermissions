@@ -73,24 +73,28 @@ public class Permissions extends JavaPlugin {
 		if (sender instanceof Player && args.length < 3) {
 			Player Player = (Player) sender;
 			String world = Player.getWorld().getName();
-			if (cmd.getName().equalsIgnoreCase("setgroup") && args.length == 2) {
+			if (cmd.getName().equalsIgnoreCase("setgroup") && args.length == 3) {
 				// setGroup(Player, World, Group);
 				// ./setgroup player group world
-				pf.setGroup(args[0], world, args[1]);
+				pf.setGroup(args[0], world, args[1],
+						Boolean.parseBoolean(args[2]));
+				pf.refreshPermissions();
 				Log(player, "set " + args[0] + " to " + args[1] + "!");
 				return true;
 			}
-			if (cmd.getName().equalsIgnoreCase("addnode") && args.length == 2) {
+			if (cmd.getName().equalsIgnoreCase("addnode") && args.length == 3) {
 				// addNode(Group,World,Node);
 				// ./addnode node group world
-				pf.addNode(args[1], world, args[0]);
+				pf.addNode(args[1], world, args[0],
+						Boolean.parseBoolean(args[2]));
 				Log(player, args[0] + " added to " + args[1]);
 				return true;
 			}
-			if (cmd.getName().equalsIgnoreCase("rmnode") && args.length == 2) {
+			if (cmd.getName().equalsIgnoreCase("rmnode") && args.length == 3) {
 				// removeNode(Group,World,Node);
 				// ./rmnode node group world
-				pf.removeNode(args[1], world, args[0]);
+				pf.removeNode(args[1], world, args[0],
+						Boolean.parseBoolean(args[2]));
 				Log(player, args[0] + " removed from " + args[1]);
 				return true;
 			}
@@ -107,24 +111,26 @@ public class Permissions extends JavaPlugin {
 				return true;
 			}
 		}
-		if (cmd.getName().equalsIgnoreCase("setgroup") && args.length == 3) {
+		if (cmd.getName().equalsIgnoreCase("setgroup") && args.length == 4) {
 			// setGroup(Player, World, Group);
 			// ./setgroup player group world
-			pf.setGroup(args[0], args[2], args[1]);
+			pf.setGroup(args[0], args[2], args[1],
+					Boolean.parseBoolean(args[3]));
 			Log(player, "set " + args[0] + " to " + args[1] + "!");
 			return true;
 		}
-		if (cmd.getName().equalsIgnoreCase("addnode") && args.length == 3) {
+		if (cmd.getName().equalsIgnoreCase("addnode") && args.length == 34) {
 			// addNode(Group,World,Node);
 			// ./addnode node group world
-			pf.addNode(args[1], args[2], args[0]);
+			pf.addNode(args[1], args[2], args[0], Boolean.parseBoolean(args[3]));
 			Log(player, args[0] + " added to " + args[1]);
 			return true;
 		}
-		if (cmd.getName().equalsIgnoreCase("rmnode") && args.length == 3) {
+		if (cmd.getName().equalsIgnoreCase("rmnode") && args.length == 4) {
 			// removeNode(Group,World,Node);
 			// ./rmnode node group world
-			pf.removeNode(args[1], args[2], args[0]);
+			pf.removeNode(args[1], args[2], args[0],
+					Boolean.parseBoolean(args[3]));
 			Log(player, args[0] + " removed from " + args[1]);
 			return true;
 		}

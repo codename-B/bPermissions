@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
@@ -71,25 +73,59 @@ public class PermissionFunctions {
 		getAllPermissions();
 	}
 
-	public void setGroup(String PlayerName, String WorldName, String Group) {
-		OfflinePermissionWriter pr = new OfflinePermissionWriter(PlayerName,
-				WorldName, Permissions);
-		pr.readNodes();
-		pr.setGroup(Group);
+	public void setGroup(String PlayerName, String WorldName, String Group,
+			Boolean forWorlds) {
+		if (!forWorlds) {
+			OfflinePermissionWriter pr = new OfflinePermissionWriter(
+					PlayerName, WorldName, Permissions);
+			pr.readNodes();
+			pr.setGroup(Group);
+			return;
+		}
+		// Sets this player to the group for every world (yeah)
+		for (World w : Bukkit.getServer().getWorlds()) {
+			OfflinePermissionWriter pr = new OfflinePermissionWriter(
+					PlayerName, w.getName(), Permissions);
+			pr.readNodes();
+			pr.setGroup(Group);
+		}
+
 	}
 
-	public void addNode(String GroupName, String WorldName, String Node) {
-		OfflinePermissionWriter pr = new OfflinePermissionWriter(false,
-				GroupName, WorldName, Permissions);
-		pr.readNodes();
-		pr.addNode(Node);
+	public void addNode(String GroupName, String WorldName, String Node,
+			Boolean forWorlds) {
+		if (!forWorlds) {
+			OfflinePermissionWriter pr = new OfflinePermissionWriter(false,
+					GroupName, WorldName, Permissions);
+			pr.readNodes();
+			pr.addNode(Node);
+			return;
+		}
+		// Adds this node in ever world (yesa)
+		for (World w : Bukkit.getServer().getWorlds()) {
+			OfflinePermissionWriter pr = new OfflinePermissionWriter(false,
+					GroupName, w.getName(), Permissions);
+			pr.readNodes();
+			pr.addNode(Node);
+		}
 	}
 
-	public void removeNode(String GroupName, String WorldName, String Node) {
-		OfflinePermissionWriter pr = new OfflinePermissionWriter(false,
-				GroupName, WorldName, Permissions);
-		pr.readNodes();
-		pr.removeNode(Node);
+	public void removeNode(String GroupName, String WorldName, String Node,
+			Boolean forWorlds) {
+		if (!forWorlds) {
+			OfflinePermissionWriter pr = new OfflinePermissionWriter(false,
+					GroupName, WorldName, Permissions);
+			pr.readNodes();
+			pr.removeNode(Node);
+			return;
+		}
+		// Removes this node from every world. (yeah)
+		for (World w : Bukkit.getServer().getWorlds()) {
+			OfflinePermissionWriter pr = new OfflinePermissionWriter(false,
+					GroupName, w.getName(), Permissions);
+			pr.readNodes();
+			pr.removeNode(Node);
+		}
 	}
 
 	public List<String> getNodes(String GroupName, String WorldName) {
