@@ -17,6 +17,10 @@ public class Permissions extends JavaPlugin {
 	public String dataFolder = "plugins/bPermissions/";
 	public String defaultGroup = "default";
 	public PermissionFunctions pf;
+	
+	public void onLoad() {
+	    PermissionBridge.loadPseudoPlugin(this, getClassLoader());
+	}
 
 	@Override
 	public void onDisable() {
