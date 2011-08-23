@@ -25,18 +25,21 @@ class WorldPermissions implements PermissionSet {
 	 * The configuration object
 	 */
 	private final Configuration c;
+
 	/**
 	 * Just the logger man
+	 * 
 	 * @param input
 	 */
 	public void log(Object input) {
-		System.out.println("[bPermissions] "+String.valueOf(input));
+		System.out.println("[bPermissions] " + String.valueOf(input));
 	}
-	
+
 	public WorldPermissions(World world, JavaPlugin plugin) {
 		this.plugin = plugin;
 		this.world = world;
-		this.c = new Configuration(new File("plugins/bPermissions/worlds/"+world.getName()+".yml"));
+		this.c = new Configuration(new File("plugins/bPermissions/worlds/"
+				+ world.getName() + ".yml"));
 		setup();
 	}
 
@@ -47,54 +50,61 @@ class WorldPermissions implements PermissionSet {
 
 	@Override
 	public void setup() {
-		log("Setting up config for world:"+world.getName());
+		log("Setting up config for world:" + world.getName());
 		reload();
 	}
 
 	@Override
 	public void reload() {
 		c.load();
-		c.save();	
+		c.save();
 	}
 
 	@Override
 	public void addNode(String node, String group) {
-		List<String> groupNodes = c.getStringList("groups."+group, null);
-		if(groupNodes == null) {
-			log("the group:"+group+" does not exist for world:"+world.getName());
+		List<String> groupNodes = c.getStringList("groups." + group, null);
+		if (groupNodes == null) {
+			log("the group:" + group + " does not exist for world:"
+					+ world.getName());
 			return;
 		}
-		if(!groupNodes.contains(node)) {
-		groupNodes.add(node);
-		log("added node:"+node+" to group:"+group+" for world:"+world);
-		}
-		else
-		log("node:"+node+" already exists in group:"+group+" for world:"+world);
+		if (!groupNodes.contains(node)) {
+			groupNodes.add(node);
+			log("added node:" + node + " to group:" + group + " for world:"
+					+ world.getName());
+		} else {
+			log("node:" + node + " already exists in group:" + group
+					+ " for world:" + world.getName());
 		return;
+		}
+		c.setProperty("groups." + group, groupNodes);
+		c.save();
 	}
 
 	@Override
 	public void removeNode(String node, String group) {
-	List<String> groupNodes = c.getStringList("groups."+group, null);
-	if(groupNodes == null) {
-		log("the group:"+group+" does not exist for world:"+world.getName());
-		return;
-	}
-	if(groupNodes.contains(node)) {
-	groupNodes.remove(node);
-	log("removed node:"+node+" from group:"+group+" for world:"+world);
-	}
-	else {
-	log("node:"+node+" does not exist in group:"+group+" for world:"+world);
-	return;
-	}
-	c.setProperty("groups."+group, groupNodes);
-	c.save();
+		List<String> groupNodes = c.getStringList("groups." + group, null);
+		if (groupNodes == null) {
+			log("the group:" + group + " does not exist for world:"
+					+ world.getName());
+			return;
+		}
+		if (groupNodes.contains(node)) {
+			groupNodes.remove(node);
+			log("removed node:" + node + " from group:" + group + " for world:"
+					+ world.getName());
+		} else {
+			log("node:" + node + " does not exist in group:" + group
+					+ " for world:" + world.getName());
+			return;
+		}
+		c.setProperty("groups." + group, groupNodes);
+		c.save();
 	}
 
 	@Override
 	public List<String> getGroupNodes(String group) {
-		List<String> groupNodes = c.getStringList("groups."+group, null);
+		List<String> groupNodes = c.getStringList("groups." + group, null);
 		return groupNodes;
 	}
 
@@ -107,7 +117,7 @@ class WorldPermissions implements PermissionSet {
 	public List<String> getPlayerNodes(String player) {
 		List<String> playerGroups = getGroups(player);
 		List<String> playerNodes = new ArrayList<String>();
-		for(String group : playerGroups) {
+		for (String group : playerGroups) {
 			playerNodes.addAll(getGroupNodes(group));
 		}
 		return playerNodes;
@@ -120,12 +130,15 @@ class WorldPermissions implements PermissionSet {
 
 	@Override
 	public List<String> getGroups(String player) {
-		List<String> playerGroups = c.getStringList("players."+player, null);
-		if(playerGroups == null || playerGroups.size() == 0) {
+		List<String> playerGroups = c.getStringList("players." + player, null);
+		if (playerGroups == null || playerGroups.size() == 0) {
 			playerGroups = new ArrayList<String>();
-			playerGroups.add(c.getString("default","default"));
-			log(player+" does not have a group in world:"+world.getName()+", creating an entry for them and setting them to the default group");
-			c.setProperty("players."+player, playerGroups);
+			playerGroups.add(c.getString("default", "default"));
+			log(player
+					+ " does not have a group in world:"
+					+ world.getName()
+					+ ", creating an entry for them and setting them to the default group");
+			c.setProperty("players." + player, playerGroups);
 			c.save();
 		}
 		return playerGroups;
@@ -133,21 +146,21 @@ class WorldPermissions implements PermissionSet {
 
 	@Override
 	public void addGroup(Player player, String group) {
-		addGroup(player.getName(),group);
+		addGroup(player.getName(), group);
 	}
 
 	@Override
 	public void addGroup(String player, String group) {
-		List<String> playerGroups = c.getStringList("players."+player, null);
-		if(!playerGroups.contains(group)) {
-		playerGroups.add(group);
-		log("Group:"+group+" added to player:"+player);
+		List<String> playerGroups = c.getStringList("players." + player, null);
+		if (!playerGroups.contains(group)) {
+			playerGroups.add(group);
+			log("Group:" + group + " added to player:" + player + " in world:" + world.getName());
+		} else {
+			log("Group:" + group + " could not be added to player:" + player
+					+ " in world:"+world.getName()+" as the player already has this group");
+			return;
 		}
-		else {
-		log("Group:"+group+" could not be added to player:"+player+" as the player already has this group");
-		return;
-		}
-		c.setProperty("players."+player, playerGroups);
+		c.setProperty("players." + player, playerGroups);
 		c.save();
 	}
 
@@ -158,25 +171,25 @@ class WorldPermissions implements PermissionSet {
 
 	@Override
 	public void removeGroup(String player, String group) {
-		List<String> playerGroups = c.getStringList("players."+player, null);
-		if(playerGroups.contains(group)) {
-		playerGroups.add(group);
-		log("Group:"+group+" removed from player:"+player);
+		List<String> playerGroups = c.getStringList("players." + player, null);
+		if (playerGroups.contains(group)) {
+			playerGroups.add(group);
+			log("Group:" + group + " removed from player:" + player + " in world:" + world.getName());
+		} else {
+			log("Group:" + group + " could not be removed from player:"
+					+ player + " in world:"+world.getName()+" as the player does not have this group");
+			return;
 		}
-		else {
-		log("Group:"+group+" could not be removed from player:"+player+" as the player does not have this group");
-		return;
-		}
-		c.setProperty("players."+player, playerGroups);
+		c.setProperty("players." + player, playerGroups);
 		c.save();
 	}
 
 	@Override
 	public void setupPlayers() {
-		for(Player player : world.getPlayers()) {
-		SuperPermissionHandler sp = new SuperPermissionHandler(player);
-		sp.unsetupPlayer();
-		sp.setupPlayer(this.getPlayerNodes(player),plugin);
+		for (Player player : world.getPlayers()) {
+			SuperPermissionHandler sp = new SuperPermissionHandler(player);
+			sp.unsetupPlayer();
+			sp.setupPlayer(this.getPlayerNodes(player), plugin);
 		}
 	}
 

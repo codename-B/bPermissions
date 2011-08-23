@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuperPermissionHandler {
 	private final Player p;
-	
+
 	public SuperPermissionHandler(Player p) {
 		this.p = p;
 	}
@@ -19,34 +19,29 @@ public class SuperPermissionHandler {
 	public void setupPlayer(List<String> nodes, JavaPlugin plugin) {
 		PermissionAttachment att = p.addAttachment(plugin);
 		for (String node : nodes) {
-			if(node.contains("^")) {
-			att.setPermission(node.replace("^", ""), false);
-			}
-			else {
-			att.setPermission(node, true);
+			if (node.contains("^")) {
+				att.setPermission(node.replace("^", ""), false);
+			} else {
+				att.setPermission(node, true);
 			}
 		}
 	}
 
 	public void unsetupPlayer() {
-			Set<PermissionAttachmentInfo> pAtt = p.getEffectivePermissions();
-			if(pAtt != null)
-			{
-			for(PermissionAttachmentInfo pInfo : pAtt)
-			{
-			PermissionAttachment pa = pInfo.getAttachment();
-			Map<String,Boolean> paNodes = pa.getPermissions();
-			if(paNodes != null)
-			{
-			Set<String> keys = paNodes.keySet();
-			for(String key : keys)
-			{
-			pa.unsetPermission(key);
-			}
-			}
+		Set<PermissionAttachmentInfo> pAtt = p.getEffectivePermissions();
+		if (pAtt != null) {
+			for (PermissionAttachmentInfo pInfo : pAtt) {
+				PermissionAttachment pa = pInfo.getAttachment();
+				Map<String, Boolean> paNodes = pa.getPermissions();
+				if (paNodes != null) {
+					Set<String> keys = paNodes.keySet();
+					for (String key : keys) {
+						pa.unsetPermission(key);
+					}
+				}
 			}
 			p.recalculatePermissions();
-			}
 		}
+	}
 
 }
