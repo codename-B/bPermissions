@@ -58,6 +58,7 @@ class WorldPermissions implements PermissionSet {
 	public void reload() {
 		c.load();
 		c.save();
+		setupPlayers();
 	}
 
 	@Override
@@ -79,6 +80,7 @@ class WorldPermissions implements PermissionSet {
 		}
 		c.setProperty("groups." + group, groupNodes);
 		c.save();
+		setupPlayers();
 	}
 
 	@Override
@@ -100,6 +102,7 @@ class WorldPermissions implements PermissionSet {
 		}
 		c.setProperty("groups." + group, groupNodes);
 		c.save();
+		setupPlayers();
 	}
 
 	@Override
@@ -140,6 +143,7 @@ class WorldPermissions implements PermissionSet {
 					+ ", creating an entry for them and setting them to the default group");
 			c.setProperty("players." + player, playerGroups);
 			c.save();
+			setupPlayers();
 		}
 		return playerGroups;
 	}
@@ -162,6 +166,7 @@ class WorldPermissions implements PermissionSet {
 		}
 		c.setProperty("players." + player, playerGroups);
 		c.save();
+		setupPlayers();
 	}
 
 	@Override
@@ -173,7 +178,7 @@ class WorldPermissions implements PermissionSet {
 	public void removeGroup(String player, String group) {
 		List<String> playerGroups = c.getStringList("players." + player, null);
 		if (playerGroups.contains(group)) {
-			playerGroups.add(group);
+			playerGroups.remove(group);
 			log("Group:" + group + " removed from player:" + player + " in world:" + world.getName());
 		} else {
 			log("Group:" + group + " could not be removed from player:"
@@ -182,6 +187,7 @@ class WorldPermissions implements PermissionSet {
 		}
 		c.setProperty("players." + player, playerGroups);
 		c.save();
+		setupPlayers();
 	}
 
 	@Override

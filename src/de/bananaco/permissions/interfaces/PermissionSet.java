@@ -111,5 +111,4 @@ public interface PermissionSet {
 	 * Sets up the online players in that world
 	 */
 	public void setupPlayers();
-
 }

@@ -77,6 +77,8 @@ public class WorldPermissionsManager {
 			return ps.get(world);
 		} else {
 			World w = jp.getServer().getWorld(world);
+			if(w == null)
+				return null;
 			PermissionSet p = new WorldPermissions(w, jp);
 			ps.put(world, p);
 			return p;

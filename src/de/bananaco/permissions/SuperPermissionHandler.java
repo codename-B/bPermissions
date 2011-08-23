@@ -32,6 +32,7 @@ public class SuperPermissionHandler {
 		if (pAtt != null) {
 			for (PermissionAttachmentInfo pInfo : pAtt) {
 				PermissionAttachment pa = pInfo.getAttachment();
+				if(pa != null) {
 				Map<String, Boolean> paNodes = pa.getPermissions();
 				if (paNodes != null) {
 					Set<String> keys = paNodes.keySet();
@@ -39,6 +40,7 @@ public class SuperPermissionHandler {
 						pa.unsetPermission(key);
 					}
 				}
+			}
 			}
 			p.recalculatePermissions();
 		}

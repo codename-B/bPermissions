@@ -58,8 +58,8 @@ public class Permissions extends JavaPlugin {
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
 
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, pl, Priority.Monitor, this);
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Monitor, this);
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
 		
 		log("Enabled");
 	}
@@ -167,6 +167,8 @@ class PermissionsPlayerListener extends PlayerListener {
 			event.setCancelled(true);
 	}
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		if(!permissions.isEnabled())
+			return;
 		if(event.isCancelled())
 			return;
 		if(event.getPlayer() == null)
