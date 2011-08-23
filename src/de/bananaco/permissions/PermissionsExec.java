@@ -17,7 +17,7 @@ public class PermissionsExec {
 	}
 	private String checkPlayer(String player) {
 		Player players = plugin.getServer().getPlayer(player);
-		if(player != null)
+		if(players != null)
 			return players.getName();
 		return player;
 	}
@@ -30,8 +30,8 @@ public class PermissionsExec {
 		}
 
 		if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addGroup)) {
-			String player = args[2];
-			String group = args[3];
+			String player = args[3];
+			String group = args[2];
 			player = checkPlayer(player);
 			
 			PermissionSet p = plugin.pm.getPermissionSet(w);
@@ -40,8 +40,8 @@ public class PermissionsExec {
 			return true;
 		} else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.removeGroup)) {
-			String player = args[2];
-			String group = args[3];
+			String player = args[3];
+			String group = args[2];
 			player = checkPlayer(player);
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);

@@ -7,8 +7,8 @@ commands:
   permissions:
     description: reloads the nodes
     usage: |
-      /<command> help for usage
+      /<command>
   p:
     description: reloads the nodes
     usage: |
-      /<command> help for usage
+      /<command>

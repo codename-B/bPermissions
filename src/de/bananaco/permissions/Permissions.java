@@ -84,7 +84,7 @@ public class Permissions extends JavaPlugin {
 		}
 		if (!allowed) {
 			sender.sendMessage("Are you sure you're doing that right?");
-			return false;
+			return true;
 		}
 		if (args.length > 0) {
 			if(args.length == 1) {
