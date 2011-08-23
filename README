@@ -1,43 +1,54 @@
-config.yml - any player who does not have a group specified will default to the group specified here.
+Version 1.2 of bPermissions brings a complete command restructuring with configurable commands!
 
-default: groupname
+************config.yml************
+commands:
+    global-command: global
+    world-command: world
+    add-node: addnode
+    list-node: lsnode
+    add-group: addgroup
+    local-command: local
+    remove-node: rmnode
+    list-group: lsgroup
+    remove-group: rmgroup
+**********************************
 
-groups/worldname.yml
+Explanation:
+	global-command: sets the designation for editing in all worlds
+	world-command: sets the designation for editing a specific worlds permissions
+	local-command: sets the designation for editing the permissions of the world you are in (in-game only)
+	add-node: sets the command for adding a node
+	remove-node: sets the command for removing a node
+	list-node: sets the command for listing nodes
+	add-group: sets the command for adding a group
+	remove-group: sets the command for removing a group
+	list-group: sets the command for listing a group
 
-groupname:
-- node.node.node
-- node.node.node
-- node.node.node
-- node.node.node
-- node.node.node
-groupname2:
-- node.node.node
-- node.node.node
-- node.node.node
-- node.node.node
-- node.node.node
+How to use:
+/p|permissions designation(world|local|global) command target (?world)
 
-players/worldname.yml
+Examples:
+/p world addnode bPermissions.admin admin world
+/p global addgroup builders
+/permissions local rmgroup EvilSeph admin
 
-playername: groupname
-playername2: groupname
-playername3: groupname
-playername4: groupname2
+*********worldname.yml************
+default: group1
+players:
+    playername:
+    - group1
+    codename_B:
+    - group1
+groups:
+    group1:
+    - node.node
+    - ^node2.node
+    - bPermissions.build
+**********************************
 
-Commands:
+Negative permissions?
+Just prefix the permission node with the "^" symbol for example "^node2.node" will mean that player.hasPermission("node2.node") will return false nomatter what.
 
-    * /setgroup playername groupname worldname - sets a player to a group
-    * /addnode node.node groupname worldname - adds a node to a group
-    * /rmnode node.node groupname worldname - removes a node from a group
-    * /lsnode groupname worldname - lists all the nodes of a group
-    * /nodereload - reloads all nodes
-
-Defaults:
-
-    * If there is no players/worldname.yml and no groups/worldname.yml then the plugin will default to defaultGroups.yml and defaultPlayers.yml
-    * This can be used in preference over any group/world specific groups if you wish global groups, or if you want per-world groups and permissions, simply setup the individual files in the defined format.
-
-Coming soon:
-
-    * Tags defined by permission nodes
-    * bPermissions -> Permissions 2.7 bridge
+Spacing?
+Yes, unfortunately the expanding config file means we have had to add spacing into the config file. We hope that it's still manageable for you.
+Remember, if you can't format yaml correctly, you can always do everything by the commands!
