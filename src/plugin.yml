@@ -1,26 +1,14 @@
 name: bPermissions
-version: 1.0
+version: 1.2
 author: codename_B
 website: http://tetragaming.com/codename_B/
-main: com.ubempire.permissions.Permissions
+main: de.bananaco.permissions.Permissions
 commands:
-  nodereload:
+  permissions:
     description: reloads the nodes
     usage: |
-      /<command>
-  setgroup:
-    description: sets the group of a player in a particular world
+      /<command> help for usage
+  p:
+    description: reloads the nodes
     usage: |
-      /<command> player group world
-  addnode:
-    description: add a node to a group
-    usage: |
-      /<command> node group world
-  rmnode:
-    description: removes a node from a group
-    usage: |
-      /<command> node group world
-  lsnode:
-    description: lists the nodes of a group
-    usage: |
-      /<command> group world
+      /<command> help for usage
