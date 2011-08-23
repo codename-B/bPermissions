@@ -74,13 +74,11 @@ public class Permissions extends JavaPlugin {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command,	String label, String[] args) {
 		boolean allowed = true;
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			allowed = (player.hasPermission("bPermissions.admin") || player
-					.isOp());
+			allowed = (player.hasPermission("bPermissions.admin") || player.isOp());
 		}
 		if (!allowed) {
 			sender.sendMessage("Are you sure you're doing that right?");
@@ -157,15 +155,20 @@ class PermissionsPlayerListener extends PlayerListener {
 	public boolean can(Player player) {
 		return (player.hasPermission("bPermissions.build") || player.hasPermission("bPermissions.admin") || player.isOp());
 	}
-	
+
+	@Override
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if(!can(event.getPlayer()))
 			event.setCancelled(true);
 	}
+
+	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if(!can(event.getPlayer()))
 			event.setCancelled(true);
 	}
+
+	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		if(!permissions.isEnabled())
 			return;
