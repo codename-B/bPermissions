@@ -23,7 +23,8 @@ public class Permissions extends JavaPlugin {
 
 	public WorldPermissionsManager pm;
 	private static WorldPermissionsManager perm;
-
+	public ImportManager im;
+	
 	public Configuration c;
 	public WorldCommands worldExec;
 	public LocalCommands localExec;
@@ -32,12 +33,12 @@ public class Permissions extends JavaPlugin {
 	public String globalCommand;
 	public String localCommand;
 	public String worldCommand;
-	public String addGroup = "addgroup";
-	public String removeGroup = "rmgroup";
-	public String listGroup = "lsgroup";
-	public String addNode = "addnode";
-	public String removeNode = "rmnode";
-	public String listNode = "lsnode";
+	public String addGroup;
+	public String removeGroup;
+	public String listGroup;
+	public String addNode;
+	public String removeNode;
+	public String listNode;
 	
 	@Override
 	public void onLoad() {
@@ -51,6 +52,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		im = new ImportManager(this);
 		setupConfig();
 		setupCommands();
 		pm = new WorldPermissionsManager(this);
@@ -70,7 +72,7 @@ public class Permissions extends JavaPlugin {
 	 * @param input
 	 */
 	public void log(Object input) {
-		System.out.println("[bPermissions] " + String.valueOf(input));
+		System.out.println("[bPermissions "+this.getDescription().getVersion()+"] " + String.valueOf(input));
 	}
 
 	@Override
@@ -90,6 +92,20 @@ public class Permissions extends JavaPlugin {
 					pm.addAllWorlds();
 					sender.sendMessage("Permissions reloaded.");
 					return true;
+				}
+			}
+			if(args.length == 2) {
+				if(args[0].equalsIgnoreCase("import")) {
+					if(args[1].equalsIgnoreCase("p3")) {
+						sender.sendMessage("Ok? Here goes!");
+						im.importPermissions3();
+						return true;
+					}
+					if(args[1].equalsIgnoreCase("gm")) {
+						sender.sendMessage("Ok? Here goes!");
+						im.importGroupManager();
+						return true;
+					}
 				}
 			}
 			if (args[0].equalsIgnoreCase(this.globalCommand))
