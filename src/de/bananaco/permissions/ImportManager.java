@@ -34,11 +34,12 @@ public class ImportManager {
 			for(String group : groupsList) {
 				List<String> nodes = pConfig.getKeys("groups."+group+".permissions");
 				List<String> wnodes = pConfig.getKeys("groups."+group+".worlds."+world.getName());
+				if(nodes!=null)
 				for(String node : nodes)
-				ps.addNode(pConfig.getBoolean("groups."+group+".permissions."+node, false)?node:"^"+node,group);
-				
+				ps.addNode(!pConfig.getBoolean("groups."+group+".permissions."+node, false)?node:"^"+node,group);
+				if(wnodes != null)
 				for(String node : wnodes)
-				ps.addNode(pConfig.getBoolean("groups."+group+".worlds."+world.getName()+"."+node, false)?node:"^"+node,group);
+				ps.addNode(!pConfig.getBoolean("groups."+group+".worlds."+world.getName()+"."+node, false)?node:"^"+node,group);
 				
 			}
 			

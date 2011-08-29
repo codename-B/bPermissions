@@ -116,6 +116,7 @@ public class Permissions extends JavaPlugin {
 					if(args[1].equalsIgnoreCase("pb")) {
 						sender.sendMessage("Ok? Here goes!");
 						im.importPermissionsBukkit();
+						return true;
 					}
 				}
 			}
