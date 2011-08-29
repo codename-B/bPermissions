@@ -15,6 +15,36 @@ public class ImportManager {
 	public ImportManager(JavaPlugin plugin) {
 		this.plugin = plugin;
 	}
+	public void importPermissionsBukkit() {
+		WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	
+		for(World world : plugin.getServer().getWorlds()) {
+			PermissionSet ps = wpm.getPermissionSet(world);
+			File perms = new File("plugins/PermissionsBukkit/config.yml");
+			Configuration pConfig = new Configuration(perms);
+			pConfig.load();
+			List<String> usersList = pConfig.getKeys("users");
+			List<String> groupsList = pConfig.getKeys("groups");
+			
+			for(String player : usersList) {
+				List<String> groups = pConfig.getStringList("users."+player+"groups", null);
+				for(String group : groups)
+					ps.addGroup(player, group);
+			}
+			
+			for(String group : groupsList) {
+				List<String> nodes = pConfig.getKeys("groups."+group+".permissions");
+				List<String> wnodes = pConfig.getKeys("groups."+group+".worlds."+world.getName());
+				for(String node : nodes)
+				ps.addNode(pConfig.getBoolean("groups."+group+".permissions."+node, false)?node:"^"+node,group);
+				
+				for(String node : wnodes)
+				ps.addNode(pConfig.getBoolean("groups."+group+".worlds."+world.getName()+"."+node, false)?node:"^"+node,group);
+				
+			}
+			
+			
+		}
+	}
 	
 	public void importGroupManager() {
 

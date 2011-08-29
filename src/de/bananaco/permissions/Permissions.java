@@ -113,6 +113,10 @@ public class Permissions extends JavaPlugin {
 						im.importYML();
 						return true;
 					}
+					if(args[1].equalsIgnoreCase("pb")) {
+						sender.sendMessage("Ok? Here goes!");
+						im.importPermissionsBukkit();
+					}
 				}
 			}
 			if (args[0].equalsIgnoreCase(this.globalCommand))
