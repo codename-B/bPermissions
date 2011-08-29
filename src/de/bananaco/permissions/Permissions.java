@@ -40,6 +40,8 @@ public class Permissions extends JavaPlugin {
 	public String removeNode;
 	public String listNode;
 	
+	public boolean bml;
+	
 	@Override
 	public void onLoad() {
 	    PermissionBridge.loadPseudoPlugin(this, getClassLoader());
@@ -106,6 +108,11 @@ public class Permissions extends JavaPlugin {
 						im.importGroupManager();
 						return true;
 					}
+					if(args[1].equalsIgnoreCase("yml")) {
+						sender.sendMessage("Ok? Here goes!");
+						im.importYML();
+						return true;
+					}
 				}
 			}
 			if (args[0].equalsIgnoreCase(this.globalCommand))
@@ -131,6 +138,9 @@ public class Permissions extends JavaPlugin {
 
 	public void setupConfig() {
 		c = this.getConfiguration();
+		
+		bml = c.getBoolean("use-bml", false);
+		
 		globalCommand = c.getString("commands.global-command", "global");
 		localCommand = c.getString("commands.local-command", "local");
 		worldCommand = c.getString("commands.world-command", "world");
@@ -143,6 +153,8 @@ public class Permissions extends JavaPlugin {
 		removeNode = c.getString("commands.remove-node", "rmnode");
 		listNode = c.getString("commands.list-node", "lsnode");
 
+		c.setProperty("use-bml", bml);
+		
 		c.setProperty("commands.global-command", globalCommand);
 		c.setProperty("commands.local-command", localCommand);
 		c.setProperty("commands.world-command", worldCommand);

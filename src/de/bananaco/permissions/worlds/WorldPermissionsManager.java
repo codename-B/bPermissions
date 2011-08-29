@@ -3,8 +3,7 @@ package de.bananaco.permissions.worlds;
 import java.util.HashMap;
 
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
-
+import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
 public class WorldPermissionsManager {
@@ -15,14 +14,14 @@ public class WorldPermissionsManager {
 	/**
 	 * The instance of the main class
 	 */
-	private final JavaPlugin jp;
+	private final Permissions jp;
 
 	/**
 	 * Instantiate this bitch
 	 * 
 	 * @param jp
 	 */
-	public WorldPermissionsManager(JavaPlugin jp) {
+	public WorldPermissionsManager(Permissions jp) {
 		this.ps = new HashMap<String, PermissionSet>();
 		this.jp = jp;
 		this.addAllWorlds();
@@ -40,7 +39,7 @@ public class WorldPermissionsManager {
 				p.reload();
 			}
 			else
-				p = new WorldPermissions(world, jp);
+				p = jp.bml? new NewWorldPermissions(world, jp) : new WorldPermissions(world, jp);
 			p.setupPlayers();
 			ps.put(world.getName(), p);
 			log("Setup world:" + world.getName());

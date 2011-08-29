@@ -45,7 +45,29 @@ public class ImportManager {
 		}
 		
 	}
-	
+	public void importYML() {
+		WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	
+		for(World world : plugin.getServer().getWorlds()) {
+			PermissionSet ps = wpm.getPermissionSet(world);
+			File perms = new File("plugins/bPermissions/worlds/"+world.getName()+".yml");
+			Configuration pConfig = new Configuration(perms);
+			pConfig.load();
+			List<String> usersList = pConfig.getKeys("players");
+			List<String> groupsList = pConfig.getKeys("groups");
+			
+			for(String player : usersList) {
+				for(String group : pConfig.getStringList("players."+player, null)) {
+				ps.addGroup(player, group);	
+				}
+			}
+			for(String group : groupsList) {
+				for(String node : pConfig.getStringList("groups."+group, null)) {
+					ps.addNode(node, group);
+				}
+			}
+			
+		}
+	}
 	public void importPermissions3() {
 		
 	WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	

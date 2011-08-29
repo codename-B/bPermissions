@@ -7,12 +7,12 @@ import java.util.List;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 import de.bananaco.permissions.SuperPermissionHandler;
+import de.bananaco.permissions.config.Configuration;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
-class WorldPermissions implements PermissionSet {
+class NewWorldPermissions implements PermissionSet {
 	/**
 	 * The main class instance
 	 */
@@ -25,6 +25,7 @@ class WorldPermissions implements PermissionSet {
 	 * The configuration object
 	 */
 	private final Configuration c;
+
 	/**
 	 * Just the logger man
 	 * 
@@ -34,11 +35,11 @@ class WorldPermissions implements PermissionSet {
 		System.out.println("[bPermissions] " + String.valueOf(input));
 	}
 
-	public WorldPermissions(World world, JavaPlugin plugin) {
+	public NewWorldPermissions(World world, JavaPlugin plugin) {
 		this.plugin = plugin;
 		this.world = world;
 		this.c = new Configuration(new File("plugins/bPermissions/worlds/"
-				+ world.getName() + ".yml"));
+				+ world.getName() + ".bml"));
 		setup();
 	}
 
@@ -135,7 +136,7 @@ class WorldPermissions implements PermissionSet {
 		List<String> playerGroups = c.getStringList("players." + player, null);
 		if (playerGroups == null || playerGroups.size() == 0) {
 			playerGroups = new ArrayList<String>();
-			playerGroups.add(c.getString("default", "default"));
+			playerGroups.add((c.getStringList("default").size()==0)? "default" : c.getStringList("default").get(0));
 			log(player
 					+ " does not have a group in world:"
 					+ world.getName()

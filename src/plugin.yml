@@ -1,5 +1,5 @@
 name: bPermissions
-version: ${project.version}
+version: 1.2.2
 author: codename_B
 website: http://tetragaming.com/codename_B/
 main: de.bananaco.permissions.Permissions
