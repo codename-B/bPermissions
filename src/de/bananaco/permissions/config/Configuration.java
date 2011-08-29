@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Configuration extends ConfigurationNode {
+	public static final String tab = "\t";
 	private final File file;
 	public Configuration(String string) {
 		super(new HashMap<String,Object>());
@@ -79,12 +80,17 @@ public class Configuration extends ConfigurationNode {
 				String addition = split[i]+":";
 				for(int p=0; p<i; p++)
 				addition = ":"+addition;
+				for(int p=0; p<i; p++)
+				addition = "\t"+addition;
 				if(!output.contains(addition))
 				output.add(addition);
 			}
+			String addition = "";
+			for(int p=0; p<split.length; p++)
+			addition = "\t"+addition;
 			List<String> props = this.getStringList(key);
 			for(String prop : props)
-				output.add(prop);
+				output.add(addition+prop);
 		}
 		for(String line : output)
 			bw.write(line+"\r");
@@ -92,14 +98,18 @@ public class Configuration extends ConfigurationNode {
 		bw.close();
 		output.clear();
 	}
-	
+	private String strip(String line) {
+		while(line.contains("\t"))
+			line = line.replace("\t", "");
+		return line;
+	}
 	private void readFile() throws Exception {
 		ArrayList<String> lines = new ArrayList<String>();
 		ArrayList<String> pLines = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(file))));
 		String line;
 		while((line = br.readLine()) != null)
-			lines.add(line);
+			lines.add(strip(line));
 		br.close();
 		for(int i=0; i<lines.size(); i++) {
 			line = lines.get(i);
