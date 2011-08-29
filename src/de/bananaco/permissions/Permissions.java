@@ -1,5 +1,9 @@
 package de.bananaco.permissions;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,6 +44,8 @@ public class Permissions extends JavaPlugin {
 	public String removeNode;
 	public String listNode;
 	
+	public Map<String,String> mirror;
+	
 	public boolean bml;
 	
 	@Override
@@ -54,6 +60,8 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		mirror = new HashMap<String,String>();
+		
 		im = new ImportManager(this);
 		setupConfig();
 		setupCommands();
@@ -143,6 +151,11 @@ public class Permissions extends JavaPlugin {
 
 	public void setupConfig() {
 		c = this.getConfiguration();
+		
+		List<String> mirrors = c.getKeys("mirrors");
+		if(mirrors!=null)
+			for(String world : mirrors)
+				mirror.put(world, c.getString("mirrors."+world));
 		
 		bml = c.getBoolean("use-bml", false);
 		

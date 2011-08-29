@@ -34,12 +34,17 @@ public class WorldPermissionsManager {
 	public void addAllWorlds() {
 		for (World world : jp.getServer().getWorlds()) {
 			PermissionSet p = null;
-			if(ps.containsKey(world.getName())) {
-				p = ps.get(world.getName());
+			
+			String wName = world.getName();
+			if(jp.mirror.containsKey(world.getName()) && jp.mirror.get(world.getName()) != null)
+				wName = jp.mirror.get(world.getName());
+			World tWorld = jp.getServer().getWorld(wName)!=null?jp.getServer().getWorld(wName):world;
+			if(ps.containsKey(wName)) {
+				p = this.getPermissionSet(wName);
 				p.reload();
 			}
 			else
-				p = jp.bml? new NewWorldPermissions(world, jp) : new WorldPermissions(world, jp);
+				p = jp.bml? new NewWorldPermissions(tWorld, jp) : new WorldPermissions(tWorld, jp);
 			p.setupPlayers();
 			ps.put(world.getName(), p);
 			log("Setup world:" + world.getName());
@@ -72,6 +77,8 @@ public class WorldPermissionsManager {
 	 * @return PermissionSet
 	 */
 	public PermissionSet getPermissionSet(String world) {
+		if(jp.mirror.containsKey(world) && jp.mirror.get(world) != null)
+			world = jp.mirror.get(world);
 		if (ps.containsKey(world)) {
 			return ps.get(world);
 		} else {
