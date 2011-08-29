@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
@@ -68,11 +70,15 @@ public class Permissions extends JavaPlugin {
 		pm = new WorldPermissionsManager(this);
 		perm = pm;
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
-
+		
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
 		
+		getServer().getPluginManager().addPermission(new Permission("bPermissions.admin"));
+		getServer().getPluginManager().addPermission(new Permission("bPermissions.build"));
+		
+		getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {public void run() {pm.addAllWorlds();}},20);
 		log("Enabled");
 	}
 

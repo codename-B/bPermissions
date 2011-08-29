@@ -42,8 +42,6 @@ public class ImportManager {
 				ps.addNode(!pConfig.getBoolean("groups."+group+".worlds."+world.getName()+"."+node, false)?node:"^"+node,group);
 				
 			}
-			
-			
 		}
 	}
 	
