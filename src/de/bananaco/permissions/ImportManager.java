@@ -24,13 +24,13 @@ public class ImportManager {
 			pConfig.load();
 			List<String> usersList = pConfig.getKeys("users");
 			List<String> groupsList = pConfig.getKeys("groups");
-			
+			if(usersList!=null)
 			for(String player : usersList) {
 				List<String> groups = pConfig.getStringList("users."+player+"groups", null);
 				for(String group : groups)
 					ps.addGroup(player, group);
 			}
-			
+			if(groupsList!=null)
 			for(String group : groupsList) {
 				List<String> nodes = pConfig.getKeys("groups."+group+".permissions");
 				List<String> wnodes = pConfig.getKeys("groups."+group+".worlds."+world.getName());
@@ -60,6 +60,8 @@ public class ImportManager {
 			gConfig.load();
 			List<String> usersList = uConfig.getKeys("users");
 			List<String> groupsList = gConfig.getKeys("groups");
+			
+			if(usersList!=null)
 			for(String player : usersList) {
 				String mainGroup = uConfig.getString("users."+player+".group");
 				ps.addGroup(player, mainGroup);
@@ -67,7 +69,7 @@ public class ImportManager {
 				ps.addGroup(player, group);	
 				}
 			}
-			
+			if(groupsList!=null)
 			for(String group : groupsList) {
 				for(String node : gConfig.getStringList("groups."+group+".permissions", null)) {
 					ps.addNode(node, group);
@@ -85,12 +87,13 @@ public class ImportManager {
 			pConfig.load();
 			List<String> usersList = pConfig.getKeys("players");
 			List<String> groupsList = pConfig.getKeys("groups");
-			
+			if(usersList!=null)
 			for(String player : usersList) {
 				for(String group : pConfig.getStringList("players."+player, null)) {
 				ps.addGroup(player, group);	
 				}
 			}
+			if(groupsList!=null)
 			for(String group : groupsList) {
 				for(String node : pConfig.getStringList("groups."+group, null)) {
 					ps.addNode(node, group);
@@ -112,11 +115,13 @@ public class ImportManager {
 		gConfig.load();
 		List<String> usersList = uConfig.getKeys("users");
 		List<String> groupsList = gConfig.getKeys("groups");
+		if(usersList!=null)
 		for(String player : usersList) {
 			for(String group : uConfig.getStringList("users."+player+".groups", null)) {
 			ps.addGroup(player, group);	
 			}
 		}
+		if(groupsList!=null)
 		for(String group : groupsList) {
 			for(String node : gConfig.getStringList("groups."+group+".permissions", null)) {
 				ps.addNode(node, group);
