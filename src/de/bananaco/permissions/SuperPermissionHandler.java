@@ -17,6 +17,7 @@ public class SuperPermissionHandler {
 	}
 
 	public void setupPlayer(List<String> nodes, JavaPlugin plugin) {
+		unsetupPlayer();
 		PermissionAttachment att = p.addAttachment(plugin);
 		for (String node : nodes) {
 			if (node.contains("^")) {
