@@ -77,13 +77,22 @@ public class Configuration extends ConfigurationNode {
 		for(String key : getAll().keySet()) {
 			String[] split = key.split("\\.");
 			for(int i=0; i<split.length; i++) {
+				String line = "";
+				for(int p=0; p<=i; p++)
+				line = (p==i)?line + split[p]:line + split[p] + ".";
+				
 				String addition = split[i]+":";
 				for(int p=0; p<i; p++)
 				addition = ":"+addition;
 				for(int p=0; p<i; p++)
 				addition = "\t"+addition;
-				if(!output.contains(addition))
+				
+				String comment = getComment(line);
+				if(!output.contains(addition)) {
 				output.add(addition);
+				if(comment != null)
+					output.add(comment);
+				}
 			}
 			String addition = "";
 			for(int p=0; p<split.length; p++)
@@ -113,7 +122,10 @@ public class Configuration extends ConfigurationNode {
 		br.close();
 		for(int i=0; i<lines.size(); i++) {
 			line = lines.get(i);
-			if(line.endsWith(":") && !line.startsWith(":")) {
+			if(line.startsWith("#")) {
+				this.comment(convert(pLines), line);
+			}
+			else if(line.endsWith(":") && !line.startsWith(":")) {
 				pLines.clear();
 				pLines.add(line);
 			}

@@ -11,10 +11,11 @@ import java.util.TreeMap;
 /**
  * Represents a configuration node.
  */
-public class ConfigurationNode {
+public class ConfigurationNode extends CommentNode {
     protected Map<String, Object> root;
 
     protected ConfigurationNode(Map<String, Object> root) {
+    	super(new HashMap<String, String>());
         this.root = root;
     }
 
