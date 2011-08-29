@@ -73,7 +73,8 @@ public class Configuration extends ConfigurationNode {
 	private void saveFile() throws Exception {
 		ArrayList<String> output = new ArrayList<String>();
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new DataOutputStream(new FileOutputStream(file)),"UTF-8"));
-		
+		if(this.getComment("") != null)
+			output.add(getAndRemoveComment(""));
 		for(String key : getAll().keySet()) {
 			String[] split = key.split("\\.");
 			for(int i=0; i<split.length; i++) {
@@ -86,12 +87,15 @@ public class Configuration extends ConfigurationNode {
 				addition = ":"+addition;
 				for(int p=0; p<i; p++)
 				addition = "\t"+addition;
+				String tabs = "";
+				for(int p=0; p<i; p++)
+					tabs = "\t"+tabs;
 				
-				String comment = getComment(line);
+				String comment = getAndRemoveComment(line);
 				if(!output.contains(addition)) {
 				output.add(addition);
 				if(comment != null)
-					output.add(comment);
+					output.add(tabs + comment);
 				}
 			}
 			String addition = "";
@@ -117,6 +121,7 @@ public class Configuration extends ConfigurationNode {
 		ArrayList<String> pLines = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(file))));
 		String line;
+		int lastNotComment = 0;
 		while((line = br.readLine()) != null)
 			lines.add(strip(line));
 		br.close();
@@ -128,14 +133,17 @@ public class Configuration extends ConfigurationNode {
 			else if(line.endsWith(":") && !line.startsWith(":")) {
 				pLines.clear();
 				pLines.add(line);
+				lastNotComment = i;
 			}
 			else if(line.endsWith(":")) {
 				int thiscount = count(line);
 				for(int p=pLines.size()-1; p>=thiscount; p--)
 				pLines.remove(p);
 				pLines.add(line);
+				lastNotComment = i;
 				}
-			else if(!line.endsWith(":") && i>0 && lines.get(i-1).endsWith(":")) {
+			else if(!line.endsWith(":") && i>0 && lines.get(lastNotComment).endsWith(":")) {
+				lastNotComment = i;
 				ArrayList<String> props = new ArrayList<String>();
 				for(int p=i; !lines.get(p).endsWith(":"); p++) {
 					props.add(lines.get(p));

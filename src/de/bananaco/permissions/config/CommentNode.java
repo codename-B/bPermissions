@@ -13,11 +13,17 @@ public class CommentNode {
 		else
 		map.put(node, "#"+comment.replace("#", ""));
 	}
-	public String getComment(String node) {
+	public String getAndRemoveComment(String node) {
 		if(!map.containsKey(node))
 			return null;
 		String comment = map.get(node);
 		map.remove(node);
+		return comment;
+	}
+	public String getComment(String node) {
+		if(!map.containsKey(node))
+			return null;
+		String comment = map.get(node);
 		return comment;
 	}
 }
