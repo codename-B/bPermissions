@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,7 +76,7 @@ public class Permissions extends JavaPlugin {
 		
 		getServer().getPluginManager().addPermission(new Permission("bPermissions.admin"));
 		getServer().getPluginManager().addPermission(new Permission("bPermissions.build"));
-		
+		if(getServer().getPluginManager().getPlugin("Spout")!=null)
 		getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {public void run() {pm.addAllWorlds();}},20);
 		log("Enabled");
 	}

@@ -7,7 +7,10 @@ public class CommentNode {
 	protected CommentNode(Map<String, String> map) {
 		this.map = map;
 	}
-	public void comment(String node, String comment) {
+	public void clear() {
+		map.clear();
+	}
+	public void comment(String node, String comment) {		
 		if(map.containsKey(node))
 		map.put(node, map.get(node)+"\r#"+comment.replace("#", ""));
 		else

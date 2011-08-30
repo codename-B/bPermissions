@@ -53,10 +53,31 @@ class NewWorldPermissions implements PermissionSet {
 		log("Setting up config for world:" + world.getName());
 		reload();
 	}
-
+	
 	@Override
 	public void reload() {
 		c.load();
+		if(c.getComment("")==null) {
+			c.comment("", "Welcome to the bPermissions config file!");
+			c.comment("", "If you're seeing this message, you've decided to make the change to our new .bml format, well done.");
+			c.comment("", "This makes you part of an elite group of people, and also improves the performance of bPermissions.");
+			c.comment("", "To import your .yml permissions to .bml use /p import yml");
+			c.comment("", "Don't worry, you can still import P3, GM etc using their relevant commands too!");
+		}
+		if(c.getComment("players")==null) {
+			c.comment("players", "This is where the players and their groups are stored!");
+			c.comment("players", "Some relevant commands:");
+			c.comment("players", "/p global addgroup playername");
+			c.comment("players", "/p global rmgroup playername");
+			c.comment("players", "/p global lsgroup playername");
+		}
+		if(c.getComment("groups")==null) {
+			c.comment("groups", "This is where the groups and their permission nodes are stored!");
+			c.comment("groups", "Some relevant commands:");
+			c.comment("groups", "/p global addnode node.node groupname");
+			c.comment("groups", "/p global rmnode node.node groupname");
+			c.comment("groups", "/p global lsnode groupname");
+		}
 		c.save();
 		setupPlayers();
 	}

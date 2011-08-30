@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Configuration extends ConfigurationNode {
@@ -43,6 +44,7 @@ public class Configuration extends ConfigurationNode {
 				file.getAbsoluteFile().getParentFile().mkdirs();
 				file.createNewFile();
 			}
+			clear();
 			readFile();
 		}
 		catch (Exception e) {
@@ -57,6 +59,7 @@ public class Configuration extends ConfigurationNode {
 				file.createNewFile();
 			}
 			saveFile();
+			load();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -72,6 +75,8 @@ public class Configuration extends ConfigurationNode {
 	}
 	private void saveFile() throws Exception {
 		ArrayList<String> output = new ArrayList<String>();
+		HashSet<String> comments = new HashSet<String>();
+		
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new DataOutputStream(new FileOutputStream(file)),"UTF-8"));
 		if(this.getComment("") != null)
 			output.add(getAndRemoveComment(""));
@@ -91,11 +96,13 @@ public class Configuration extends ConfigurationNode {
 				for(int p=0; p<i; p++)
 					tabs = "\t"+tabs;
 				
-				String comment = getAndRemoveComment(line);
+				String comment = getComment(line);
+				
 				if(!output.contains(addition)) {
 				output.add(addition);
-				if(comment != null)
+				if(comment != null  && !comments.contains(line))
 					output.add(tabs + comment);
+					comments.add(line);
 				}
 			}
 			String addition = "";
@@ -110,6 +117,7 @@ public class Configuration extends ConfigurationNode {
 		bw.flush();
 		bw.close();
 		output.clear();
+		comments.clear();
 	}
 	private String strip(String line) {
 		while(line.contains("\t"))
