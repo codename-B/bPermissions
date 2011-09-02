@@ -20,9 +20,7 @@ public class MonkeyPlayer extends CraftPlayer {
 	public boolean hasPermission(String name) {
 		boolean has = isOp();
 		try {
-			
 			has = internalHasPermission(name);
-			System.out.println(this.getName() + " " + name + ":" + has);
 		} catch (Exception e) {
 			System.err.println("[bPermissions] Something horrible went wrong. Please turn off your computer and walk away.");
 		}
