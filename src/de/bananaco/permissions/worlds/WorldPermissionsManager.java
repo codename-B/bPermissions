@@ -46,6 +46,8 @@ public class WorldPermissionsManager {
 			else
 				p = jp.bml? new NewWorldPermissions(tWorld, jp) : new WorldPermissions(tWorld, jp);
 			p.setupPlayers();
+			
+			
 			ps.put(world.getName(), p);
 			log("Setup world:" + world.getName());
 		}

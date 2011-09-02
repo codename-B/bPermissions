@@ -6,18 +6,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.World;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
+import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.config.Configuration;
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.override.MonkeyPlayer;
 
 class NewWorldPermissions extends TransitionPermissions implements PermissionSet {
 	/**
 	 * The main class instance
 	 */
-	private final JavaPlugin plugin;
+	private final Permissions plugin;
 	/**
 	 * The world
 	 */
@@ -36,7 +37,7 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		System.out.println("[bPermissions] " + String.valueOf(input));
 	}
 
-	public NewWorldPermissions(World world, JavaPlugin plugin) {
+	public NewWorldPermissions(World world, Permissions plugin) {
 		super(new HashMap<String, ArrayList<String>>());
 		this.plugin = plugin;
 		this.world = world;
@@ -222,4 +223,36 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		}
 	}
 
+	@Override
+	public boolean has(Player player, String node) {
+		List<String> pNodes = getPlayerNodes(player);
+		if(pNodes.contains("^"+node))
+			return false;
+		if(pNodes.contains(node))
+			return true;
+		return player.isOp();
+	}
+	
+	@Override
+	public void overrideCraftPlayers() {
+		for(Player player : getWorld().getPlayers()) {
+		if (Permissions.useMonkeyPlayer && plugin.overridePlayer) {
+
+        if (!(player instanceof CraftPlayer)) {
+            System.err.println("Player is not an instance of CraftPlayer! "+player.getName());
+            return;
+        }
+        MonkeyPlayer newPlayer = new MonkeyPlayer((CraftPlayer) player);
+        try {
+            Permissions.entity_bukkitEntity.set(newPlayer.getHandle(), newPlayer);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error while attempting to replace CraftPlayer with MonkeyPlayer");
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            System.err.println("Error while attempting to replace CraftPlayer with MonkeyPlayer");
+            e.printStackTrace();
+        }
+    }
+}
+}
 }

@@ -41,7 +41,6 @@ public class PermissionBridge extends PermissionHandler {
                 return player.hasPermission(wildcard);
             index = permission.lastIndexOf('.');
         }
-        
         return player.hasPermission("*");
     }
 
