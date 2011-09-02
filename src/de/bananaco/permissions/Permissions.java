@@ -1,5 +1,6 @@
 package de.bananaco.permissions;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +18,54 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
-
 import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class Permissions extends JavaPlugin {
+	
+	public final MonkeyListener listener = new MonkeyListener(this);
+
+    /**
+     * Whether to use MonkeyPlayer class to proxy CraftPlayer. 
+     * Will only be true if CraftPlayer was found.
+     */
+    public static final boolean useMonkeyPlayer;
+    public static final Field entity_bukkitEntity;
+    static {
+        boolean result = true;
+        try {
+            Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer");
+        } catch (ClassNotFoundException e) {
+            System.err.println("Cannot use MonkeyPlayer unless on CraftBukkit! Not attempting to use!");
+            result = false;
+        }
+        Field field_bukkitEntity = null;
+        try {
+            @SuppressWarnings("rawtypes")
+			Class class_Entity = Class.forName("net.minecraft.server.Entity");
+
+            field_bukkitEntity = class_Entity.getDeclaredField("bukkitEntity");
+            field_bukkitEntity.setAccessible(true);
+        } catch (ClassNotFoundException e) {
+            System.err.println("net.minecrat.server.Entity missing, cannot use MonkeyPlayer!");
+            result = false;
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            System.err.println("net.minecrat.server.Entity missing field bukkitEntity, cannot use MonkeyPlayer!");
+            result = false;
+            e.printStackTrace();
+        }
+        useMonkeyPlayer = result;
+        if (useMonkeyPlayer) {
+            entity_bukkitEntity = field_bukkitEntity;
+        } else {
+            entity_bukkitEntity = null;
+        }
+    }
 
 	public WorldPermissionsManager pm;
 	private static WorldPermissionsManager perm;
@@ -48,6 +89,8 @@ public class Permissions extends JavaPlugin {
 	public Map<String,String> mirror;
 	
 	public boolean bml;
+
+	public boolean overridePlayer;
 	
 	@Override
 	public void onLoad() {
@@ -73,6 +116,7 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, listener, Priority.Lowest, this);
 		
 		getServer().getPluginManager().addPermission(new Permission("bPermissions.admin"));
 		getServer().getPluginManager().addPermission(new Permission("bPermissions.build"));
@@ -164,6 +208,8 @@ public class Permissions extends JavaPlugin {
 		
 		bml = c.getBoolean("use-bml", false);
 		
+		overridePlayer = c.getBoolean("override-player", false);
+		
 		globalCommand = c.getString("commands.global-command", "global");
 		localCommand = c.getString("commands.local-command", "local");
 		worldCommand = c.getString("commands.world-command", "world");
@@ -177,6 +223,8 @@ public class Permissions extends JavaPlugin {
 		listNode = c.getString("commands.list-node", "lsnode");
 
 		c.setProperty("use-bml", bml);
+		
+		c.setProperty("override-player", overridePlayer);
 		
 		c.setProperty("commands.global-command", globalCommand);
 		c.setProperty("commands.local-command", localCommand);

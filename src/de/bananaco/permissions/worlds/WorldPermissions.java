@@ -2,6 +2,7 @@ package de.bananaco.permissions.worlds;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.World;
@@ -12,7 +13,7 @@ import org.bukkit.util.config.Configuration;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
-class WorldPermissions implements PermissionSet {
+class WorldPermissions extends TransitionPermissions implements PermissionSet{
 	/**
 	 * The main class instance
 	 */
@@ -35,6 +36,7 @@ class WorldPermissions implements PermissionSet {
 	}
 
 	public WorldPermissions(World world, JavaPlugin plugin) {
+		super(new HashMap<String,ArrayList<String>>());
 		this.plugin = plugin;
 		this.world = world;
 		this.c = new Configuration(new File("plugins/bPermissions/worlds/"
