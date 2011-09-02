@@ -12,6 +12,7 @@ import org.bukkit.util.config.Configuration;
 
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.interfaces.TransitionSet;
 
 class WorldPermissions extends TransitionPermissions implements PermissionSet{
 	/**
@@ -124,6 +125,8 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 		for (String group : playerGroups) {
 			playerNodes.addAll(getGroupNodes(group));
 		}
+		List<String> transitionNodes = ((TransitionSet) this).listTransNodes(player);
+		playerNodes.addAll(transitionNodes);
 		return playerNodes;
 	}
 
