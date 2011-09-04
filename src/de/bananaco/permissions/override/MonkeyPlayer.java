@@ -32,7 +32,6 @@ public class MonkeyPlayer extends CraftPlayer {
     	PermissionSet p = Permissions.getWorldPermissionsManager().getPermissionSet(getWorld());
         if (isPermissionSet(name))
             return p.has(this, name);
-        System.out.println("test");
         int index = name.lastIndexOf('.');
         while (index >= 0) {
             name = name.substring(0, index);
