@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,52 +26,55 @@ import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class Permissions extends JavaPlugin {
-	
+
 	public final MonkeyListener listener = new MonkeyListener(this);
 
-    /**
-     * Whether to use MonkeyPlayer class to proxy CraftPlayer. 
-     * Will only be true if CraftPlayer was found.
-     */
-    public static final boolean useMonkeyPlayer;
-    public static final Field entity_bukkitEntity;
-    static {
-        boolean result = true;
-        try {
-            Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer");
-        } catch (ClassNotFoundException e) {
-            System.err.println("Cannot use MonkeyPlayer unless on CraftBukkit! Not attempting to use!");
-            result = false;
-        }
-        Field field_bukkitEntity = null;
-        try {
-            @SuppressWarnings("rawtypes")
+	/**
+	 * Whether to use MonkeyPlayer class to proxy CraftPlayer. Will only be true
+	 * if CraftPlayer was found.
+	 */
+	public static final boolean useMonkeyPlayer;
+	public static final Field entity_bukkitEntity;
+	static {
+		boolean result = true;
+		try {
+			Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer");
+		} catch (ClassNotFoundException e) {
+			System.err
+					.println("Cannot use MonkeyPlayer unless on CraftBukkit! Not attempting to use!");
+			result = false;
+		}
+		Field field_bukkitEntity = null;
+		try {
+			@SuppressWarnings("rawtypes")
 			Class class_Entity = Class.forName("net.minecraft.server.Entity");
 
-            field_bukkitEntity = class_Entity.getDeclaredField("bukkitEntity");
-            field_bukkitEntity.setAccessible(true);
-        } catch (ClassNotFoundException e) {
-            System.err.println("net.minecrat.server.Entity missing, cannot use MonkeyPlayer!");
-            result = false;
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            System.err.println("net.minecrat.server.Entity missing field bukkitEntity, cannot use MonkeyPlayer!");
-            result = false;
-            e.printStackTrace();
-        }
-        useMonkeyPlayer = result;
-        if (useMonkeyPlayer) {
-            entity_bukkitEntity = field_bukkitEntity;
-        } else {
-            entity_bukkitEntity = null;
-        }
-    }
+			field_bukkitEntity = class_Entity.getDeclaredField("bukkitEntity");
+			field_bukkitEntity.setAccessible(true);
+		} catch (ClassNotFoundException e) {
+			System.err
+					.println("net.minecrat.server.Entity missing, cannot use MonkeyPlayer!");
+			result = false;
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			System.err
+					.println("net.minecrat.server.Entity missing field bukkitEntity, cannot use MonkeyPlayer!");
+			result = false;
+			e.printStackTrace();
+		}
+		useMonkeyPlayer = result;
+		if (useMonkeyPlayer) {
+			entity_bukkitEntity = field_bukkitEntity;
+		} else {
+			entity_bukkitEntity = null;
+		}
+	}
 
 	public WorldPermissionsManager pm;
 	private static WorldPermissionsManager perm;
 	private static InfoReader info;
 	public ImportManager im;
-	
+
 	public Configuration c;
 	public WorldCommands worldExec;
 	public LocalCommands localExec;
@@ -85,20 +89,22 @@ public class Permissions extends JavaPlugin {
 	public String addNode;
 	public String removeNode;
 	public String listNode;
-	
-	public Map<String,String> mirror;
-	
+
+	public Map<String, String> mirror;
+
 	public boolean bml;
 
 	public boolean overridePlayer;
-	
+
 	@Override
 	public void onLoad() {
-	    PermissionBridge.loadPseudoPlugin(this, getClassLoader());
-	    info = new InfoReader();
-		getServer().getServicesManager().register(PlayerInfo.class, info, this, ServicePriority.Normal);
+		
+		info = new InfoReader();
+		getServer().getServicesManager().register(PlayerInfo.class, info, this,
+				ServicePriority.Normal);
+		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
 	}
-	
+
 	@Override
 	public void onDisable() {
 		log("Disabled");
@@ -106,8 +112,10 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		mirror = new HashMap<String,String>();
-		
+		sanityCheck();
+
+		mirror = new HashMap<String, String>();
+
 		im = new ImportManager(this);
 		setupConfig();
 		setupCommands();
@@ -115,17 +123,51 @@ public class Permissions extends JavaPlugin {
 		perm = pm;
 		info.instantiate();
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
-		
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, listener, Priority.Lowest, this);
-		
-		getServer().getPluginManager().addPermission(new Permission("bPermissions.admin"));
-		getServer().getPluginManager().addPermission(new Permission("bPermissions.build"));
-		if(getServer().getPluginManager().getPlugin("Spout")!=null)
-		getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {public void run() {pm.addAllWorlds();}},20);
+
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN,
+				listener, Priority.Lowest, this);
+
+		getServer().getPluginManager().addPermission(
+				new Permission("bPermissions.admin"));
+		getServer().getPluginManager().addPermission(
+				new Permission("bPermissions.build"));
+		if (getServer().getPluginManager().getPlugin("Spout") != null)
+			getServer().getScheduler().scheduleAsyncDelayedTask(this,
+					new Runnable() {
+						public void run() {
+							pm.addAllWorlds();
+						}
+					}, 20);
 		log("Enabled");
+	}
+
+	/**
+	 * May as well include this - it'll let even the most lazy of server owners
+	 * know it's time to get rid of bInfo
+	 */
+	public void sanityCheck() {
+		if (getServer().getPluginManager().getPlugin("bInfo") != null) {
+			getServer().getScheduler().scheduleAsyncRepeatingTask(this,
+					new Runnable() {
+
+						@Override
+						public void run() {
+							getServer()
+									.broadcastMessage(
+											ChatColor.RED
+													+ "bInfo is installed! Please uninstall it for bPermissions to work correctly!");
+							System.err
+									.println("bInfo is installed! Please uninstall it for bPermissions to work correctly!");
+						}
+
+					}, 100, 100);
+		}
 	}
 
 	/**
@@ -134,46 +176,50 @@ public class Permissions extends JavaPlugin {
 	 * @param input
 	 */
 	public void log(Object input) {
-		System.out.println("[bPermissions "+this.getDescription().getVersion()+"] " + String.valueOf(input));
+		System.out.println("[bPermissions "
+				+ this.getDescription().getVersion() + "] "
+				+ String.valueOf(input));
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,	String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command,
+			String label, String[] args) {
 		boolean allowed = true;
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
-			allowed = (player.hasPermission("bPermissions.admin") || player.isOp());
+			allowed = (player.hasPermission("bPermissions.admin") || player
+					.isOp());
 		}
 		if (!allowed) {
 			sender.sendMessage("Are you sure you're doing that right?");
 			return true;
 		}
 		if (args.length > 0) {
-			if(args.length == 1) {
-				if(args[0].equalsIgnoreCase("reload")) {
+			if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("reload")) {
 					pm.addAllWorlds();
 					sender.sendMessage("Permissions reloaded.");
 					return true;
 				}
 			}
-			if(args.length == 2) {
-				if(args[0].equalsIgnoreCase("import")) {
-					if(args[1].equalsIgnoreCase("p3")) {
+			if (args.length == 2) {
+				if (args[0].equalsIgnoreCase("import")) {
+					if (args[1].equalsIgnoreCase("p3")) {
 						sender.sendMessage("Ok? Here goes!");
 						im.importPermissions3();
 						return true;
 					}
-					if(args[1].equalsIgnoreCase("gm")) {
+					if (args[1].equalsIgnoreCase("gm")) {
 						sender.sendMessage("Ok? Here goes!");
 						im.importGroupManager();
 						return true;
 					}
-					if(args[1].equalsIgnoreCase("yml")) {
+					if (args[1].equalsIgnoreCase("yml")) {
 						sender.sendMessage("Ok? Here goes!");
 						im.importYML();
 						return true;
 					}
-					if(args[1].equalsIgnoreCase("pb")) {
+					if (args[1].equalsIgnoreCase("pb")) {
 						sender.sendMessage("Ok? Here goes!");
 						im.importPermissionsBukkit();
 						return true;
@@ -203,16 +249,16 @@ public class Permissions extends JavaPlugin {
 
 	public void setupConfig() {
 		c = this.getConfiguration();
-		
+
 		List<String> mirrors = c.getKeys("mirrors");
-		if(mirrors!=null)
-			for(String world : mirrors)
-				mirror.put(world, c.getString("mirrors."+world));
-		
+		if (mirrors != null)
+			for (String world : mirrors)
+				mirror.put(world, c.getString("mirrors." + world));
+
 		bml = c.getBoolean("use-bml", false);
-		
+
 		overridePlayer = c.getBoolean("override-player", false);
-		
+
 		globalCommand = c.getString("commands.global-command", "global");
 		localCommand = c.getString("commands.local-command", "local");
 		worldCommand = c.getString("commands.world-command", "world");
@@ -226,9 +272,9 @@ public class Permissions extends JavaPlugin {
 		listNode = c.getString("commands.list-node", "lsnode");
 
 		c.setProperty("use-bml", bml);
-		
+
 		c.setProperty("override-player", overridePlayer);
-		
+
 		c.setProperty("commands.global-command", globalCommand);
 		c.setProperty("commands.local-command", localCommand);
 		c.setProperty("commands.world-command", worldCommand);
@@ -247,7 +293,7 @@ public class Permissions extends JavaPlugin {
 	public static WorldPermissionsManager getWorldPermissionsManager() {
 		return Permissions.perm;
 	}
-	
+
 	public static InfoReader getInfoReader() {
 		return info;
 	}

@@ -134,6 +134,7 @@ public class PermissionBridge extends PermissionHandler {
     @Override
     public String getGroupPermissionString(String world, String groupName, String permission) {
         unsupportedOperation();
+        System.err.println("[bPermissions] Unsupported! getGroupPermissionString();");
         return null;
     }
 
@@ -156,8 +157,21 @@ public class PermissionBridge extends PermissionHandler {
 
     @Override
     public String getUserPermissionString(String world, String userName, String permission) {
+    	System.out.println("permission: " + permission);
+    	if(permission.equalsIgnoreCase("prefix")) {
+    		System.out.println("prefix: " + permission);	
+    	String prefix = infoReader.getPrefix(userName, world);
+    	System.out.println("prefix: "+prefix);
+    	return prefix;
+    	}
+    	if(permission.equalsIgnoreCase("suffix")) {
+    		System.out.println("suffix: " + permission);
+    	String suffix = infoReader.getSuffix(userName, world);
+    	System.out.println("suffix: "+suffix);
+    	return suffix;
+    	}
         unsupportedOperation();
-        return null;
+        return "";
     }
 
     @Override
@@ -179,8 +193,7 @@ public class PermissionBridge extends PermissionHandler {
 
     @Override
     public String getPermissionString(String world, String userName, String permission) {
-        unsupportedOperation();
-        return null;
+        return this.getUserPermissionString(world, userName, permission);
     }
 
     @Override
