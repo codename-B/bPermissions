@@ -10,18 +10,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.permissions.Permission;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
+
+import com.ubempire.binfo.PlayerInfo;
 
 import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
-import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -69,6 +68,7 @@ public class Permissions extends JavaPlugin {
 
 	public WorldPermissionsManager pm;
 	private static WorldPermissionsManager perm;
+	private static InfoReader info;
 	public ImportManager im;
 	
 	public Configuration c;
@@ -95,6 +95,8 @@ public class Permissions extends JavaPlugin {
 	@Override
 	public void onLoad() {
 	    PermissionBridge.loadPseudoPlugin(this, getClassLoader());
+	    info = new InfoReader();
+		getServer().getServicesManager().register(PlayerInfo.class, info, this, ServicePriority.Normal);
 	}
 	
 	@Override
@@ -111,6 +113,7 @@ public class Permissions extends JavaPlugin {
 		setupCommands();
 		pm = new WorldPermissionsManager(this);
 		perm = pm;
+		info.instantiate();
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
 		
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
@@ -244,40 +247,8 @@ public class Permissions extends JavaPlugin {
 	public static WorldPermissionsManager getWorldPermissionsManager() {
 		return Permissions.perm;
 	}
-}
-class PermissionsPlayerListener extends PlayerListener {
-	private final Permissions permissions;
-	public PermissionsPlayerListener(Permissions permissions) {
-		this.permissions = permissions;
-	}
 	
-	public boolean can(Player player) {
-		return (player.hasPermission("bPermissions.build") || player.hasPermission("bPermissions.admin") || player.isOp());
-	}
-
-	@Override
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if(!can(event.getPlayer()))
-			event.setCancelled(true);
-	}
-
-	@Override
-	public void onPlayerInteract(PlayerInteractEvent event) {
-		if(!can(event.getPlayer()))
-			event.setCancelled(true);
-	}
-
-	@Override
-	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if(!permissions.isEnabled())
-			return;
-		if(event.isCancelled())
-			return;
-		if(event.getPlayer() == null)
-			return;
-		if(event.getTo() == null)
-			return;
-		PermissionSet ps = permissions.pm.getPermissionSet(event.getTo().getWorld());
-		new SuperPermissionHandler(event.getPlayer()).setupPlayer(ps.getPlayerNodes(event.getPlayer()), permissions);
+	public static InfoReader getInfoReader() {
+		return info;
 	}
 }

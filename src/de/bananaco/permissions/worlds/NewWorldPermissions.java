@@ -255,4 +255,5 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
     }
 }
 }
+
 }

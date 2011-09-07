@@ -19,12 +19,14 @@ import org.bukkit.util.config.Configuration;
 
 import com.nijiko.permissions.PermissionHandler;
 
+import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
 public class PermissionBridge extends PermissionHandler {
 
     private final Server server = Bukkit.getServer();
     private Permissions permissions;
+    private InfoReader infoReader = Permissions.getInfoReader();
     
     /**
      * internal permissions check method
@@ -80,7 +82,7 @@ public class PermissionBridge extends PermissionHandler {
     @Override
     public String getGroup(String world, String userName) {
         List<String> groups = internalGetGroups(world, userName);
-        return groups.isEmpty() ? null : groups.get(0);
+        return groups.isEmpty() ? null : groups.get(groups.size()-1);
     }
 
     @Override
@@ -116,12 +118,12 @@ public class PermissionBridge extends PermissionHandler {
 
     @Override
     public String getGroupPrefix(String world, String groupName) {
-        return "";
+    	return infoReader.getGroupPrefix(groupName, world);
     }
 
     @Override
     public String getGroupSuffix(String world, String groupName) {
-        return "";
+        return infoReader.getGroupSuffix(groupName, world);
     }
 
     @Override
