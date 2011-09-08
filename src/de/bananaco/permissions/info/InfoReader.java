@@ -18,107 +18,112 @@ public class InfoReader implements PlayerInfo {
 	public void instantiate() {
 		wpm = Permissions.getWorldPermissionsManager();
 	}
-	
+	/**
+	 * The workhorse of getGroupValue();
+	 * @param group
+	 * @param world
+	 * @param valueToGet
+	 * @return String
+	 */
+	public String getGroupValue(String group, String world, String valueToGet) {
+		String value = "";
+		int priority = -1;
+		for(String set : wpm.getPermissionSet(world).getGroupNodes(group)) {
+			if(!set.startsWith("^")) {
+			String name = set;
+	        String[] index = name.split("\\.", 4);
+	        if(index.length==3 && index[0].equals(valueToGet)) {
+	        	int pr = Integer.parseInt(index[1]);
+	        	if(pr > priority)
+	        	value = index[2];
+	        }
+	        }
+		}
+		return value;
+	}
+	/**
+	 * The workhorse of getValue();
+	 * @param player
+	 * @param world
+	 * @param valueToGet
+	 * @return String
+	 */
+	public String getValue(String player, String world, String valueToGet) {
+		String value = "";
+		int priority = -1;
+		for(String set : wpm.getPermissionSet(world).getPlayerNodes(player) != null ? wpm.getPermissionSet(world).getPlayerNodes(player) : new ArrayList<String>()) {
+			if(!set.startsWith("^")) {
+			String name = set;
+	        String[] index = name.split("\\.", 4);
+	        if(index.length==3 && index[0].equals(valueToGet)) {
+	        	int pr = Integer.parseInt(index[1]);
+	        	if(pr > priority)
+	        	value = index[2];
+	        }
+	        }
+		}
+		return value;
+	}
+	/**
+	 * Workaround for lazy people - group prefix
+	 * @param group
+	 * @param world
+	 * @return String
+	 */
 	public String getGroupPrefix(String group, String world) {
-		String prefix = "";
-		int priority = -1;
-		for(String set : wpm.getPermissionSet(world).getGroupNodes(group)) {
-			if(!set.startsWith("^")) {
-			String name = set;
-	        String[] index = name.split("\\.", 4);
-	        if(index.length==3 && index[0].equals("prefix")) {
-	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
-	        	prefix = index[2];
-	        }
-	        }
-		}
-		return prefix;
+		return getGroupValue(group, world, "prefix");
 	}
-	
+	/**
+	 * Workaround for lazy people - group suffix
+	 * @param group
+	 * @param world
+	 * @return String
+	 */
 	public String getGroupSuffix(String group, String world) {
-		String suffix = "";
-		int priority = -1;
-		for(String set : wpm.getPermissionSet(world).getGroupNodes(group)) {
-			if(!set.startsWith("^")) {
-			String name = set;
-	        String[] index = name.split("\\.", 4);
-	        if(index.length==3 && index[0].equals("suffix")) {
-	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
-	        	suffix = index[2];
-	        }
-	        }
-		}
-		return suffix;
+		return getGroupValue(group, world, "suffix");
 	}
-	
+	/**
+	 * Bridging method - calls getValue(String player, String world, String valueToGet);
+	 * @param player
+	 * @param valueToGet
+	 * @return String
+	 */
+	public String getValue(Player player, String valueToGet) {
+		return getValue(player.getName(), player.getWorld().getName(), valueToGet);
+	}
+	/**
+	 * Workaround for lazy people - player prefix
+	 * @param player
+	 * @return String
+	 */
 	public String getPrefix(Player player) {
-		String prefix = "";
-		int priority = -1;
-		for(String set : wpm.getPermissionSet(player.getWorld()).getPlayerNodes(player) != null ? wpm.getPermissionSet(player.getWorld()).getPlayerNodes(player) : new ArrayList<String>()) {
-			if(!set.startsWith("^")) {
-			String name = set;
-	        String[] index = name.split("\\.", 4);
-	        if(index.length==3 && index[0].equals("prefix")) {
-	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
-	        	prefix = index[2];
-	        }
-	        }
-		}
-		return prefix;
+		return getValue(player, "prefix");
 	}
-	
+	/**
+	 * Workaround for lazy people - player suffix
+	 * @param player
+	 * @return String
+	 */
 	public String getSuffix(Player player) {
-		String suffix = "";
-		int priority = -1;
-		for(String set : wpm.getPermissionSet(player.getWorld()).getPlayerNodes(player) != null ? wpm.getPermissionSet(player.getWorld()).getPlayerNodes(player) : new ArrayList<String>()) {
-			if(!set.startsWith("^")) {
-			String name = set;
-	        String[] index = name.split("\\.", 4);
-	        if(index.length==3 && index[0].equals("suffix")) {
-	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
-	        	suffix = index[2];
-	        }
-	        }
-		}
-		return suffix;
+		return getValue(player, "suffix");
 	}
-	
+	/**
+	 * Workaround for lazy people - player prefix
+	 * @param player
+	 * @param world
+	 * @return String
+	 */
 	public String getPrefix(String player, String world) {
-		String prefix = "";
-		int priority = -1;
-		for(String set : wpm.getPermissionSet(world).getPlayerNodes(player) != null ? wpm.getPermissionSet(world).getPlayerNodes(player) : new ArrayList<String>()) {
-			if(!set.startsWith("^")) {
-			String name = set;
-	        String[] index = name.split("\\.", 4);
-	        if(index.length==3 && index[0].equals("prefix")) {
-	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
-	        	prefix = index[2];
-	        }
-	        }
-		}
-		return prefix;
+		return getValue(player, world, "prefix");
 	}
-	
+	/**
+	 * Workaround for lazy people - player suffix
+	 * @param player
+	 * @param world
+	 * @return String
+	 */
 	public String getSuffix(String player, String world) {
-		String suffix = "";
-		int priority = -1;
-		for(String set : wpm.getPermissionSet(world).getPlayerNodes(player) != null ? wpm.getPermissionSet(world).getPlayerNodes(player) : new ArrayList<String>()) {
-			if(!set.startsWith("^")) {
-			String name = set;
-	        String[] index = name.split("\\.", 4);
-	        if(index.length==3 && index[0].equals("suffix")) {
-	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
-	        	suffix = index[2];
-	        }
-	        }
-		}
-		return suffix;
+		return getValue(player, world, "suffix");
 	}
 
 }
