@@ -9,7 +9,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
 public class PermissionsPlayerListener extends PlayerListener {
+	
 	private final Permissions permissions;
+	
 	public PermissionsPlayerListener(Permissions permissions) {
 		this.permissions = permissions;
 	}

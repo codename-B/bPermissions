@@ -23,6 +23,7 @@ import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.override.MonkeyListener;
+import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class Permissions extends JavaPlugin {
@@ -75,6 +76,12 @@ public class Permissions extends JavaPlugin {
 	private static InfoReader info;
 	public ImportManager im;
 
+	public String hostname = "localhost";
+	public String port = "3306";
+	public String database = "bPermissions";
+	public String username = "minecraft";
+	public String password = "minecraft";
+	
 	public Configuration c;
 	public WorldCommands worldExec;
 	public LocalCommands localExec;
@@ -89,10 +96,10 @@ public class Permissions extends JavaPlugin {
 	public String addNode;
 	public String removeNode;
 	public String listNode;
+	
+	public WorldPermissionSet wps;
 
 	public Map<String, String> mirror;
-
-	public boolean bml;
 
 	public boolean overridePlayer;
 
@@ -255,8 +262,6 @@ public class Permissions extends JavaPlugin {
 			for (String world : mirrors)
 				mirror.put(world, c.getString("mirrors." + world));
 
-		bml = c.getBoolean("use-bml", false);
-
 		overridePlayer = c.getBoolean("override-player", false);
 
 		globalCommand = c.getString("commands.global-command", "global");
@@ -270,9 +275,21 @@ public class Permissions extends JavaPlugin {
 		addNode = c.getString("commands.add-node", "addnode");
 		removeNode = c.getString("commands.remove-node", "rmnode");
 		listNode = c.getString("commands.list-node", "lsnode");
-
-		c.setProperty("use-bml", bml);
-
+		
+		hostname = c.getString("sql.hostname", hostname);
+		port = c.getString("sql.port", port);
+		database = c.getString("sql.database", database);
+		username = c.getString("sql.username", username);
+		password = c.getString("sql.password", password);
+		
+		//c.setProperty("use-bml", bml);
+		if(c.getBoolean("use-bml", false)) {
+			wps = WorldPermissionSet.BML;
+		} else {
+			c.setProperty("permission-type", c.getString("permission-type", "yaml"));
+			wps = WorldPermissionSet.getSet(c.getString("permission-type"));
+		}
+		
 		c.setProperty("override-player", overridePlayer);
 
 		c.setProperty("commands.global-command", globalCommand);

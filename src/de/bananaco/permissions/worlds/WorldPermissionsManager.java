@@ -44,7 +44,7 @@ public class WorldPermissionsManager {
 				p.reload();
 			}
 			else
-				p = jp.bml? new NewWorldPermissions(tWorld, jp) : new WorldPermissions(tWorld, jp);
+				p = jp.wps.get(tWorld, jp);
 			p.setupPlayers();
 			
 			
