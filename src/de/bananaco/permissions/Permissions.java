@@ -125,6 +125,7 @@ public class Permissions extends JavaPlugin {
 
 		im = new ImportManager(this);
 		setupConfig();
+		log("Using " + wps.toString() + " for Permissions");
 		setupCommands();
 		pm = new WorldPermissionsManager(this);
 		perm = pm;
@@ -289,7 +290,7 @@ public class Permissions extends JavaPlugin {
 			c.setProperty("permission-type", c.getString("permission-type", "yaml"));
 			wps = WorldPermissionSet.getSet(c.getString("permission-type"));
 		}
-		
+		c.removeProperty("use-bml");
 		c.setProperty("override-player", overridePlayer);
 
 		c.setProperty("commands.global-command", globalCommand);

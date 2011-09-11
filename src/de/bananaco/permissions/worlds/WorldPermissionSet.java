@@ -32,6 +32,9 @@ public enum WorldPermissionSet {
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;
 	}
+	public String toString() {
+		return type;
+	}
 	
 	public static WorldPermissionSet getSet(String type) {
 		if(type == null) {
