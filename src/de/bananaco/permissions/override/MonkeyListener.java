@@ -18,7 +18,7 @@ public class MonkeyListener extends PlayerListener {
     }
 
     public void onPlayerLogin(PlayerLoginEvent event) {
-        if (Permissions.useMonkeyPlayer && plugin.overridePlayer) {
+        if (Permissions.useMonkeyPlayer && plugin.overridePlayer && plugin.getServer().getPluginManager().getPlugin("Spout") == null) {
             Player player = event.getPlayer();
             if (!(player instanceof CraftPlayer)) {
                 System.err.println("Player is not an instance of CraftPlayer! "+player.getName());

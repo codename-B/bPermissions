@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +24,7 @@ import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.override.MonkeyListener;
+import de.bananaco.permissions.override.SpoutMonkey;
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -129,6 +131,9 @@ public class Permissions extends JavaPlugin {
 		setupCommands();
 		pm = new WorldPermissionsManager(this);
 		perm = pm;
+		if(info == null)
+			info = new InfoReader();
+		
 		info.instantiate();
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
 
@@ -145,6 +150,7 @@ public class Permissions extends JavaPlugin {
 				new Permission("bPermissions.admin"));
 		getServer().getPluginManager().addPermission(
 				new Permission("bPermissions.build"));
+		
 		if (getServer().getPluginManager().getPlugin("Spout") != null)
 			getServer().getScheduler().scheduleAsyncDelayedTask(this,
 					new Runnable() {
@@ -152,6 +158,10 @@ public class Permissions extends JavaPlugin {
 							pm.addAllWorlds();
 						}
 					}, 20);
+		if(this.overridePlayer && getServer().getPluginManager().getPlugin("Spout") != null) {
+			log("Spout detected, registering PlayerPermissionEvent");
+			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(getWorldPermissionsManager()), Priority.Normal, this);
+		}
 		log("Enabled");
 	}
 
