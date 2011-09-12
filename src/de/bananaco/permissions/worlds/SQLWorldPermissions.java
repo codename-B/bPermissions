@@ -50,8 +50,6 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 
 	@Override
 	public void setup() {
-		reload();
-		
 		PermissionsThread.run(new Runnable() { public void run() {
 		try {
 		if(!sql.checkTable(world.getName()+"_users")) {
@@ -71,19 +69,22 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 			e.printStackTrace();
 		}	
 		}});
+		reload();
 	}
 
 	@Override
 	public void reload() {
 		userCache.clear();
 		groupCache.clear();
-		log("userCache and groupCache cleared. Reloaded.");
+		log(
+				"userCache and "+
+				"groupCache cleared. Reloaded.");
 	}
 
 	@Override
 	public void addNode(String node, final String group) {
 		final List<String> nodes = getGroupNodes(group);
-		if(!nodes.contains(group))
+		if(!nodes.contains(node))
 			nodes.add(node);
 		groupCache.put(group, nodes);
 		PermissionsThread.run(new Runnable() { public void run() {
@@ -99,7 +100,7 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 	@Override
 	public void removeNode(String node, final String group) {
 		final List<String> nodes = getGroupNodes(group);
-		if(nodes.contains(group))
+		if(nodes.contains(node))
 			nodes.remove(node);
 		groupCache.put(group, nodes);
 		PermissionsThread.run(new Runnable() { public void run() {
@@ -114,7 +115,10 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 	
 	private List<String> parse(String rString) {
 		ArrayList<String> nodes = new ArrayList<String>();
-		for(String split : rString.replace("[", "").replace("]", "").split(", ")) {
+		if(rString.length()>1)
+		rString = rString.substring(1, rString.length()-1);
+		
+		for(String split : rString.split(", ")) {
 			nodes.add(split);
 		}
 		return nodes;
