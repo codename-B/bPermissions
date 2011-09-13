@@ -125,10 +125,16 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 		List<String> playerGroups = getGroups(player);
 		List<String> playerNodes = new ArrayList<String>();
 		for (String group : playerGroups) {
-			playerNodes.addAll(getGroupNodes(group));
+			for(String node : getGroupNodes(group)) {
+				if(!playerNodes.contains(node))
+					playerNodes.add(node);
+			}
 		}
 		List<String> transitionNodes = ((TransitionSet) this).listTransNodes(player);
-		playerNodes.addAll(transitionNodes);
+		for(String node : transitionNodes) {
+			if(!playerNodes.contains(node))
+				playerNodes.add(node);
+		}
 		return playerNodes;
 	}
 
@@ -236,6 +242,11 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
     }
 }
 }
+
+	@Override
+	public String getDefaultGroup() {
+		return c.getString("default", "default");
+	}
 
 	
 }

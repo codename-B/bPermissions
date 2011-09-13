@@ -22,6 +22,7 @@ import com.ubempire.binfo.PlayerInfo;
 import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
+import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.override.SpoutMonkey;
@@ -217,6 +218,12 @@ public class Permissions extends JavaPlugin {
 				if (args[0].equalsIgnoreCase("reload")) {
 					pm.addAllWorlds();
 					sender.sendMessage("Permissions reloaded.");
+					return true;
+				}
+				if(args[0].equals("helpme")) {
+					new ForNoobs(this).addAll();
+					sender.sendMessage("Attempted to setup default groups");
+					sender.sendMessage("WARNING: If the admin name is lowercase in ops.txt IT WILL NEED CHANGED");
 					return true;
 				}
 			}

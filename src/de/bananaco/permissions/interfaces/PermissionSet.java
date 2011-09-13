@@ -121,4 +121,5 @@ public interface PermissionSet {
 	 * @return boolean
 	 */
 	public boolean has(Player player, String node);
+	public String getDefaultGroup();
 }

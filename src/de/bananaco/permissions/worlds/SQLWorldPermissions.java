@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.interfaces.TransitionSet;
 import de.bananaco.permissions.override.MonkeyPlayer;
 import de.bananaco.permissions.sql.MySQL;
 
@@ -162,11 +163,20 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 
 	@Override
 	public List<String> getPlayerNodes(String player) {
-		List<String> nodes = new ArrayList<String>();
-		for(String group : getGroups(player))
-			nodes.addAll(getGroupNodes(group));
-		
-		return nodes;
+		List<String> playerGroups = getGroups(player);
+		List<String> playerNodes = new ArrayList<String>();
+		for (String group : playerGroups) {
+			for(String node : getGroupNodes(group)) {
+				if(!playerNodes.contains(node))
+					playerNodes.add(node);
+			}
+		}
+		List<String> transitionNodes = ((TransitionSet) this).listTransNodes(player);
+		for(String node : transitionNodes) {
+			if(!playerNodes.contains(node))
+				playerNodes.add(node);
+		}
+		return playerNodes;
 	}
 
 	@Override
@@ -282,6 +292,11 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
     }
 }
 }
+
+	@Override
+	public String getDefaultGroup() {
+		return "default";
+	}
 	
 
 }

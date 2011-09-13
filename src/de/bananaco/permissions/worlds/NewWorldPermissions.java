@@ -12,6 +12,7 @@ import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.config.Configuration;
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.interfaces.TransitionSet;
 import de.bananaco.permissions.override.MonkeyPlayer;
 
 class NewWorldPermissions extends TransitionPermissions implements PermissionSet {
@@ -145,7 +146,15 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		List<String> playerGroups = getGroups(player);
 		List<String> playerNodes = new ArrayList<String>();
 		for (String group : playerGroups) {
-			playerNodes.addAll(getGroupNodes(group));
+			for(String node : getGroupNodes(group)) {
+				if(!playerNodes.contains(node))
+					playerNodes.add(node);
+			}
+		}
+		List<String> transitionNodes = ((TransitionSet) this).listTransNodes(player);
+		for(String node : transitionNodes) {
+			if(!playerNodes.contains(node))
+				playerNodes.add(node);
 		}
 		return playerNodes;
 	}
@@ -255,5 +264,13 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
     }
 }
 }
+
+	@Override
+	public String getDefaultGroup() {
+		List<String> ls = c.getStringList("default");
+		if(ls.size()==0)
+			return "default";
+		return ls.get(0);
+	}
 
 }

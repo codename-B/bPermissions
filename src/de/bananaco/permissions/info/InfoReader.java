@@ -57,8 +57,10 @@ public class InfoReader implements PlayerInfo {
 	        String[] index = name.split("\\.", 4);
 	        if(index.length==3 && index[0].equals(valueToGet)) {
 	        	int pr = Integer.parseInt(index[1]);
-	        	if(pr > priority)
+	        	if(pr > priority) {
 	        	value = index[2];
+	        	priority = pr;
+	        	}
 	        }
 	        }
 		}
