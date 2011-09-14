@@ -70,5 +70,6 @@ public class TransitionPermissions implements TransitionSet {
 		else
 			return transet.get(player);
 	}
+	
 
 }

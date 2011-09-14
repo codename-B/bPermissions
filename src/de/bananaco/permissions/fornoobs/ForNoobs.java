@@ -5,6 +5,8 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.Server;
@@ -38,39 +40,64 @@ public class ForNoobs {
 	
 	private void addDefaults(PermissionSet ps) throws Exception {
 		String defaultGroup = ps.getDefaultGroup();
+		String moderatorGroup = "moderator";
 		String adminGroup = "admin";
+		
 		ArrayList<String> admins = new ArrayList<String>();
 		BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream("ops.txt"))));
 		String line = "";
 		while((line = br.readLine()) != null)
 			admins.add(line);
 		// Basic default setup
-		ps.addNode("bPermissions.build", defaultGroup);
 		ps.addNode("prefix.0.default", defaultGroup);
 		ps.addNode("suffix.0.imnew", defaultGroup);
+		// Basic moderator setup
+		ps.addNode("prefix.10.moderator", moderatorGroup);
+		ps.addNode("suffix.10.ihelp", moderatorGroup);
 		// Basic admin setup
-		ps.addNode("bPermissions.admin", adminGroup);
 		ps.addNode("prefix.100.admin", adminGroup);
 		ps.addNode("suffix.100.over9000", adminGroup);
-		// Add the admins
+		// Add the online admins
 		for(String player : admins) {
+			if(s.getPlayer(player) != null) {
 			ps.addGroup(player, defaultGroup);
 			ps.addGroup(player, adminGroup);
+			}
 		}
+		
+		// Add the example admin
+		ps.addGroup("HerpaDerpa", defaultGroup);
+		ps.addGroup("HerpaDerpa", moderatorGroup);
+		ps.addGroup("HerpaDerpa", adminGroup);
+		// Add the example mod
+		ps.addGroup("Derpy", defaultGroup);
+		ps.addGroup("Derpy", moderatorGroup);
+		
 		// Add the permissions to the admins
-		for(String permission : getPermissions())
+		for(String permission : getPermissions()) {
+			if(permission.contains("user") || permission.contains("default") || permission.contains("build"))
+				ps.addNode(permission, defaultGroup);
+			else if(permission.contains("ban") || permission.contains("kick") || permission.contains("mod"))
+				ps.addNode(permission, moderatorGroup);
+			else
 			ps.addNode(permission, adminGroup);
+		}
 		
 	}
 	
 	private ArrayList<String> getPermissions() {
 		ArrayList<String> regPerms = new ArrayList<String>();
 		for(Permission p : s.getPluginManager().getPermissions()) {
-			if(!p.getName().contains("bpermissions") && !p.getName().contains("bPermissions") && !p.getName().equals("*")
-					&& !p.getName().equals("*.*") && !p.getName().equals("*.*.*")) { 
+			if(!p.getName().equals("*") && !p.getName().equals("*.*"))
 			regPerms.add(p.getName());
-			}
 		}
+		Collections.sort(regPerms, new Comparator<String>() {
+			
+		public int compare(String a, String b) {
+			return a.compareTo(b); 
+			};
+		});
+			
 		return regPerms;
 	}
 	
@@ -87,3 +114,4 @@ public class ForNoobs {
 	
 	
 }
+

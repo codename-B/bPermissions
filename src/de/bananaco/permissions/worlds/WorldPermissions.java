@@ -37,6 +37,12 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 	public void log(Object input) {
 		System.out.println("[bPermissions] " + String.valueOf(input));
 	}
+	
+	private ArrayList<String> getDefaultArrayList() {
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add(getDefaultGroup());
+		return ar;
+	}
 
 	public WorldPermissions(World world, Permissions plugin) {
 		super(new HashMap<String,ArrayList<String>>());
@@ -67,7 +73,7 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 
 	@Override
 	public void addNode(String node, String group) {
-		List<String> groupNodes = c.getStringList("groups." + group, null);
+		List<String> groupNodes = getGroupNodes(group);
 		if (groupNodes == null) {
 			log("the group:" + group + " does not exist for world:"
 					+ world.getName());
@@ -89,7 +95,7 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 
 	@Override
 	public void removeNode(String node, String group) {
-		List<String> groupNodes = c.getStringList("groups." + group, null);
+		List<String> groupNodes = getGroupNodes(group);
 		if (groupNodes == null) {
 			log("the group:" + group + " does not exist for world:"
 					+ world.getName());
@@ -147,15 +153,7 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 	public List<String> getGroups(String player) {
 		List<String> playerGroups = c.getStringList("players." + player, null);
 		if (playerGroups == null || playerGroups.size() == 0) {
-			playerGroups = new ArrayList<String>();
-			playerGroups.add(c.getString("default", "default"));
-			log(player
-					+ " does not have a group in world:"
-					+ world.getName()
-					+ ", creating an entry for them and setting them to the default group");
-			c.setProperty("players." + player, playerGroups);
-			c.save();
-			setupPlayers();
+			return getDefaultArrayList();
 		}
 		return playerGroups;
 	}
@@ -167,7 +165,7 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 
 	@Override
 	public void addGroup(String player, String group) {
-		List<String> playerGroups = c.getStringList("players." + player, null);
+		List<String> playerGroups = getGroups(player);
 		if (!playerGroups.contains(group)) {
 			playerGroups.add(group);
 			log("Group:" + group + " added to player:" + player + " in world:" + world.getName());

@@ -98,6 +98,12 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 	});
 	}
 
+	private ArrayList<String> getDefaultArrayList() {
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add(getDefaultGroup());
+		return ar;
+	}
+	
 	@Override
 	public void removeNode(String node, final String group) {
 		final List<String> nodes = getGroupNodes(group);
@@ -199,9 +205,10 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 			groups = parse(rString);
 			userCache.put(player, groups);
 		} else {
+			
 			sql.query("INSERT INTO `"+world.getName()+"_users` (`k`, `v`) VALUES ('"+player+"', '[default]');");
 			log("No entry for player:"+player+" entry created.");
-			groups.add("default");
+			return getDefaultArrayList();
 		}
 		} catch (Exception e) {
 		e.printStackTrace();
