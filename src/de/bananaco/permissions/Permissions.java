@@ -222,8 +222,7 @@ public class Permissions extends JavaPlugin {
 				}
 				if(args[0].equals("helpme")) {
 					new ForNoobs(this).addAll();
-					sender.sendMessage("Attempted to setup default groups");
-					sender.sendMessage("WARNING: If the admin name is lowercase in ops.txt IT WILL NEED CHANGED");
+					sender.sendMessage("Attempted to setup default groups - please view your worldname.yml files");
 					return true;
 				}
 			}

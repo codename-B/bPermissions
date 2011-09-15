@@ -60,7 +60,9 @@ public class ForNoobs {
 		// Add the online admins
 		for(String player : admins) {
 			if(s.getPlayer(player) != null) {
+				player = s.getPlayer(player).getName();
 			ps.addGroup(player, defaultGroup);
+			ps.addGroup(player, moderatorGroup);
 			ps.addGroup(player, adminGroup);
 			}
 		}
