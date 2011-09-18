@@ -105,7 +105,7 @@ public class ImportManager {
 	WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	
 	for(World world : plugin.getServer().getWorlds()) {
 		PermissionSet ps = wpm.getPermissionSet(world);
-		File users =  new File("plugins/PermissionsEX/permissions.yml");
+		File users =  new File("plugins/PermissionsEx/permissions.yml");
 
 		Configuration pConfig = new Configuration(users);
 		pConfig.load();
@@ -113,7 +113,7 @@ public class ImportManager {
 		List<String> groupsList = pConfig.getKeys("groups");
 		if(usersList!=null)
 		for(String player : usersList) {
-			for(String group : pConfig.getStringList("users."+player+".groups", null)) {
+			for(String group : pConfig.getStringList("users."+player+".group", null)) {
 			ps.addGroup(player, group);	
 			}
 		}
