@@ -124,7 +124,7 @@ public class Permissions extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		sanityCheck();
-
+		
 		mirror = new HashMap<String, String>();
 
 		im = new ImportManager(this);
@@ -138,7 +138,9 @@ public class Permissions extends JavaPlugin {
 		
 		info.instantiate();
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
-
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_COMMAND_PREPROCESS, new CommandPreprocess(this), Priority.Lowest, this);
+		
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(
