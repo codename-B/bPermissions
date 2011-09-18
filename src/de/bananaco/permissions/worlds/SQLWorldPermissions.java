@@ -312,10 +312,12 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 
 	@Override
 	public void setGroup(String player, String group) {
-		for(String removeGroup : getGroups(player))
-			removeGroup(player, removeGroup);
 		addGroup(player, group);
+		
+		for(String removeGroup : getGroups(player))
+			if(!removeGroup.equals(group))
+			removeGroup(player, removeGroup);
+		
 	}
-	
 
 }
