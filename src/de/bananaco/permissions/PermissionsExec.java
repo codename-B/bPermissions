@@ -38,6 +38,15 @@ public class PermissionsExec {
 			p.addGroup(player, group);
 			sender.sendMessage("Added group:" + group + " to player:" + player);
 			return true;
+		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.setGroup)) {
+			String player = args[3];
+			String group = args[2];
+			player = checkPlayer(player);
+			
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			p.setGroup(player, group);
+			sender.sendMessage("Set player:"+player+" to group:"+group);
+			return true;
 		} else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.removeGroup)) {
 			String player = args[3];

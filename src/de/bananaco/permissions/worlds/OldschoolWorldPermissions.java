@@ -4,18 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.util.config.Configuration;
+
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
-import de.bananaco.permissions.config.Configuration;
 import de.bananaco.permissions.interfaces.PermissionSet;
 import de.bananaco.permissions.interfaces.TransitionSet;
 import de.bananaco.permissions.override.MonkeyPlayer;
 
-class NewWorldPermissions extends TransitionPermissions implements PermissionSet {
+public class OldschoolWorldPermissions extends TransitionPermissions implements PermissionSet {
+	
 	/**
 	 * The main class instance
 	 */
@@ -25,10 +26,31 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 	 */
 	private final World world;
 	/**
-	 * The configuration object
+	 * The user configuration object
 	 */
-	private final Configuration c;
-
+	private final Configuration users;
+	/**
+	 * The user configuration object
+	 */
+	private final Configuration groups;
+	/**
+	 * The default!
+	 */
+	private String defaultGroup = "default";
+	
+	public OldschoolWorldPermissions(World world, Permissions plugin) {
+		super(new HashMap<String, ArrayList<String>>());
+		this.plugin = plugin;
+		this.world = world;
+		this.users = new Configuration(new File("plugins/bPermissions/worlds/"
+				+ world.getName() + "/users.yml"));
+		this.groups = new Configuration(new File("plugins/bPermissions/worlds/"
+				+ world.getName() + "/groups.yml"));
+		users.load();
+		groups.load();
+		setup();
+	}
+	
 	/**
 	 * Just the logger man
 	 * 
@@ -38,62 +60,94 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		System.out.println("[bPermissions] " + String.valueOf(input));
 	}
 
-	public NewWorldPermissions(World world, Permissions plugin) {
-		super(new HashMap<String, ArrayList<String>>());
-		this.plugin = plugin;
-		this.world = world;
-		this.c = new Configuration(new File("plugins/bPermissions/worlds/"
-				+ world.getName() + ".bml"));
-		setup();
-	}
-
 	@Override
 	public World getWorld() {
 		return world;
 	}
+	
+	private ArrayList<String> getDefaultArrayList() {
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add(getDefaultGroup());
+		return ar;
+	}
 
 	@Override
 	public void setup() {
-		log("Setting up config for world:" + world.getName());
+		parseNoobery();
 		reload();
 	}
 	
+	private void parseNoobery() {
+		log("Checking users.yml and groups.yml for errors...");
+		List<String> userList = users.getKeys("users");
+		
+		List<String> groupList = groups.getKeys("groups");
+		
+		if(userList != null)
+			for(String user : userList) {
+				List<String> userPermissions = users.getStringList("users."+user+".permissions", new ArrayList<String>());
+				String prefix = users.getString("users."+user+".info.prefix", null);
+				if(prefix != null) {
+					userPermissions.add("prefix.0."+prefix);
+				}
+				users.removeProperty("users."+user+".info.prefix");
+				String suffix = users.getString("users."+user+".info.suffix", null);
+				if(suffix != null) {
+					userPermissions.add("suffix.0."+suffix);
+				}
+				users.removeProperty("users."+user+".info.suffix");
+				boolean build = users.getBoolean("users."+user+".info.build", false);
+				if(build) {
+					userPermissions.add("bPermissions.build");
+				}
+				users.removeProperty("users."+user+".info.build");
+				users.removeProperty("users."+user+".info");
+				users.setProperty("users."+user+".permissions", userPermissions);
+			}
+		if(groupList != null)
+			for(String group : groupList) {
+				List<String> groupPermissions = groups.getStringList("groups."+group+".permissions", new ArrayList<String>());
+				String prefix = groups.getString("groups."+group+".info.prefix", null);
+				if(prefix != null) {
+					groupPermissions.add("prefix.0."+prefix);
+				}
+				groups.removeProperty("groups."+group+".info.prefix");
+				String suffix = groups.getString("groups."+group+".info.suffix", null);
+				if(suffix != null) {
+					groupPermissions.add("suffix.0."+suffix);
+					
+				}
+				groups.removeProperty("groups."+group+".info.suffix");
+				boolean build = groups.getBoolean("groups."+group+".info.build", false);
+				if(build) {
+					groupPermissions.add("bPermissions.build");
+					
+				}
+				groups.removeProperty("groups."+group+".info.build");
+				boolean def = groups.getBoolean("groups."+group+".default", false);
+				if(def) {
+					groups.setProperty("default", group);
+				}
+				groups.removeProperty("groups."+group+".default");
+				groups.removeProperty("groups."+group+".info");
+				groups.setProperty("groups."+group+".permissions", groupPermissions);
+			}
+		users.save();
+		groups.save();
+	}
+
 	@Override
 	public void reload() {
-		c.load();
-		if(c.getComment("")==null) {
-			c.comment("", "Welcome to the bPermissions config file!");
-			c.comment("", "If you're seeing this message, you've decided to make the change to our new .bml format, well done.");
-			c.comment("", "This makes you part of an elite group of people, and also improves the performance of bPermissions.");
-			c.comment("", "To import your .yml permissions to .bml use /p import yml");
-			c.comment("", "Don't worry, you can still import P3, GM etc using their relevant commands too!");
-		}
-		if(c.getComment("players")==null) {
-			c.comment("players", "This is where the players and their groups are stored!");
-			c.comment("players", "Some relevant commands:");
-			c.comment("players", "/p global addgroup playername");
-			c.comment("players", "/p global rmgroup playername");
-			c.comment("players", "/p global lsgroup playername");
-		}
-		if(c.getComment("groups")==null) {
-			c.comment("groups", "This is where the groups and their permission nodes are stored!");
-			c.comment("groups", "Some relevant commands:");
-			c.comment("groups", "/p global addnode node.node groupname");
-			c.comment("groups", "/p global rmnode node.node groupname");
-			c.comment("groups", "/p global lsnode groupname");
-		}
-		c.save();
-		setupPlayers();
+		users.load();
+		users.save();
+		groups.load();
+		groups.save();
 	}
 
 	@Override
 	public void addNode(String node, String group) {
-		List<String> groupNodes = getGroupNodes(group);
-		if (groupNodes == null) {
-			log("the group:" + group + " does not exist for world:"
-					+ world.getName());
-			return;
-		}
+		List<String> groupNodes = getGroupNodesNoInherit(group);
+		
 		if (!groupNodes.contains(node)) {
 			groupNodes.add(node);
 			log("added node:" + node + " to group:" + group + " for world:"
@@ -103,19 +157,15 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 					+ " for world:" + world.getName());
 		return;
 		}
-		c.setProperty("groups." + group, groupNodes);
-		c.save();
+		groups.setProperty("groups."+group+".permissions", groupNodes);
+		groups.save();	
 		setupPlayers();
 	}
 
 	@Override
 	public void removeNode(String node, String group) {
-		List<String> groupNodes = getGroupNodes(group);
-		if (groupNodes == null) {
-			log("the group:" + group + " does not exist for world:"
-					+ world.getName());
-			return;
-		}
+		List<String> groupNodes = getGroupNodesNoInherit(group);
+		
 		if (groupNodes.contains(node)) {
 			groupNodes.remove(node);
 			log("removed node:" + node + " from group:" + group + " for world:"
@@ -125,15 +175,26 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 					+ " for world:" + world.getName());
 			return;
 		}
-		c.setProperty("groups." + group, groupNodes);
-		c.save();
+		groups.setProperty("groups."+group+".permissions", groupNodes);
+		groups.save();
 		setupPlayers();
 	}
 
+	private List<String> getGroupNodesNoInherit(String group) {
+		List<String> permissions = groups.getStringList("groups."+group+".permissions", new ArrayList<String>());
+		
+		return permissions;
+	}
+	
 	@Override
 	public List<String> getGroupNodes(String group) {
-		List<String> groupNodes = c.getStringList("groups." + group, null);
-		return groupNodes;
+		List<String> permissions = groups.getStringList("groups."+group+".permissions", new ArrayList<String>());
+		List<String> inheritance = groups.getStringList("groups."+group+".inheritance", new ArrayList<String>());
+		
+		for(String inheritGroup : inheritance)
+			permissions.addAll(getGroupNodes(inheritGroup));
+
+		return permissions;
 	}
 
 	@Override
@@ -156,6 +217,12 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 			if(!playerNodes.contains(node))
 				playerNodes.add(node);
 		}
+		List<String> perPlayerNodes = users.getStringList("users."+player+".permissions", new ArrayList<String>());
+		for(String node : perPlayerNodes) {
+			if(!playerNodes.contains(node))
+				playerNodes.add(node);
+		}
+		
 		return playerNodes;
 	}
 
@@ -163,17 +230,15 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 	public List<String> getGroups(Player player) {
 		return getGroups(player.getName());
 	}
-	private ArrayList<String> getDefaultArrayList() {
-		ArrayList<String> ar = new ArrayList<String>();
-		ar.add(getDefaultGroup());
-		return ar;
-	}
+
 	@Override
 	public List<String> getGroups(String player) {
-		List<String> playerGroups = c.getStringList("players." + player, null);
-		if (playerGroups == null || playerGroups.size() == 0) {
-			return getDefaultArrayList();
-		}
+		
+		List<String> playerGroups = users.getStringList("users."+player+"groups", new ArrayList<String>());
+		
+		if(playerGroups.size() == 0)
+			playerGroups = getDefaultArrayList();
+		
 		return playerGroups;
 	}
 
@@ -182,7 +247,6 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		addGroup(player.getName(), group);
 	}
 
-	@Override
 	public void addGroup(String player, String group) {
 		List<String> playerGroups = getGroups(player);
 		if (!playerGroups.contains(group)) {
@@ -193,8 +257,9 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 					+ " in world:"+world.getName()+" as the player already has this group");
 			return;
 		}
-		c.setProperty("players." + player, playerGroups);
-		c.save();
+		users.setProperty("users." + player + ".groups", playerGroups);
+		users.save();
+		
 		setupPlayers();
 	}
 
@@ -210,12 +275,13 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 			playerGroups.remove(group);
 			log("Group:" + group + " removed from player:" + player + " in world:" + world.getName());
 		} else {
-			log("Group:" + group + " could not be removed from player:"
-					+ player + " in world:"+world.getName()+" as the player does not have this group");
+			log("Group:" + group + " could not be removed from player:" + player
+					+ " in world:"+world.getName()+" as the player does not have this group");
 			return;
 		}
-		c.setProperty("players." + player, playerGroups);
-		c.save();
+		users.setProperty("users." + player + ".groups", playerGroups);
+		users.save();
+		
 		setupPlayers();
 	}
 
@@ -228,7 +294,6 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		}
 	}
 
-	@Override
 	public boolean has(Player player, String node) {
 		List<String> pNodes = getPlayerNodes(player);
 		if(pNodes.contains("^"+node))
@@ -237,7 +302,7 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 			return true;
 		return player.isOp();
 	}
-	
+
 	@Override
 	public void overrideCraftPlayers() {
 		for(Player player : getWorld().getPlayers()) {
@@ -263,12 +328,9 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 
 	@Override
 	public String getDefaultGroup() {
-		List<String> ls = c.getStringList("default");
-		if(ls.size()==0)
-			return "default";
-		return ls.get(0);
+		return groups.getString("default", defaultGroup);
 	}
-
+	
 	@Override
 	public void setGroup(Player player, String group) {
 		setGroup(player.getName(), group);

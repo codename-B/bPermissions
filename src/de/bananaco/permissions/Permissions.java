@@ -94,6 +94,7 @@ public class Permissions extends JavaPlugin {
 	public String localCommand;
 	public String worldCommand;
 	public String addGroup;
+	public String setGroup;
 	public String removeGroup;
 	public String listGroup;
 	public String addNode;
@@ -286,6 +287,7 @@ public class Permissions extends JavaPlugin {
 		worldCommand = c.getString("commands.world-command", "world");
 
 		addGroup = c.getString("commands.add-group", "addgroup");
+		setGroup = c.getString("commands.set-group", "setgroup");
 		removeGroup = c.getString("commands.remove-group", "rmgroup");
 		listGroup = c.getString("commands.list-group", "lsgroup");
 
@@ -313,6 +315,7 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.local-command", localCommand);
 		c.setProperty("commands.world-command", worldCommand);
 
+		c.setProperty("commands.set-group", setGroup);
 		c.setProperty("commands.add-group", addGroup);
 		c.setProperty("commands.remove-group", removeGroup);
 		c.setProperty("commands.list-group", listGroup);

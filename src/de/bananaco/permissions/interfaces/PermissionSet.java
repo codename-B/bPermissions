@@ -92,7 +92,21 @@ public interface PermissionSet {
 	 * @param player
 	 */
 	public void addGroup(String player, String group);
-
+	/**
+	 * Set a player to a single group
+	 * 
+	 * @param player
+	 * @param group
+	 */
+	public void setGroup(Player player, String group);
+	/**
+	 * Set a player to a single group
+	 * 
+	 * @param player
+	 * @param group
+	 */
+	public void setGroup(String player, String group);
+	
 	/**
 	 * Remove a group from a player
 	 * 
@@ -105,7 +119,7 @@ public interface PermissionSet {
 	 * 
 	 * @param Player
 	 */
-	public void removeGroup(String Player, String group);
+	public void removeGroup(String player, String group);
 
 	/**
 	 * Sets up the online players in that world

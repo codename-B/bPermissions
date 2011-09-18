@@ -9,6 +9,7 @@ public enum WorldPermissionSet {
 	
 	SQL("sql"),
 	YAML("yaml"),
+	YAML_OLDSCHOOL("yaml_oldschool"),
 	BML("bml");
 	
 	private final String type;
@@ -22,6 +23,9 @@ public enum WorldPermissionSet {
 		}
 		else if(type.equals("yaml")) {
 			return new WorldPermissions(world, permissions);
+		}
+		else if(type.equals("yaml_oldschool")) {
+			return new OldschoolWorldPermissions(world, permissions);
 		}
 		else if(type.equals("bml")) {
 			return new NewWorldPermissions(world, permissions);
@@ -43,6 +47,9 @@ public enum WorldPermissionSet {
 		}
 		else if(type.equals("yaml")) {
 			return WorldPermissionSet.YAML;
+		}
+		else if(type.equals("yaml_oldschool")) {
+			return WorldPermissionSet.YAML_OLDSCHOOL;
 		}
 		else if(type.equals("bml")) {
 			return WorldPermissionSet.BML;

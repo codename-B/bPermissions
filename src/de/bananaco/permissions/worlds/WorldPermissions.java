@@ -245,6 +245,18 @@ class WorldPermissions extends TransitionPermissions implements PermissionSet{
 	public String getDefaultGroup() {
 		return c.getString("default", "default");
 	}
+	
+	@Override
+	public void setGroup(Player player, String group) {
+		setGroup(player.getName(), group);
+	}
+
+	@Override
+	public void setGroup(String player, String group) {
+		for(String removeGroup : getGroups(player))
+			removeGroup(player, removeGroup);
+		addGroup(player, group);
+	}
 
 	
 }
