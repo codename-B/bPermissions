@@ -249,6 +249,11 @@ public class Permissions extends JavaPlugin {
 						im.importPermissionsBukkit();
 						return true;
 					}
+					if(args[1].equalsIgnoreCase("pex")) {
+						sender.sendMessage("Why did you use PEX? You fool!");
+						im.importPEX();
+						return true;
+					}
 				}
 			}
 			if (args[0].equalsIgnoreCase(this.globalCommand))

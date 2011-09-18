@@ -226,7 +226,7 @@ public class PermissionBridge extends PermissionHandler {
      */
     @Override
     public void addGroupInfo(String world, String group, String node, Object data) {
-        unsupportedOperation();
+    	unsupportedOperation();
     }
 
     @Override
@@ -251,7 +251,15 @@ public class PermissionBridge extends PermissionHandler {
 
     @Override
     public boolean checkWorld(String world) {
-        return unsupportedOperation();
+    	try {
+        PermissionSet ps = this.permissions.pm.getPermissionSet(world);
+    	if(ps == null)
+    		return false;
+    	return true;
+    	} catch (Exception e) {
+    		unsupportedOperation();
+    	}
+    	return false;
     }
 
     @Override
@@ -266,7 +274,8 @@ public class PermissionBridge extends PermissionHandler {
 
     @Override
     public boolean reload(String world) {
-        return unsupportedOperation();
+        permissions.pm.getPermissionSet(world).reload();
+        return true;
     }
 
     // Cache

@@ -100,6 +100,32 @@ public class ImportManager {
 			
 		}
 	}
+	public void importPEX() {
+		
+	WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	
+	for(World world : plugin.getServer().getWorlds()) {
+		PermissionSet ps = wpm.getPermissionSet(world);
+		File users =  new File("plugins/PermissionsEX/permissions.yml");
+
+		Configuration pConfig = new Configuration(users);
+		pConfig.load();
+		List<String> usersList = pConfig.getKeys("users");
+		List<String> groupsList = pConfig.getKeys("groups");
+		if(usersList!=null)
+		for(String player : usersList) {
+			for(String group : pConfig.getStringList("users."+player+".groups", null)) {
+			ps.addGroup(player, group);	
+			}
+		}
+		if(groupsList!=null)
+		for(String group : groupsList) {
+			for(String node : pConfig.getStringList("groups."+group+".permissions", null)) {
+				ps.addNode(node, group);
+			}
+		}
+	}
+	
+	}
 	public void importPermissions3() {
 		
 	WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	
