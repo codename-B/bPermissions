@@ -50,8 +50,8 @@ public class ImportManager {
 		WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();	
 		for(World world : plugin.getServer().getWorlds()) {
 			PermissionSet ps = wpm.getPermissionSet(world);
-			File users = new File("plugins/GroupManager/"+world.getName()+"/users.yml");
-			File groups = new File("plugins/GroupManager/"+world.getName()+"/groups.yml");
+			File users = new File("plugins/GroupManager/worlds/"+world.getName()+"/users.yml");
+			File groups = new File("plugins/GroupManager/worlds/"+world.getName()+"/groups.yml");
 			Configuration uConfig = new Configuration(users);
 			Configuration gConfig = new Configuration(groups);
 			uConfig.load();
