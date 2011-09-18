@@ -120,6 +120,12 @@ public class ImportManager {
 		if(groupsList!=null)
 		for(String group : groupsList) {
 			for(String node : pConfig.getStringList("groups."+group+".permissions", null)) {
+				String prefix = pConfig.getString("groups."+group+".prefix", null);
+				String suffix = pConfig.getString("groups."+group+".suffix", null);
+				if(prefix != null)
+					ps.addNode("prefix.0"+prefix, group);
+				if(suffix != null)
+					ps.addNode("suffix.0"+suffix, group);
 				ps.addNode(node, group);
 			}
 		}
