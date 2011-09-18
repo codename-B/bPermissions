@@ -234,7 +234,7 @@ public class OldschoolWorldPermissions extends TransitionPermissions implements 
 	@Override
 	public List<String> getGroups(String player) {
 		
-		List<String> playerGroups = users.getStringList("users."+player+"groups", new ArrayList<String>());
+		List<String> playerGroups = users.getStringList("users."+player+".groups", new ArrayList<String>());
 		
 		if(playerGroups.size() == 0)
 			playerGroups = getDefaultArrayList();
