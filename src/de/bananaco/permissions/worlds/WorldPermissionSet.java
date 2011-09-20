@@ -10,7 +10,8 @@ public enum WorldPermissionSet {
 	SQL("sql"),
 	YAML("yaml"),
 	YAML_OLDSCHOOL("yaml_oldschool"),
-	BML("bml");
+	BML("bml"),
+	JSON("json");
 	
 	private final String type;
 	WorldPermissionSet(String type) {
@@ -32,6 +33,9 @@ public enum WorldPermissionSet {
 		}
 		else if(type.equals("sql")) {
 			return new SQLWorldPermissions(world, permissions);
+		}
+		else if(type.equals("json")) {
+			return new JSONWorldPermissions(world, permissions);
 		}
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;
@@ -56,6 +60,9 @@ public enum WorldPermissionSet {
 		}
 		else if(type.equals("sql")) {
 			return WorldPermissionSet.SQL;
+		}
+		else if(type.equals("json")) {
+			return WorldPermissionSet.JSON;
 		}
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;

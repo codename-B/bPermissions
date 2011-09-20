@@ -1,7 +1,6 @@
 package de.bananaco.permissions.worlds;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,12 +21,10 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	/**
 	 * The main class instance
 	 */
-	@SuppressWarnings("unused")
 	private final Permissions plugin;
 	/**
 	 * The world
 	 */
-	@SuppressWarnings("unused")
 	private final World world;
 	/**
 	 * The default!
@@ -135,6 +132,7 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	
 	private void setGroups(String player, List<String> groups) {
 		players.put(player, groups);
+		save();
 	}
 	
 	@Override
@@ -144,7 +142,7 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 
 	@Override
 	public List<String> getGroups(String player) {
-		List<String> groups = new ArrayList<String>();
+		List<String> groups = getDefaultArrayList();
 		if(players.containsKey(player))
 			return players.get(player);
 		return groups;

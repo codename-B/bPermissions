@@ -26,6 +26,7 @@ public class JSONPermission {
 	File file;
 	public JSONPermission(File file) {
 		this.file = file;
+		jsonmain = new JSONObject();
 	}
 	
 	public void load() {
@@ -45,6 +46,10 @@ public class JSONPermission {
 	
 	public void save() {
 		try {
+		if(!file.exists()) {
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+		}
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new DataOutputStream(new FileOutputStream(file)),"UTF-8"));
 		bw.write(toString());
 		bw.close();
@@ -65,7 +70,7 @@ public class JSONPermission {
 		Map<String, Map<String, List<String>>> main = new HashMap<String, Map<String, List<String>>>();
 		Map<String, List<String>> playerGroups = new HashMap<String, List<String>>();
 		Map<String, List<String>> groupPermissions = new HashMap<String, List<String>>();
-		
+		if(jsonmain.containsKey("players")) {
 		JSONObject jsonPlayers = (JSONObject) jsonmain.get("players");
 		if(jsonPlayers != null) {
 			// The list of players
@@ -78,7 +83,8 @@ public class JSONPermission {
 				playerGroups.put(key, groups);
 			}
 		}
-		
+		}
+		if(jsonmain.containsKey("groups")) {
 		JSONObject jsonGroups = (JSONObject) jsonmain.get("groups");
 		if(jsonGroups != null) {
 			// The list of players
@@ -91,6 +97,9 @@ public class JSONPermission {
 				groupPermissions.put(key, permissions);
 			}
 		}
+		}
+		main.put("players", playerGroups);
+		main.put("groups", groupPermissions);
 		return main;
 	}
 	
@@ -105,15 +114,17 @@ public class JSONPermission {
 			jsongroups.add(group);
 		jsonPlayers.put(player, jsongroups);
 	}
+	
 	for(String group : groups.keySet()) {
 		JSONArray jsonpermissions = new JSONArray();
-		for(String permission : players.get(group))
+		for(String permission : groups.get(group))
 			jsonpermissions.add(permission);
 		jsonGroups.put(group, jsonpermissions);
 	}
 	jsonmain.put("players", jsonPlayers);
 	jsonmain.put("groups", jsonGroups);
 	jsonmain.put("default", defaultGroup);
+	this.jsonmain = jsonmain;
 	}
 	
 	public String toString() {
