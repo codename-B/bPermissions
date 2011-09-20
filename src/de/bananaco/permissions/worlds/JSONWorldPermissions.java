@@ -1,13 +1,21 @@
 package de.bananaco.permissions.worlds;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.World;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.interfaces.TransitionSet;
+import de.bananaco.permissions.json.JSONPermission;
+import de.bananaco.permissions.override.MonkeyPlayer;
 
 public class JSONWorldPermissions extends TransitionPermissions implements PermissionSet {
 	
@@ -27,89 +35,138 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	@SuppressWarnings("unused")
 	private String defaultGroup = "default";
 	
+	private JSONPermission permission;
+	private Map<String, List<String>> groups;
+	private Map<String, List<String>> players;
+	
 	public JSONWorldPermissions(World world, Permissions plugin) {
 		super(new HashMap<String, ArrayList<String>>());
 		this.plugin = plugin;
 		this.world = world;
+		this.permission = new JSONPermission(new File("plugins/bPermissions/worlds/"+world.getName()+".json"));
 		setup();
 	}
 
+	private ArrayList<String> getDefaultArrayList() {
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add(getDefaultGroup());
+		return ar;
+	}
+	
 	@Override
 	public World getWorld() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.world;
 	}
 
 	@Override
 	public void setup() {
-		// TODO Auto-generated method stub
+		Map<String, Map<String, List<String>>> loc = permission.get();
 		
+		permission.load();
+		
+		groups = loc.get("groups");
+		players = loc.get("players");
 	}
-
+	
+	private void save() {
+		permission.put(getDefaultGroup(), players, groups);
+		permission.save();
+	}
+	
 	@Override
 	public void reload() {
-		// TODO Auto-generated method stub
-		
+		permission.load();
+		permission.save();
 	}
 
+	private void setGroupNodes(String group, List<String> nodes) {
+		groups.put(group, nodes);
+		save();
+	}
+	
 	@Override
 	public void addNode(String node, String group) {
-		// TODO Auto-generated method stub
-		
+		List<String> nodes = getGroupNodes(group);
+		if(!nodes.contains(node)) {
+			nodes.add(node);
+			setGroupNodes(group, nodes);
+		}
 	}
 
 	@Override
 	public void removeNode(String node, String group) {
-		// TODO Auto-generated method stub
-		
+		List<String> nodes = getGroupNodes(group);
+		if(nodes.contains(node)) {
+			nodes.remove(node);
+			setGroupNodes(group, nodes);
+		}
 	}
 
 	@Override
 	public List<String> getGroupNodes(String group) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> nodes = new ArrayList<String>();
+		if(groups.containsKey(group))
+			return groups.get(group);
+		return nodes;
 	}
 
 	@Override
 	public List<String> getPlayerNodes(Player player) {
-		// TODO Auto-generated method stub
-		return null;
+		return getPlayerNodes(player.getName());
 	}
 
 	@Override
 	public List<String> getPlayerNodes(String player) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> playerGroups = getGroups(player);
+		List<String> playerNodes = new ArrayList<String>();
+		for (String group : playerGroups) {
+			for(String node : getGroupNodes(group)) {
+				if(!playerNodes.contains(node))
+					playerNodes.add(node);
+			}
+		}
+		List<String> transitionNodes = ((TransitionSet) this).listTransNodes(player);
+		for(String node : transitionNodes) {
+			if(!playerNodes.contains(node))
+				playerNodes.add(node);
+		}
+		return playerNodes;
 	}
-
+	
+	private void setGroups(String player, List<String> groups) {
+		players.put(player, groups);
+	}
+	
 	@Override
 	public List<String> getGroups(Player player) {
-		// TODO Auto-generated method stub
-		return null;
+		return getGroups(player.getName());
 	}
 
 	@Override
 	public List<String> getGroups(String player) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> groups = new ArrayList<String>();
+		if(players.containsKey(player))
+			return players.get(player);
+		return groups;
 	}
 
 	@Override
 	public void addGroup(Player player, String group) {
-		// TODO Auto-generated method stub
-		
+		addGroup(player.getName(), group);
 	}
 
 	@Override
 	public void addGroup(String player, String group) {
-		// TODO Auto-generated method stub
-		
+		List<String> groups = getGroups(player);
+		if(!groups.contains(group)) {
+			groups.add(group);
+			setGroups(player, groups);
+		}
 	}
 
 	@Override
 	public void setGroup(Player player, String group) {
-		// TODO Auto-generated method stub
-		
+		setGroup(player.getName(), group);
 	}
 
 	@Override
@@ -124,38 +181,58 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 
 	@Override
 	public void removeGroup(Player player, String group) {
-		// TODO Auto-generated method stub
-		
+		removeGroup(player.getName(), group);
 	}
 
 	@Override
 	public void removeGroup(String player, String group) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setupPlayers() {
-		// TODO Auto-generated method stub
-		
+		List<String> groups = getGroups(player);
+		if(groups.contains(group)) {
+		groups.remove(group);
+		setGroups(player, groups);
+		}
 	}
 
 	@Override
 	public void overrideCraftPlayers() {
-		// TODO Auto-generated method stub
-		
+		for(Player player : getWorld().getPlayers()) {
+		if (Permissions.useMonkeyPlayer && plugin.overridePlayer) {
+
+        if (!(player instanceof CraftPlayer)) {
+            System.err.println("Player is not an instance of CraftPlayer! "+player.getName());
+            return;
+        }
+        MonkeyPlayer newPlayer = new MonkeyPlayer((CraftPlayer) player);
+        try {
+            Permissions.entity_bukkitEntity.set(newPlayer.getHandle(), newPlayer);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error while attempting to replace CraftPlayer with MonkeyPlayer");
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            System.err.println("Error while attempting to replace CraftPlayer with MonkeyPlayer");
+            e.printStackTrace();
+        }
+    }
+}
+}
+
+	@Override
+	public void setupPlayers() {
+		for (Player player : world.getPlayers()) {
+			SuperPermissionHandler sp = new SuperPermissionHandler(player);
+			sp.unsetupPlayer();
+			sp.setupPlayer(this.getPlayerNodes(player), plugin);
+		}
 	}
 
 	@Override
 	public boolean has(Player player, String node) {
-		// TODO Auto-generated method stub
-		return false;
+		return HasPermission.has(player, node);
 	}
-
+	
 	@Override
 	public String getDefaultGroup() {
-		// TODO Auto-generated method stub
-		return null;
+		return permission.getDefault();
 	}
 	
 }

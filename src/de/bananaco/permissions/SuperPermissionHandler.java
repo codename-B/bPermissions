@@ -18,13 +18,18 @@ public class SuperPermissionHandler {
 
 	public void setupPlayer(List<String> nodes, JavaPlugin plugin) {
 		unsetupPlayer();
-		PermissionAttachment att = p.addAttachment(plugin);
+		/*
+		 * Test fix for mChat - dunno wtf is up
+		 */
 		for (String node : nodes) {
-			if (node.contains("^")) {
-				att.setPermission(node.replace("^", ""), false);
+			String tNode = (node.startsWith("^")?node.replace("^",""):node);
+		PermissionAttachment att = p.addAttachment(plugin);
+			if (node.startsWith("^")) {
+				att.setPermission(tNode, false);
 			} else {
-				att.setPermission(node, true);
+				att.setPermission(tNode, true);
 			}
+			//System.out.println(tNode+":"+p.hasPermission(tNode));
 		}
 	}
 

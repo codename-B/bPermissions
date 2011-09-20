@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.interfaces.PermissionSet;
@@ -269,12 +267,7 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 	}
 	
 	public boolean has(Player player, String node) {
-		List<String> pNodes = getPlayerNodes(player);
-		if(pNodes.contains("^"+node))
-			return false;
-		if(pNodes.contains(node))
-			return true;
-		return player.isOp();
+		return HasPermission.has(player, node);
 	}
 
 	@Override

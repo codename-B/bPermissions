@@ -31,7 +31,7 @@ import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class Permissions extends JavaPlugin {
 
-	public final MonkeyListener listener = new MonkeyListener(this);
+	public final MonkeyListener monkeylistener = new MonkeyListener(this);
 
 	/**
 	 * Whether to use MonkeyPlayer class to proxy CraftPlayer. Will only be true
@@ -129,26 +129,36 @@ public class Permissions extends JavaPlugin {
 
 		im = new ImportManager(this);
 		setupConfig();
+		
 		log("Using " + wps.toString() + " for Permissions");
+		
 		setupCommands();
+		
 		pm = new WorldPermissionsManager(this);
 		perm = pm;
+		
 		if(info == null)
 			info = new InfoReader();
 		
 		info.instantiate();
 		PermissionsPlayerListener pl = new PermissionsPlayerListener(this);
+		
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_COMMAND_PREPROCESS, new CommandPreprocess(this), Priority.Lowest, this);
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_LOGIN, pl, Priority.Low, this);
 		
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
+		
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
+		
+		
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN,
-				listener, Priority.Lowest, this);
+				monkeylistener, Priority.Lowest, this);
 
 		getServer().getPluginManager().addPermission(
 				new Permission("bPermissions.admin"));
@@ -162,6 +172,7 @@ public class Permissions extends JavaPlugin {
 							pm.addAllWorlds();
 						}
 					}, 20);
+		
 		if(this.overridePlayer && getServer().getPluginManager().getPlugin("Spout") != null) {
 			log("Spout detected, registering PlayerPermissionEvent");
 			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(getWorldPermissionsManager()), Priority.Normal, this);

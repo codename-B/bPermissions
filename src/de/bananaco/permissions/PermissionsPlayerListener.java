@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import de.bananaco.permissions.interfaces.PermissionSet;
@@ -14,6 +15,17 @@ public class PermissionsPlayerListener extends PlayerListener {
 	
 	public PermissionsPlayerListener(Permissions permissions) {
 		this.permissions = permissions;
+	}
+	
+	public void onPlayerLogin(PlayerLoginEvent event) {
+		if(!permissions.isEnabled())
+			return;
+		if(event.getPlayer() == null)
+			return;
+		if(event.getPlayer().getLocation() == null)
+			return;
+		PermissionSet ps = permissions.pm.getPermissionSet(event.getPlayer().getLocation().getWorld());
+		new SuperPermissionHandler(event.getPlayer()).setupPlayer(ps.getPlayerNodes(event.getPlayer()), permissions);
 	}
 	
 	public boolean can(Player player) {

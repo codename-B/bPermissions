@@ -295,12 +295,7 @@ public class OldschoolWorldPermissions extends TransitionPermissions implements 
 	}
 
 	public boolean has(Player player, String node) {
-		List<String> pNodes = getPlayerNodes(player);
-		if(pNodes.contains("^"+node))
-			return false;
-		if(pNodes.contains(node))
-			return true;
-		return player.isOp();
+		return HasPermission.has(player, node);
 	}
 
 	@Override
