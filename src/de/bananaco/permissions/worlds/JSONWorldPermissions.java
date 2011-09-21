@@ -57,12 +57,7 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 
 	@Override
 	public void setup() {
-		Map<String, Map<String, List<String>>> loc = permission.get();
-		
-		permission.load();
-		
-		groups = loc.get("groups");
-		players = loc.get("players");
+		reload();
 	}
 	
 	private void save() {
@@ -74,6 +69,11 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	public void reload() {
 		permission.load();
 		permission.save();
+		Map<String, Map<String, List<String>>> loc = permission.get();
+		groups = loc.get("groups");
+		players = loc.get("players");
+		defaultGroup = permission.getDefault();
+		setupPlayers();
 	}
 
 	private void setGroupNodes(String group, List<String> nodes) {
@@ -230,7 +230,7 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	
 	@Override
 	public String getDefaultGroup() {
-		return permission.getDefault();
+		return this.defaultGroup;
 	}
 	
 }
