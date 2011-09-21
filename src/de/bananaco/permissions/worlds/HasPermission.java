@@ -15,7 +15,7 @@ public class HasPermission {
 			if(permission.equalsIgnoreCase(node))
 				return result;
 		}
-		System.err.println("Not registered?");
+
 		return player.isOp();
 	}
 
