@@ -13,7 +13,7 @@ public class SpoutMonkey extends PermissionListener {
 	public SpoutMonkey() {
 		
 	}
-	
+	@Override
 	public void onPlayerPermission(PlayerPermissionEvent event) {
 		String node = event.getPermissionString();
 		boolean result = HasPermission.has(event.getPlayer(), node);
