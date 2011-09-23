@@ -13,6 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
@@ -123,6 +124,11 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		getServer().getPluginManager().addPermission(
+				new Permission("bPermissions.admin", PermissionDefault.OP));
+		getServer().getPluginManager().addPermission(
+				new Permission("bPermissions.build", PermissionDefault.OP));
+		
 		sanityCheck();
 		
 		mirror = new HashMap<String, String>();
@@ -159,23 +165,10 @@ public class Permissions extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN,
 				monkeylistener, Priority.Lowest, this);
-
-		getServer().getPluginManager().addPermission(
-				new Permission("bPermissions.admin"));
-		getServer().getPluginManager().addPermission(
-				new Permission("bPermissions.build"));
-		
-		if (getServer().getPluginManager().getPlugin("Spout") != null)
-			getServer().getScheduler().scheduleAsyncDelayedTask(this,
-					new Runnable() {
-						public void run() {
-							pm.addAllWorlds();
-						}
-					}, 20);
 		
 		if(this.overridePlayer && getServer().getPluginManager().getPlugin("Spout") != null) {
 			log("Spout detected, registering PlayerPermissionEvent");
-			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(getWorldPermissionsManager()), Priority.Normal, this);
+			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(), Priority.Normal, this);
 		}
 		log("Enabled");
 	}
