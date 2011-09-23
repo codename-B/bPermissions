@@ -27,6 +27,7 @@ import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.override.SpoutMonkey;
+import de.bananaco.permissions.tracks.Tracks;
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -80,6 +81,8 @@ public class Permissions extends JavaPlugin {
 	private static InfoReader info;
 	public ImportManager im;
 
+	public Tracks tracks;
+	
 	public String hostname = "localhost";
 	public String port = "3306";
 	public String database = "bPermissions";
@@ -101,6 +104,8 @@ public class Permissions extends JavaPlugin {
 	public String addNode;
 	public String removeNode;
 	public String listNode;
+	public String promotePlayer;
+	public String demotePlayer;
 	
 	public WorldPermissionSet wps;
 
@@ -124,6 +129,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		
 		getServer().getPluginManager().addPermission(
 				new Permission("bPermissions.admin", PermissionDefault.OP));
 		getServer().getPluginManager().addPermission(
@@ -170,6 +176,9 @@ public class Permissions extends JavaPlugin {
 			log("Spout detected, registering PlayerPermissionEvent");
 			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(), Priority.Normal, this);
 		}
+		
+		tracks = new Tracks(this);
+		
 		log("Enabled");
 	}
 
@@ -211,6 +220,46 @@ public class Permissions extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		boolean allowed = true;
+		
+		if(args.length == 3 && args[0].equalsIgnoreCase(promotePlayer)) {
+			String player = args[1];
+			String track = args[2];
+			String permission = "bPermissions.promote."+track;
+			if(sender instanceof Player) {
+				if(!sender.hasPermission(permission)) {
+					sender.sendMessage("Nopromotion.");
+					return true;
+				}
+			}
+			if(tracks.promote(player, track)) {
+				sender.sendMessage(player + "promoted via "+track);
+			return true;
+			}
+			else {
+				sender.sendMessage("Please check tracks.yml");
+			return true;
+			}
+		}
+		if(args.length == 3 && args[0].equalsIgnoreCase(demotePlayer)) {
+			String player = args[1];
+			String track = args[2];
+			String permission = "bPermissions.demote."+track;
+			if(sender instanceof Player) {
+				if(!sender.hasPermission(permission)) {
+					sender.sendMessage("Nodemotion.");
+					return true;
+				}
+			}
+			if(tracks.demote(player, track)) {
+				sender.sendMessage(player + "demoted via "+track);
+			return true;
+			} else {
+				sender.sendMessage("Please check tracks.yml");
+			return true;
+			}
+		}
+		
+		
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
 			allowed = (player.hasPermission("bPermissions.admin") || player
@@ -297,6 +346,9 @@ public class Permissions extends JavaPlugin {
 		localCommand = c.getString("commands.local-command", "local");
 		worldCommand = c.getString("commands.world-command", "world");
 
+		promotePlayer = c.getString("promote-player","promote");
+		demotePlayer = c.getString("demote-player","demote");
+		
 		addGroup = c.getString("commands.add-group", "addgroup");
 		setGroup = c.getString("commands.set-group", "setgroup");
 		removeGroup = c.getString("commands.remove-group", "rmgroup");
@@ -326,6 +378,9 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.local-command", localCommand);
 		c.setProperty("commands.world-command", worldCommand);
 
+		c.setProperty("promote-player", promotePlayer);
+		c.setProperty("demote-player", demotePlayer);
+		
 		c.setProperty("commands.set-group", setGroup);
 		c.setProperty("commands.add-group", addGroup);
 		c.setProperty("commands.remove-group", removeGroup);

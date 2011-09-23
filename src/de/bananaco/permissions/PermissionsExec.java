@@ -28,7 +28,6 @@ public class PermissionsExec {
 			sender.sendMessage("That world does not exist.");
 			return false;
 		}
-
 		if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addGroup)) {
 			String player = args[3];
 			String group = args[2];
