@@ -26,13 +26,15 @@ public class CommandPreprocess extends PlayerListener {
 				||(command.equalsIgnoreCase(permissions.listGroup))
 					||(command.equalsIgnoreCase(permissions.addNode))
 						||(command.equalsIgnoreCase(permissions.removeNode))
-							||(command.equalsIgnoreCase(permissions.listNode))
-								||(command.equalsIgnoreCase(permissions.promotePlayer))
-									||(command.equalsIgnoreCase(permissions.demotePlayer))) {
+							||(command.equalsIgnoreCase(permissions.listNode))) {
 			event.setCancelled(true);
 			player.chat("/p global "+message);
 		}
-	
+		else if((command.equalsIgnoreCase(permissions.promotePlayer))
+				||(command.equalsIgnoreCase(permissions.demotePlayer))) {
+			event.setCancelled(true);
+			player.chat("/p "+message);
+		}
 	}
 
 }
@@ -51,10 +53,12 @@ class ExtraCommandPreprocess extends ServerListener {
 				||(command.equalsIgnoreCase(permissions.listGroup))
 					||(command.equalsIgnoreCase(permissions.addNode))
 						||(command.equalsIgnoreCase(permissions.removeNode))
-							||(command.equalsIgnoreCase(permissions.listNode))
-								||(command.equalsIgnoreCase(permissions.promotePlayer))
-									||(command.equalsIgnoreCase(permissions.demotePlayer))) {
+							||(command.equalsIgnoreCase(permissions.listNode))) {
 			event.setCommand("p global "+message);
+		}
+		else if((command.equalsIgnoreCase(permissions.promotePlayer))
+				||(command.equalsIgnoreCase(permissions.demotePlayer))) {
+			event.setCommand("p "+message);
 		}
 	}
 }
