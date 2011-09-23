@@ -313,4 +313,16 @@ public class SQLWorldPermissions extends TransitionPermissions implements Permis
 		
 	}
 
+	@Override
+	public List<String> getAllCachedGroups() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAllCachedPlayers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

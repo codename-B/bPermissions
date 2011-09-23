@@ -256,4 +256,16 @@ class NewWorldPermissions extends TransitionPermissions implements PermissionSet
 		
 	}
 
+	@Override
+	public List<String> getAllCachedGroups() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAllCachedPlayers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

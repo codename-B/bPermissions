@@ -136,4 +136,6 @@ public interface PermissionSet {
 	 */
 	public boolean has(Player player, String node);
 	public String getDefaultGroup();
+	public List<String> getAllCachedGroups();
+	public List<String> getAllCachedPlayers();
 }

@@ -29,7 +29,6 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	/**
 	 * The default!
 	 */
-	@SuppressWarnings("unused")
 	private String defaultGroup = "default";
 	
 	private JSONPermission permission;
@@ -48,6 +47,7 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 		ArrayList<String> ar = new ArrayList<String>();
 		ar.add(getDefaultGroup());
 		return ar;
+		
 	}
 	
 	@Override
@@ -231,6 +231,18 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 	@Override
 	public String getDefaultGroup() {
 		return this.defaultGroup;
+	}
+
+	@Override
+	public List<String> getAllCachedGroups() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getAllCachedPlayers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
