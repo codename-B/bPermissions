@@ -343,14 +343,12 @@ public class OldschoolWorldPermissions extends TransitionPermissions implements 
 
 	@Override
 	public List<String> getAllCachedGroups() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.groups.getKeys("groups");
 	}
 
 	@Override
 	public List<String> getAllCachedPlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.users.getKeys("users");
 	}
 
 }
