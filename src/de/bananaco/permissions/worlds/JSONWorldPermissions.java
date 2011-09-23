@@ -235,14 +235,20 @@ public class JSONWorldPermissions extends TransitionPermissions implements Permi
 
 	@Override
 	public List<String> getAllCachedGroups() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> groups = new ArrayList<String>();
+		if(this.groups != null)
+		for(String group : this.groups.keySet())
+			groups.add(group);
+		return groups;
 	}
 
 	@Override
 	public List<String> getAllCachedPlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> players = new ArrayList<String>();
+		if(this.players != null)
+		for(String player : this.players.keySet())
+			players.add(player);
+		return players;
 	}
 	
 }

@@ -21,7 +21,8 @@ public class HasPermission {
             	return get(hnodes, wildcard);
             index = node.lastIndexOf('.');
         }
-        
+        if(contains(hnodes, "*"))
+        	return get(hnodes, "*");
         hnodes.clear();
 		return player.isOp();
 	}
