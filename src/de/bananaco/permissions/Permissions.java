@@ -232,7 +232,7 @@ public class Permissions extends JavaPlugin {
 				}
 			}
 			if(tracks.promote(player, track)) {
-				sender.sendMessage(player + "promoted via "+track);
+				sender.sendMessage(player + " promoted via "+track);
 			return true;
 			}
 			else {
@@ -251,7 +251,7 @@ public class Permissions extends JavaPlugin {
 				}
 			}
 			if(tracks.demote(player, track)) {
-				sender.sendMessage(player + "demoted via "+track);
+				sender.sendMessage(player + " demoted via "+track);
 			return true;
 			} else {
 				sender.sendMessage("Please check tracks.yml");

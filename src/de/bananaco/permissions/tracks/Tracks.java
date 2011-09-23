@@ -82,7 +82,7 @@ public class Tracks {
 		// The worlds
 		List<World> worlds = new ArrayList<World>();
 		// Return false if nothing will happen
-		if(groups.size() == 0 || worlds.size() == 0)
+		if(groups.size() == 0 || worldStrings.size() == 0)
 			return false;
 		// Setting up the actual worlds
 		for(String world : worldStrings)
@@ -115,7 +115,7 @@ public class Tracks {
 		// The worlds
 		List<World> worlds = new ArrayList<World>();
 		// Return false if nothing will happen
-		if(groups.size() == 0 || worlds.size() == 0)
+		if(groups.size() == 0 || worldStrings.size() == 0)
 			return false;
 		// Settings up the actual worlds
 		for(String world : worldStrings)
