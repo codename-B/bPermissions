@@ -416,7 +416,7 @@ public class Permissions extends JavaPlugin {
 		username = c.getString("sql.username", username);
 		password = c.getString("sql.password", password);
 		
-		useIpLock = c.getBoolean("use-iplock", true);
+		useIpLock = c.getBoolean("use-iplock", false);
 		lock = c.getString("commands.lock", "lock");
 		unlock = c.getString("commands.unlock", "unlock");
 		

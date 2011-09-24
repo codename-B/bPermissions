@@ -1,6 +1,8 @@
 package de.bananaco.permissions.worlds;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.World;
 import de.bananaco.permissions.Permissions;
@@ -61,7 +63,19 @@ public class WorldPermissionsManager {
 	public void log(Object input) {
 		System.out.println("[bPermissions] " + String.valueOf(input));
 	}
-
+	/**
+	 * Added in preparation for GUI permissions managers (EWW)
+	 * @return List<PermissionSet> unique only
+	 */
+	public List<PermissionSet> getPermissionSets() {
+		List<PermissionSet> ps = new ArrayList<PermissionSet>();
+		for(String key : this.ps.keySet()) {
+			if(!ps.contains(this.ps.get(key)) && this.ps.get(key) != null)
+			ps.add(this.ps.get(key));
+		}
+		return ps;
+	}
+	
 	/**
 	 * Gets the PermissionSet
 	 * 
