@@ -230,6 +230,10 @@ public class Permissions extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		boolean allowed = true;
+		if(args.length == 0) {
+			sender.sendMessage("http://dev.bukkit.org/server-mods/bpermissions/");
+			return true;
+		}
 		if(args.length == 2 && args[0].equalsIgnoreCase("lock") && sender instanceof Player && useIpLock) {
 			Player player = (Player) sender;
 			if(!player.hasPermission("bPermissions.iplock.lock") || iplock.kickPlayers.contains(player.getName())) {
