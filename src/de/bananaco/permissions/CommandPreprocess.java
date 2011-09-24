@@ -31,7 +31,9 @@ public class CommandPreprocess extends PlayerListener {
 			player.chat("/p global "+message);
 		}
 		else if((command.equalsIgnoreCase(permissions.promotePlayer))
-				||(command.equalsIgnoreCase(permissions.demotePlayer))) {
+				||(command.equalsIgnoreCase(permissions.demotePlayer))
+					||(command.equalsIgnoreCase(permissions.lock))
+						||(command.equalsIgnoreCase(permissions.unlock))){
 			event.setCancelled(true);
 			player.chat("/p "+message);
 		}

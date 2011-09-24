@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.iplock.IpLock;
 
 public class PermissionsPlayerListener extends PlayerListener {
 	
@@ -34,10 +35,21 @@ public class PermissionsPlayerListener extends PlayerListener {
 			return;
 		if(event.getPlayer() == null)
 			return;
-		if(event.getPlayer().getLocation() == null)
-			return;
-		PermissionSet ps = permissions.pm.getPermissionSet(event.getPlayer().getLocation().getWorld());
-		new SuperPermissionHandler(event.getPlayer()).setupPlayer(ps.getPlayerNodes(event.getPlayer()), permissions);
+		if(!permissions.useIpLock)
+		return;
+		
+		Player player = event.getPlayer();
+		if(player.hasPermission("bPermissions.iplock.lock")) {
+			IpLock iplock = permissions.iplock;
+			if(iplock.hasEntry(player)) {
+				if(iplock.isIpLocked(player)) {
+			player.sendMessage("Please login before you are kicked!");
+			iplock.startTimeout(player);
+			}
+			} else {
+			player.sendMessage("Please set a password!");
+			}
+		}
 	}
 	
 	public boolean can(Player player) {

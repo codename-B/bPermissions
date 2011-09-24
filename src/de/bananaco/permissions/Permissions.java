@@ -25,6 +25,7 @@ import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.info.InfoReader;
+import de.bananaco.permissions.iplock.IpLock;
 import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.override.SpoutMonkey;
 import de.bananaco.permissions.tracks.Tracks;
@@ -80,6 +81,7 @@ public class Permissions extends JavaPlugin {
 	private static WorldPermissionsManager perm;
 	private static InfoReader info;
 	public ImportManager im;
+	public IpLock iplock;
 
 	public Tracks tracks;
 	
@@ -107,6 +109,10 @@ public class Permissions extends JavaPlugin {
 	public String promotePlayer;
 	public String demotePlayer;
 	
+	public String lock;
+	public String unlock;
+	public boolean useIpLock;
+	
 	public WorldPermissionSet wps;
 
 	public Map<String, String> mirror;
@@ -124,6 +130,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		getServer().getScheduler().cancelTasks(this);
 		log("Disabled");
 	}
 
@@ -159,7 +166,8 @@ public class Permissions extends JavaPlugin {
 				Event.Type.PLAYER_COMMAND_PREPROCESS, new CommandPreprocess(this), Priority.Lowest, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_LOGIN, pl, Priority.Low, this);
-		
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_JOIN, pl, Priority.Low, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
 		
@@ -177,6 +185,8 @@ public class Permissions extends JavaPlugin {
 			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(), Priority.Normal, this);
 		}
 		
+		// Just some extra stuff
+		iplock = new IpLock(this);
 		tracks = new Tracks(this);
 		
 		log("Enabled");
@@ -220,7 +230,49 @@ public class Permissions extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		boolean allowed = true;
-		
+		if(args.length == 2 && args[0].equalsIgnoreCase("lock") && sender instanceof Player && useIpLock) {
+			Player player = (Player) sender;
+			if(!player.hasPermission("bPermissions.iplock.lock")) {
+				player.sendMessage("Nope.");
+				return true;
+			}
+			if(iplock.hasEntry(player)) {
+			iplock.createEntry(player, args[1]);
+			sender.sendMessage("Your entry has been reset");
+			return true;
+			} else {
+			iplock.createEntry(player, args[1]);
+			sender.sendMessage("A new entry was created with your password");
+			return true;
+			}
+		}
+		if(args.length == 2 && args[0].equalsIgnoreCase("unlock") && sender instanceof Player && useIpLock) {
+			Player player = (Player) sender;
+			if(!player.hasPermission("bPermissions.iplock.lock")) {
+				player.sendMessage("Nope.");
+				return true;
+			}
+			if(!iplock.kickPlayers.contains(player.getName())) {
+				sender.sendMessage("You are already logged in!");
+				return true;
+			}
+			if(iplock.hasEntry(player)) {
+			boolean isPassword = iplock.isPassword(player, args[1]);
+			if(isPassword) {
+				sender.sendMessage("Welcome, Professor.");
+				iplock.stopTimeout(player);
+				iplock.addIp(player);
+				return true;
+			} else {
+				sender.sendMessage("Incorrect password! Attempt logged!");
+				log(player.getAddress().toString() + " attempted to login to account "+player.getName());
+				return true;
+			}
+			} else {
+			sender.sendMessage("You can't do this.");
+			return true;
+			}
+		}
 		if(args.length == 3 && args[0].equalsIgnoreCase(promotePlayer)) {
 			String player = args[1];
 			String track = args[2];
@@ -364,6 +416,10 @@ public class Permissions extends JavaPlugin {
 		username = c.getString("sql.username", username);
 		password = c.getString("sql.password", password);
 		
+		useIpLock = c.getBoolean("use-iplock", true);
+		lock = c.getString("commands.lock", "lock");
+		unlock = c.getString("commands.unlock", "unlock");
+		
 		//c.setProperty("use-bml", bml);
 		if(c.getBoolean("use-bml", false)) {
 			wps = WorldPermissionSet.BML;
@@ -389,6 +445,10 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.add-node", addNode);
 		c.setProperty("commands.remove-node", removeNode);
 		c.setProperty("commands.list-node", listNode);
+		
+		c.setProperty("commands.unlock", unlock);
+		c.setProperty("commands.lock", lock);
+		c.setProperty("use-iplock", useIpLock);
 
 		c.save();
 	}
