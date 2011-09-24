@@ -28,14 +28,14 @@ public class CommandPreprocess extends PlayerListener {
 						||(command.equalsIgnoreCase(permissions.removeNode))
 							||(command.equalsIgnoreCase(permissions.listNode))) {
 			event.setCancelled(true);
-			player.chat("/p global "+message);
+			player.chat("/permissions global "+message);
 		}
 		else if((command.equalsIgnoreCase(permissions.promotePlayer))
 				||(command.equalsIgnoreCase(permissions.demotePlayer))
 					||(command.equalsIgnoreCase(permissions.lock))
 						||(command.equalsIgnoreCase(permissions.unlock))){
 			event.setCancelled(true);
-			player.chat("/p "+message);
+			player.chat("/permissions "+message);
 		}
 	}
 
@@ -56,11 +56,11 @@ class ExtraCommandPreprocess extends ServerListener {
 					||(command.equalsIgnoreCase(permissions.addNode))
 						||(command.equalsIgnoreCase(permissions.removeNode))
 							||(command.equalsIgnoreCase(permissions.listNode))) {
-			event.setCommand("p global "+message);
+			event.setCommand("permissions global "+message);
 		}
 		else if((command.equalsIgnoreCase(permissions.promotePlayer))
 				||(command.equalsIgnoreCase(permissions.demotePlayer))) {
-			event.setCommand("p "+message);
+			event.setCommand("permissions "+message);
 		}
 	}
 }
