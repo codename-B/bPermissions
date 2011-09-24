@@ -232,7 +232,7 @@ public class Permissions extends JavaPlugin {
 		boolean allowed = true;
 		if(args.length == 2 && args[0].equalsIgnoreCase("lock") && sender instanceof Player && useIpLock) {
 			Player player = (Player) sender;
-			if(!player.hasPermission("bPermissions.iplock.lock")) {
+			if(!player.hasPermission("bPermissions.iplock.lock") || iplock.kickPlayers.contains(player.getName())) {
 				player.sendMessage("Nope.");
 				return true;
 			}
