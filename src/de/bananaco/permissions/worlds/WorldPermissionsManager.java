@@ -18,6 +18,7 @@ public class WorldPermissionsManager {
 	 */
 	private final Permissions jp;
 
+	private boolean engaged = false;
 	/**
 	 * Instantiate this bitch
 	 * 
@@ -26,6 +27,10 @@ public class WorldPermissionsManager {
 	public WorldPermissionsManager(Permissions jp) {
 		this.ps = new HashMap<String, PermissionSet>();
 		this.jp = jp;
+	}
+	
+	public void engage() {
+		this.engaged = true;
 		this.addAllWorlds();
 		log("WorldPermissionsManager engaged");
 	}
@@ -34,6 +39,10 @@ public class WorldPermissionsManager {
 	 * Adds all worlds active on the server
 	 */
 	public void addAllWorlds() {
+		if(!this.engaged) {
+			System.err.println("[bPermissions] WorldPermissionsManager not engaged!");
+			return;
+		}
 		for (World world : jp.getServer().getWorlds()) {
 			PermissionSet p = null;
 			
@@ -68,6 +77,10 @@ public class WorldPermissionsManager {
 	 * @return List<PermissionSet> unique only
 	 */
 	public List<PermissionSet> getPermissionSets() {
+		if(!this.engaged) {
+			System.err.println("[bPermissions] WorldPermissionsManager not engaged!");
+			return null;
+		}
 		List<PermissionSet> ps = new ArrayList<PermissionSet>();
 		for(String key : this.ps.keySet()) {
 			if(!ps.contains(this.ps.get(key)) && this.ps.get(key) != null)
@@ -93,6 +106,10 @@ public class WorldPermissionsManager {
 	 * @return PermissionSet
 	 */
 	public PermissionSet getPermissionSet(String world) {
+		if(!this.engaged) {
+			System.err.println("[bPermissions] WorldPermissionsManager not engaged!");
+			return null;
+		}
 		if(jp.mirror.containsKey(world) && jp.mirror.get(world) != null)
 			world = jp.mirror.get(world);
 		if (ps.containsKey(world)) {

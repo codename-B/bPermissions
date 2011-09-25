@@ -121,7 +121,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onLoad() {
-		
+		pm = new WorldPermissionsManager(this);
 		info = new InfoReader();
 		getServer().getServicesManager().register(PlayerInfo.class, info, this,
 				ServicePriority.Normal);
@@ -136,6 +136,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		
 		
 		getServer().getPluginManager().addPermission(
 				new Permission("bPermissions.admin", PermissionDefault.OP));
@@ -152,8 +153,11 @@ public class Permissions extends JavaPlugin {
 		log("Using " + wps.toString() + " for Permissions");
 		
 		setupCommands();
-		
+		if(pm == null)
 		pm = new WorldPermissionsManager(this);
+		
+		pm.engage();
+		
 		perm = pm;
 		
 		if(info == null)
