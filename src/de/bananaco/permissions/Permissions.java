@@ -122,6 +122,9 @@ public class Permissions extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		pm = new WorldPermissionsManager(this);
+		
+		perm = pm;
+		
 		info = new InfoReader();
 		getServer().getServicesManager().register(PlayerInfo.class, info, this,
 				ServicePriority.Normal);
@@ -157,8 +160,6 @@ public class Permissions extends JavaPlugin {
 		pm = new WorldPermissionsManager(this);
 		
 		pm.engage();
-		
-		perm = pm;
 		
 		if(info == null)
 			info = new InfoReader();
