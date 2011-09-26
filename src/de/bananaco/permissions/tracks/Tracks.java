@@ -34,8 +34,10 @@ public class Tracks {
 		if(isEmpty())
 			setupDefaults();
 		c.save();
-		for(String permission : getPermissions())
+
+		for(String permission : getPermissions()) {
 			p.getServer().getPluginManager().addPermission(new Permission(permission, PermissionDefault.OP));
+		}
 	}
 	
 	private boolean isEmpty() {
@@ -46,7 +48,7 @@ public class Tracks {
 		return false;
 	}
 	
-	private List<String> getPermissions() {
+	public List<String> getPermissions() {
 		List<String> permissions = new ArrayList<String>();
 		List<String> keys = c.getKeys("tracks");
 		if(keys != null)

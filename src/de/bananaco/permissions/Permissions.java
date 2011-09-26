@@ -139,13 +139,6 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		
-		
-		getServer().getPluginManager().addPermission(
-				new Permission("bPermissions.admin", PermissionDefault.OP));
-		getServer().getPluginManager().addPermission(
-				new Permission("bPermissions.build", PermissionDefault.OP));
-		
 		sanityCheck();
 		
 		mirror = new HashMap<String, String>();
@@ -194,9 +187,21 @@ public class Permissions extends JavaPlugin {
 		iplock = new IpLock(this);
 		tracks = new Tracks(this);
 		
+		registerPermissions();
+		
 		log("Enabled");
 	}
 
+	public void registerPermissions() {
+		
+		getServer().getPluginManager().addPermission(
+				new Permission("bPermissions.admin", PermissionDefault.OP));
+		getServer().getPluginManager().addPermission(
+				new Permission("bPermissions.build", PermissionDefault.OP));
+		
+	}
+	
+	
 	/**
 	 * May as well include this - it'll let even the most lazy of server owners
 	 * know it's time to get rid of bInfo
@@ -287,7 +292,7 @@ public class Permissions extends JavaPlugin {
 			String track = args[2];
 			String permission = "bPermissions.promote."+track;
 			if(sender instanceof Player) {
-				if(!sender.hasPermission(permission)) {
+				if(!(sender.hasPermission(permission))) {
 					sender.sendMessage("Nopromotion.");
 					return true;
 				}

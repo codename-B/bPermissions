@@ -22,7 +22,13 @@ public class PermissionsExec {
 		return player;
 	}
 	public boolean exec(CommandSender sender, String[] args, String world) {
-
+		String perm = "bPermissions.admin."+args[1];
+		if(sender instanceof Player) {
+			if(!(sender.hasPermission(perm) || sender.hasPermission("bPermissions.admin"))) {
+				sender.sendMessage("You don't have permission.");
+				return false;
+			}
+		}
 		World w = plugin.getServer().getWorld(world);
 		if (w == null) {
 			sender.sendMessage("That world does not exist.");
