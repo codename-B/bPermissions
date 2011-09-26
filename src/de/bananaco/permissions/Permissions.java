@@ -324,7 +324,18 @@ public class Permissions extends JavaPlugin {
 			return true;
 			}
 		}
-		
+		if (args.length == 1) {
+			if (args[0].equalsIgnoreCase("reload")) {
+				if(sender.hasPermission("bPermissions.admin") || sender.hasPermission("bPermissions.reload") || !(sender instanceof Player)) {
+				pm.addAllWorlds();
+				sender.sendMessage("Permissions reloaded.");
+				return true;
+				} else {
+					sender.sendMessage("Reload? Nope.");
+					return true;
+				}
+			}
+		}
 		
 		if (sender instanceof Player) {
 			Player player = (Player) sender;
@@ -337,11 +348,6 @@ public class Permissions extends JavaPlugin {
 		}
 		if (args.length > 0) {
 			if (args.length == 1) {
-				if (args[0].equalsIgnoreCase("reload")) {
-					pm.addAllWorlds();
-					sender.sendMessage("Permissions reloaded.");
-					return true;
-				}
 				if(args[0].equals("helpme")) {
 					new ForNoobs(this).addAll();
 					sender.sendMessage("Attempted to setup default groups - please view your worldname.yml files");
