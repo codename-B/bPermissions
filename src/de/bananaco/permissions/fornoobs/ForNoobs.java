@@ -59,11 +59,11 @@ public class ForNoobs {
 		ps.addNode("suffix.100.over9000", adminGroup);
 		// Add the online admins
 		for(String player : admins) {
-			if(s.getPlayer(player) != null) {
-				player = s.getPlayer(player).getName();
-			ps.addGroup(player, defaultGroup);
-			ps.addGroup(player, moderatorGroup);
-			ps.addGroup(player, adminGroup);
+			String name = PlayerCase.correctCase(player);
+			if(name != null) {
+			ps.addGroup(name, defaultGroup);
+			ps.addGroup(name, moderatorGroup);
+			ps.addGroup(name, adminGroup);
 			}
 		}
 		
