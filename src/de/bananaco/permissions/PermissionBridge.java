@@ -82,7 +82,9 @@ public class PermissionBridge extends PermissionHandler {
     @Override
     public String getGroup(String world, String userName) {
         List<String> groups = internalGetGroups(world, userName);
-        return groups.isEmpty() ? null : groups.get(groups.size()-1);
+        if(groups == null)
+            groups = new ArrayList<String>();
+        return groups.size() == 0 ? "" : groups.get(groups.size()-1);
     }
 
     @Override
