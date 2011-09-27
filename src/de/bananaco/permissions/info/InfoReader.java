@@ -27,8 +27,10 @@ public class InfoReader implements PlayerInfo {
 	 */
 	public String getGroupValue(String group, String world, String valueToGet) {
 		// Blame CraftIRC
-		if(world == null || world.equals(""))
-		world = Bukkit.getServer().getWorlds().get(0).getName();
+		if(world == null || world.equals("")) {
+		System.err.println("[bPermissions] Some silly developer is checking for a blank world!");
+		return "BLANKWORLD";
+		}
 		
 		String value = "";
 		int priority = -1;
@@ -53,9 +55,10 @@ public class InfoReader implements PlayerInfo {
 	 * @return String
 	 */
 	public String getValue(String player, String world, String valueToGet) {
-		// Blame CraftIRC
-		if(world == null || world.equals(""))
-		world = Bukkit.getServer().getWorlds().get(0).getName();
+		if(world == null || world.equals("")) {
+		System.err.println("[bPermissions] Some silly developer is checking for a blank world!");
+		return "BLANKWORLD";
+		}
 		
 		String value = "";
 		int priority = -1;
