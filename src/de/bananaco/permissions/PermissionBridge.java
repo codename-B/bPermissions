@@ -76,7 +76,9 @@ public class PermissionBridge extends PermissionHandler {
      * internal getGroups, used by the other methods
      */
     private List<String> internalGetGroups(String world, String userName) {
+        System.out.println("[DEBUG] world:"+world+"userName:"+userName);
         PermissionSet ps = permissions.pm.getPermissionSet(world);
+        System.out.println("[DEBUG] ps.getGroups(userName).size()="+ps.getGroups(userName).size());
         return ps.getGroups(userName);
     }
     
