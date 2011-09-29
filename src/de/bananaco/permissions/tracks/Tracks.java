@@ -124,7 +124,7 @@ public class Tracks {
 			if(p.getServer().getWorld(world) != null)
 				worlds.add(p.getServer().getWorld(world));
 		// The message		
-		String message = c.getString("tracks."+track+".promote-message", defaultPromoteMessage);
+		String message = c.getString("tracks."+track+".demote-message", defaultDemoteMessage);
 		// Sending the message
 		Player pl = p.getServer().getPlayer(player);
 		if(pl != null) {
