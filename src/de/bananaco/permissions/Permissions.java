@@ -420,8 +420,8 @@ public class Permissions extends JavaPlugin {
 		localCommand = c.getString("commands.local-command", "local");
 		worldCommand = c.getString("commands.world-command", "world");
 
-		promotePlayer = c.getString("promote-player","promote");
-		demotePlayer = c.getString("demote-player","demote");
+		promotePlayer = c.getString("commands.promote-player","promote");
+		demotePlayer = c.getString("commands.demote-player","demote");
 		
 		addGroup = c.getString("commands.add-group", "addgroup");
 		setGroup = c.getString("commands.set-group", "setgroup");
@@ -456,8 +456,8 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.local-command", localCommand);
 		c.setProperty("commands.world-command", worldCommand);
 
-		c.setProperty("promote-player", promotePlayer);
-		c.setProperty("demote-player", demotePlayer);
+		c.setProperty("commands.promote-player", promotePlayer);
+		c.setProperty("commands.demote-player", demotePlayer);
 		
 		c.setProperty("commands.set-group", setGroup);
 		c.setProperty("commands.add-group", addGroup);
