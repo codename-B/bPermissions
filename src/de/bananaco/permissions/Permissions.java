@@ -167,7 +167,7 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_LOGIN, pl, Priority.Low, this);
 		getServer().getPluginManager().registerEvent(
-				Event.Type.PLAYER_JOIN, pl, Priority.Low, this);
+				Event.Type.PLAYER_JOIN, pl, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
 		
