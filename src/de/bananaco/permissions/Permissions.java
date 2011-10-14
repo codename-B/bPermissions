@@ -120,6 +120,8 @@ public class Permissions extends JavaPlugin {
 
 	public boolean overridePlayer;
 
+	public boolean suggestSimilarCommands;
+
 	@Override
 	public void onLoad() {
 		pm = new WorldPermissionsManager(this);
@@ -442,6 +444,8 @@ public class Permissions extends JavaPlugin {
 		lock = c.getString("commands.lock", "lock");
 		unlock = c.getString("commands.unlock", "unlock");
 		
+		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", false);
+		
 		//c.setProperty("use-bml", bml);
 		if(c.getBoolean("use-bml", false)) {
 			wps = WorldPermissionSet.BML;
@@ -451,6 +455,8 @@ public class Permissions extends JavaPlugin {
 		}
 		c.removeProperty("use-bml");
 		c.setProperty("override-player", overridePlayer);
+		
+		c.setProperty("suggest-similar-commands", suggestSimilarCommands);
 
 		c.setProperty("commands.global-command", globalCommand);
 		c.setProperty("commands.local-command", localCommand);

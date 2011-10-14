@@ -37,6 +37,8 @@ public class CommandPreprocess extends PlayerListener {
 			event.setCancelled(true);
 			player.chat("/permissions "+message);
 		}
+
+		if(permissions.suggestSimilarCommands) CommandSuggestions.calculateSimilarCommands(event);
 	}
 
 }
