@@ -17,7 +17,6 @@ import org.bukkit.plugin.Plugin;
 public class CommandSuggestions {
 
 	public static Map<String, Object> pluginCommands = new HashMap<String, Object>();
-	private final static int maxCmdDistance = 3; // maximum levenshtein distance to take into account, based on my tests, 3 works nice
 
 	public static void grabDefinedCommands() {
 
@@ -56,7 +55,7 @@ public class CommandSuggestions {
 
 			for(String cmd : CommandSuggestions.pluginCommands.keySet()) {
 				int distance = LevenshteinImpl.distance(split, cmd);
-				if(distance < CommandSuggestions.maxCmdDistance) {
+				if(distance < 3) {
 					distanceCmds.put(cmd, distance);
 				}
 			}
@@ -88,6 +87,9 @@ public class CommandSuggestions {
 					if((ref.size() - itc == ref.size() - 1) && ref.size() > 1) sb.append(" or ");
 					else if(ref.size() - itc != 0) sb.append(", "); 
 				}
+
+				event.getPlayer().sendMessage(sb.toString());
+
 			}
 		}
 	}
