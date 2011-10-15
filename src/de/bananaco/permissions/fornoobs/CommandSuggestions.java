@@ -1,13 +1,18 @@
 package de.bananaco.permissions.fornoobs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
+import org.bukkit.ChatColor;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandSuggestions {
 
@@ -35,7 +40,7 @@ public class CommandSuggestions {
 		CommandSuggestions.pluginCommands = allCmdList;
 	}
 
-	public static calculateSimilarCommands(PlayerCommandPreprocessEvent event) {
+	public static void calculateSimilarCommands(PlayerCommandPreprocessEvent event) {
 
 		if(event.isCancelled()) return;
 

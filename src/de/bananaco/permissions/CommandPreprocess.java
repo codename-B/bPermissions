@@ -8,6 +8,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.event.server.ServerCommandEvent;
 
+import de.bananaco.permissions.fornoobs.CommandSuggestions;
+
 public class CommandPreprocess extends PlayerListener {
 	private final Permissions permissions;
 	CommandPreprocess(Permissions permissions) {
