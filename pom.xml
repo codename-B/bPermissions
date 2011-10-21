@@ -9,6 +9,19 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <!-- Repository locations -->
+    <repositories>
+        <!-- Spout-related stufff -->
+        <repository>
+            <id>spout-repo</id>
+            <url>http://ci.getspout.org/plugin/repository/everything/</url>
+        </repository>
+        <!-- Bukkit-related stuff -->
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/artifactory/repo</url>
+        </repository>
+    </repositories>
     <build>
         <sourceDirectory>${basedir}/src/</sourceDirectory>
         <plugins>
@@ -46,7 +59,7 @@
             <version>0.0.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
-		<dependency>
+        <dependency>
             <groupId>org.getspout</groupId>
             <artifactId>spoutapi</artifactId>
             <version>dev-SNAPSHOT</version>
