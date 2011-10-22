@@ -503,7 +503,7 @@ public class Permissions extends JavaPlugin {
 		lock = c.getString("commands.lock", "lock");
 		unlock = c.getString("commands.unlock", "unlock");
 		
-		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", false);
+		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", true);
 		
 		//c.setProperty("use-bml", bml);
 		if(c.getBoolean("use-bml", false)) {
