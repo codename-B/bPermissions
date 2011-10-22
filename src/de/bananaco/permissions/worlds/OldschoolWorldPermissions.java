@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
+import de.bananaco.permissions.oldschool.Configuration;
 
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;

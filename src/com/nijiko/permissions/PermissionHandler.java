@@ -2,7 +2,6 @@ package com.nijiko.permissions;
 
 import java.util.Map;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
 
 /**
  * Permissions 2.x
@@ -38,7 +37,6 @@ public abstract class PermissionHandler {
     public abstract boolean checkWorld(String world);
 
     public abstract void load();
-    public abstract void load(String world, Configuration config);
     public abstract void reload();
     public abstract boolean reload(String world);
 

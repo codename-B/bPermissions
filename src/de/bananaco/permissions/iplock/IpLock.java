@@ -8,7 +8,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.util.config.Configuration;
+import de.bananaco.permissions.oldschool.Configuration;
 
 import de.bananaco.permissions.Permissions;
 

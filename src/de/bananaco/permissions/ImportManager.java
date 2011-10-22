@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
+import de.bananaco.permissions.oldschool.Configuration;
 
 import de.bananaco.permissions.interfaces.PermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;

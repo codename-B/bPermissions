@@ -17,7 +17,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
+
 
 import com.ubempire.binfo.PlayerInfo;
 
@@ -25,6 +25,7 @@ import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.fornoobs.ForNoobs;
+import de.bananaco.permissions.fornoobs.Tutorial;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.iplock.IpLock;
 import de.bananaco.permissions.override.MonkeyListener;
@@ -32,6 +33,8 @@ import de.bananaco.permissions.override.SpoutMonkey;
 import de.bananaco.permissions.tracks.Tracks;
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
+
+import de.bananaco.permissions.oldschool.Configuration;
 
 public class Permissions extends JavaPlugin {
 
@@ -121,6 +124,8 @@ public class Permissions extends JavaPlugin {
 	public boolean overridePlayer;
 
 	public boolean suggestSimilarCommands;
+	
+	public Tutorial tutorial;
 
 	@Override
 	public void onLoad() {
@@ -187,6 +192,11 @@ public class Permissions extends JavaPlugin {
 			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT, new SpoutMonkey(), Priority.Normal, this);
 		}
 		
+		tutorial = new Tutorial(this);
+		// The tutorial
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, 
+				tutorial, Priority.Normal, this);
+		
 		// Just some extra stuff
 		iplock = new IpLock(this);
 		tracks = new Tracks(this);
@@ -244,9 +254,24 @@ public class Permissions extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		boolean allowed = true;
-		if(args.length == 0) {
-			sender.sendMessage("http://dev.bukkit.org/server-mods/bpermissions/");
+	if(args.length == 0 && sender.hasPermission("bPermissions.admin")) {
+			sender.sendMessage("Type: \"/"+label +" tutorial\" in-game for help");
 			return true;
+		} if(args.length == 1 && sender instanceof Player) {
+			Player player = (Player) sender;
+			if(args[0].equalsIgnoreCase("tutorial"))
+				if(player.hasPermission("bPermissions.admin")) {
+				player.sendMessage(ChatColor.GREEN+"--"+ChatColor.BLUE+"bPermissions tutorial"+ChatColor.GREEN+"--");
+				player.sendMessage(ChatColor.BLUE+"bPermissions tutorial started.");
+				player.sendMessage(ChatColor.BLUE+"A basic command to start with");
+				player.sendMessage(ChatColor.BLUE+"To list the permission nodes of a group, try it!");
+				player.sendMessage(ChatColor.WHITE+"/permissions global lsnode "+Permissions.getWorldPermissionsManager().getPermissionSet(player.getWorld()).getDefaultGroup());
+				tutorial.enable(player);
+				return true;
+			} else {
+				player.sendMessage(ChatColor.RED+"Nice try buckaroo!");
+				return true;
+			}
 		}
 		if(args.length == 2 && args[0].equalsIgnoreCase("lock") && sender instanceof Player && useIpLock) {
 			Player player = (Player) sender;
@@ -409,7 +434,7 @@ public class Permissions extends JavaPlugin {
 	}
 
 	public void setupConfig() {
-		c = this.getConfiguration();
+		c = new Configuration(this);
 
 		List<String> mirrors = c.getKeys("mirrors");
 		if (mirrors != null)

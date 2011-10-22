@@ -27,7 +27,7 @@ package org.blockface.bukkitstats;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.util.config.Configuration;
+import de.bananaco.permissions.oldschool.Configuration;
 
 import java.io.BufferedReader;
 import java.io.File;

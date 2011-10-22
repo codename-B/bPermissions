@@ -16,7 +16,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.java.PluginClassLoader;
-import org.bukkit.util.config.Configuration;
 
 import com.nijiko.permissions.PermissionHandler;
 
@@ -271,11 +270,6 @@ public class PermissionBridge extends PermissionHandler {
 
     @Override
     public void load() {
-        unsupportedOperation();
-    }
-
-    @Override
-    public void load(String world, Configuration config) {
         unsupportedOperation();
     }
 
