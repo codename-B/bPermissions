@@ -17,7 +17,9 @@ public class GlobalCommands {
 			String label, String[] args) {
 		for (World wd : plugin.getServer().getWorlds()) {
 			String world = wd.getName();
-			plugin.permissionsExec.exec(sender, args, world);
+			if(!plugin.permissionsExec.exec(sender, args, world))
+				if(plugin.suggestSimilarCommands)
+					return plugin.suggest(sender, command, args, label);
 		}
 		return true;
 	}

@@ -2,8 +2,10 @@ package de.bananaco.permissions;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.blockface.bukkitstats.CallHome;
 import org.bukkit.ChatColor;
@@ -25,6 +27,7 @@ import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.fornoobs.ForNoobs;
+import de.bananaco.permissions.fornoobs.PermissionsCommandSuggestions;
 import de.bananaco.permissions.fornoobs.Tutorial;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.iplock.IpLock;
@@ -126,6 +129,21 @@ public class Permissions extends JavaPlugin {
 	public boolean suggestSimilarCommands;
 	
 	public Tutorial tutorial;
+	private static Set<String> commands = new HashSet<String>();
+	private static Set<String> worldCommands = new HashSet<String>();
+	private static Set<String> listCommands = new HashSet<String>();
+	
+	public static Set<String> getCommands() {
+		return commands;
+	}
+	
+	public static Set<String> getWorldCommands() {
+		return worldCommands;
+	}
+	
+	public static Set<String> getListCommands() {
+		return listCommands;
+	}
 
 	@Override
 	public void onLoad() {
@@ -420,10 +438,21 @@ public class Permissions extends JavaPlugin {
 					&& sender instanceof Player)
 				return this.localExec.onCommand((Player) sender, command,
 						label, args);
-			else
-				sender.sendMessage("Are you sure you're doing that right?");
 		}
+		if(suggestSimilarCommands) {
+			return suggest(sender, command, args, label);
+		} else {
+			sender.sendMessage("Please check out the tutorial for help.");
+		}
+		
 		return false;
+	}
+	
+	public boolean suggest(CommandSender sender, Command command, String[] args, String label) {		
+		String message = PermissionsCommandSuggestions.suggestSimilarCommands(sender, args, label);
+		sender.sendMessage(ChatColor.BLUE+"[bPermissions] "+ChatColor.AQUA+"Did you mean:");
+		sender.sendMessage(ChatColor.AQUA+message);
+		return true;
 	}
 
 	public void setupCommands() {
@@ -504,6 +533,22 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("use-iplock", useIpLock);
 
 		c.save();
+		worldCommands.add(this.globalCommand);
+		worldCommands.add(this.localCommand);
+		worldCommands.add(this.worldCommand);
+		
+		commands.add(this.setGroup);
+		commands.add(this.addGroup);
+		commands.add(this.removeGroup);
+		
+		commands.add(this.addNode);
+		commands.add(this.removeNode);
+		
+		commands.add(this.listGroup);
+		commands.add(this.listNode);
+		
+		listCommands.add(this.listGroup);
+		listCommands.add(this.listNode);
 	}
 
 	public static WorldPermissionsManager getWorldPermissionsManager() {
