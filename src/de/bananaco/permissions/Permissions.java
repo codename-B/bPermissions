@@ -132,6 +132,7 @@ public class Permissions extends JavaPlugin {
 	private static Set<String> commands = new HashSet<String>();
 	private static Set<String> worldCommands = new HashSet<String>();
 	private static Set<String> listCommands = new HashSet<String>();
+	private static String sworldCommand;
 	
 	public static Set<String> getCommands() {
 		return commands;
@@ -143,6 +144,10 @@ public class Permissions extends JavaPlugin {
 	
 	public static Set<String> getListCommands() {
 		return listCommands;
+	}
+	
+	public static String getWorldCommand() {
+		return sworldCommand;
 	}
 
 	@Override
@@ -533,6 +538,8 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("use-iplock", useIpLock);
 
 		c.save();
+		sworldCommand = this.worldCommand;
+		
 		worldCommands.add(this.globalCommand);
 		worldCommands.add(this.localCommand);
 		worldCommands.add(this.worldCommand);

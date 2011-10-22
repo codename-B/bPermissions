@@ -1,5 +1,6 @@
 package de.bananaco.permissions.fornoobs;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.command.CommandSender;
@@ -11,6 +12,7 @@ public class PermissionsCommandSuggestions {
 	private static Set<String> commands = null;
 	private static Set<String> worldCommands = null;
 	private static Set<String> listCommands = null;
+	private static Set<String> worldCommand = null;
 	
 	public static void grabCommands() {
 		commands = Permissions.getCommands();
@@ -24,6 +26,11 @@ public class PermissionsCommandSuggestions {
 		listCommands = Permissions.getListCommands();
 	}
 	
+	public static void grabWorldCommand() {
+		worldCommand = new HashSet<String>();
+				worldCommand.add(Permissions.getWorldCommand());
+	}
+	
 	public static String suggestSimilarCommands(CommandSender sender, String[] args, String label) {
 		if(commands == null)
 			grabCommands();
@@ -31,10 +38,10 @@ public class PermissionsCommandSuggestions {
 			grabWorldCommands();
 		if(listCommands == null)
 			grabListCommands();
+		if(worldCommand == null)
+			grabWorldCommand();
 		
 		int length = 4;
-		if(args.length>length)
-			length = 5;
 		
 		String[] nargs = new String[length];
 		
@@ -62,14 +69,20 @@ public class PermissionsCommandSuggestions {
 		if(contains(nargs, listCommands)) {
 			length = 3;
 		}
+		if(contains(nargs, worldCommand)) {
+			length = length+1;
+		}
+		
 		String[] targs = new String[length];
-		for(int i=0; i<targs.length; i++)
-			if(nargs[i] != null)
+		for(int i=0; i<length; i++)
+			if(i<nargs.length)
 			targs[i] = nargs[i];
 			else
 			targs[i] = "[value]";
 		
 		for(String c : targs) {
+			if(c == null)
+				c = "[value]";
 			sb.append(c).append(" ");
 		}
 		return sb.toString();
