@@ -58,7 +58,7 @@ public class PermissionsCommandSuggestions {
 			
 			for(String d : com) {
 			int dist = 100-LevenshteinImpl.distance(c, d);
-			System.out.println(d+":"+dist);
+			
 			if(dist>dis) {
 				dis = dist;
 				nargs[i] = d;
