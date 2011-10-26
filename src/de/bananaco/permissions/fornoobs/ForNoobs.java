@@ -76,15 +76,23 @@ public class ForNoobs {
 		ps.addGroup("Derpy", defaultGroup);
 		ps.addGroup("Derpy", moderatorGroup);
 		
+		List<String> def = new ArrayList<String>();
+		List<String> mod = new ArrayList<String>();
+		List<String> adm = new ArrayList<String>();
+		
 		// Add the permissions to the admins
 		for(String permission : getPermissions()) {
 			if(permission.contains("user") || permission.contains("default") || permission.contains("build"))
-				ps.addNode(permission, defaultGroup);
+				def.add(permission);
 			else if(permission.contains("ban") || permission.contains("kick") || permission.contains("mod"))
-				ps.addNode(permission, moderatorGroup);
+				mod.add(permission);
 			else
-			ps.addNode(permission, adminGroup);
+			adm.add(permission);
 		}
+		
+		ps.setNodes(defaultGroup, def);
+		ps.setNodes(moderatorGroup, mod);
+		ps.setNodes(adminGroup, adm);
 		
 	}
 	

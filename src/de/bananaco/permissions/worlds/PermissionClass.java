@@ -1,6 +1,7 @@
 package de.bananaco.permissions.worlds;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.World;
@@ -165,11 +166,13 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public void setGroups(String player, List<String> groups) {
+		log(parse(groups) + " set to player:" + player);
 		setupPlayer(player);
 	}
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
+		log(parse(nodes) + " set to group:" + group);
 		setupPlayers();
 	}
 
@@ -202,6 +205,12 @@ public abstract class PermissionClass implements PermissionSet {
 		}
 		long finish = System.currentTimeMillis() - start;
 		log("Setup players for world:"+getWorld().getName()+" took "+finish+"ms.");
+	}
+	
+	public String parse(List<String> rList) {
+		String[] rArray = new String[rList.size()];
+		rArray = rList.toArray(rArray);
+		return Arrays.toString(rArray);
 	}
 
 }

@@ -2,7 +2,6 @@ package de.bananaco.permissions.worlds;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import org.bukkit.World;
@@ -102,12 +101,6 @@ public class SQLWorldPermissions extends PermissionClass {
 			e.printStackTrace();
 		}
 		return groups;
-	}
-
-	private String parse(List<String> rList) {
-		String[] rArray = new String[rList.size()];
-		rArray = rList.toArray(rArray);
-		return Arrays.toString(rArray);
 	}
 
 	private List<String> parse(String rString) {
