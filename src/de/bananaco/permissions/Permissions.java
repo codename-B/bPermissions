@@ -118,7 +118,6 @@ public class Permissions extends JavaPlugin {
 	public String promotePlayer;
 	public String demotePlayer;
 	
-	
 	public String lock;
 	public String unlock;
 	public boolean useIpLock;
@@ -132,6 +131,8 @@ public class Permissions extends JavaPlugin {
 	public boolean overridePlayer;
 
 	public boolean suggestSimilarCommands;
+	
+	public boolean cacheValues;
 	
 	public Tutorial tutorial;
 	private static Set<String> commands = new HashSet<String>();
@@ -391,6 +392,7 @@ public class Permissions extends JavaPlugin {
 				if(sender.hasPermission("bPermissions.admin") || sender.hasPermission("bPermissions.reload") || !(sender instanceof Player)) {
 				for(PermissionSet ps : pm.getPermissionSets())
 					ps.reload();
+				info.clear();
 				sender.sendMessage("Permissions reloaded.");
 				return true;
 				} else {
@@ -516,12 +518,15 @@ public class Permissions extends JavaPlugin {
 		
 		formatChat = c.getBoolean("format-chat", false);
 		
+		cacheValues = c.getBoolean("cache-values", true);
+		
 		boolean debug = c.getBoolean("enable-debug", true);
 		Debugger.setDebugging(debug);
 		c.setProperty("enable-debug", debug);
 		
 		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", true);
 		
+		c.setProperty("cache-values", cacheValues);
 		//c.setProperty("use-bml", bml);
 		if(c.getBoolean("use-bml", false)) {
 			wps = WorldPermissionSet.BML;

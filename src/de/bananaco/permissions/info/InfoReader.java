@@ -1,6 +1,8 @@
 package de.bananaco.permissions.info;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.entity.Player;
 import com.ubempire.binfo.PlayerInfo;
@@ -12,7 +14,22 @@ public class InfoReader implements PlayerInfo {
 	
 	private WorldPermissionsManager wpm;
 	
+	private final Map<String, String> groups = new HashMap<String, String>();
+	private final Map<String, String> players = new HashMap<String, String>();
+	
+	private final boolean cache;
+	
+	public InfoReader(boolean cache) {
+		this.cache = cache;
+	}
+	
 	public InfoReader() {
+	this(true);
+	}
+	
+	public void clear() {
+		groups.clear();
+		players.clear();
 	}
 	
 	public void instantiate() {
@@ -26,6 +43,9 @@ public class InfoReader implements PlayerInfo {
 	 * @return String
 	 */
 	public String getGroupValue(String group, String world, String valueToGet) {
+		if(groups.containsKey(group))
+			return groups.get(group);
+		
 		// Blame CraftIRC
 		if(world == null || world.equals("")) {
 		System.err.println("[bPermissions] Some silly developer is checking for a blank world!");
@@ -45,6 +65,10 @@ public class InfoReader implements PlayerInfo {
 	        }
 	        }
 		}
+		
+		if(!value.equals("") && cache)
+			groups.put(group, value);
+		
 		return value;
 	}
 	/**
@@ -55,6 +79,9 @@ public class InfoReader implements PlayerInfo {
 	 * @return String
 	 */
 	public String getValue(String player, String world, String valueToGet) {
+		if(players.containsKey(player))
+			return players.get(player);
+		
 		if(world == null || world.equals("")) {
 		System.err.println("[bPermissions] Some silly developer is checking for a blank world!");
 		return "BLANKWORLD";
@@ -75,6 +102,10 @@ public class InfoReader implements PlayerInfo {
 	        }
 	        }
 		}
+		
+		if(!value.equals("") && cache)
+			players.put(player, value);
+		
 		return value;
 	}
 	/**

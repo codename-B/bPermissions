@@ -117,6 +117,8 @@ public class PermissionsPlayerListener extends PlayerListener {
 			return;
 		if(event.getTo() == null)
 			return;
+		if(event.getFrom().getWorld() == event.getTo().getWorld())
+			return;
 		PermissionSet ps = permissions.pm.getPermissionSet(event.getTo().getWorld());
 		SuperPermissionHandler.setupPlayer(event.getPlayer(), ps.getPlayerNodes(event.getPlayer()), permissions);
 	}

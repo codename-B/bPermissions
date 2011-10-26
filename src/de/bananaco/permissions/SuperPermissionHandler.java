@@ -9,9 +9,12 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bananaco.permissions.debug.Debugger;
+
 public class SuperPermissionHandler {
 
 	public static void setupPlayer(Player p, List<String> nodes, JavaPlugin plugin) {
+		long start = System.currentTimeMillis();
 		unsetupPlayer(p, plugin);
 		/*
 		 * Test fix for mChat - dunno wtf is up
@@ -24,8 +27,10 @@ public class SuperPermissionHandler {
 			} else {
 				att.setPermission(tNode, true);
 			}
-			//System.out.println(tNode+":"+p.hasPermission(tNode));
 		}
+		
+		long finish = System.currentTimeMillis()-start;
+		Debugger.getDebugger().log("Setup player:"+p.getName()+" took "+finish+"ms");
 	}
 
 	public static void unsetupPlayer(Player p, JavaPlugin plugin) {
