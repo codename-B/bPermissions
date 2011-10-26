@@ -33,7 +33,9 @@ public class SuperPermissionHandler {
 		Set<PermissionAttachmentInfo> pAtt = p.getEffectivePermissions();
 		if (pAtt != null) {
 			for (PermissionAttachmentInfo pInfo : pAtt) {
-				if(pInfo.getAttachment() != null) {
+				if(pInfo.getAttachment() != null && pInfo.getAttachment().getPlugin() != null &&
+						pInfo.getAttachment().getPlugin().getDescription() != null &&
+						pInfo.getAttachment().getPlugin().getDescription().getName().equalsIgnoreCase("bPermissions")) {
 				pInfo.getAttachment().unsetPermission(pInfo.getPermission());
 				pInfo.getAttachment().remove();
 				}
