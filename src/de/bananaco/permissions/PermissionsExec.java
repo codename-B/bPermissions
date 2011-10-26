@@ -15,16 +15,19 @@ public class PermissionsExec {
 	public PermissionsExec(Permissions plugin) {
 		this.plugin = plugin;
 	}
+
 	private String checkPlayer(String player) {
 		Player players = plugin.getServer().getPlayer(player);
-		if(players != null)
+		if (players != null)
 			return players.getName();
 		return player;
 	}
+
 	public boolean exec(CommandSender sender, String[] args, String world) {
-		String perm = "bPermissions.admin."+args[1];
-		if(sender instanceof Player) {
-			if(!(sender.hasPermission(perm) || sender.hasPermission("bPermissions.admin"))) {
+		String perm = "bPermissions.admin." + args[1];
+		if (sender instanceof Player) {
+			if (!(sender.hasPermission(perm) || sender
+					.hasPermission("bPermissions.admin"))) {
 				sender.sendMessage("You don't have permission.");
 				return false;
 			}
@@ -38,19 +41,20 @@ public class PermissionsExec {
 			String player = args[3];
 			String group = args[2];
 			player = checkPlayer(player);
-			
+
 			PermissionSet p = plugin.pm.getPermissionSet(w);
 			p.addGroup(player, group);
 			sender.sendMessage("Added group:" + group + " to player:" + player);
 			return true;
-		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.setGroup)) {
+		} else if (args.length >= 4
+				&& args[1].equalsIgnoreCase(plugin.setGroup)) {
 			String player = args[3];
 			String group = args[2];
 			player = checkPlayer(player);
-			
+
 			PermissionSet p = plugin.pm.getPermissionSet(w);
 			p.setGroup(player, group);
-			sender.sendMessage("Set player:"+player+" to group:"+group);
+			sender.sendMessage("Set player:" + player + " to group:" + group);
 			return true;
 		} else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.removeGroup)) {
@@ -70,7 +74,8 @@ public class PermissionsExec {
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);
 			List<String> playerGroups = p.getGroups(player);
-			String list = Arrays.toString(playerGroups.toArray()).replace("[", "").replace("]", "");
+			String list = Arrays.toString(playerGroups.toArray())
+					.replace("[", "").replace("]", "");
 			sender.sendMessage(player + " in world:" + world
 					+ " has these groups:");
 			sender.sendMessage(list);
@@ -100,7 +105,8 @@ public class PermissionsExec {
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);
 			List<String> groupNodes = p.getGroupNodes(group);
-			String list = Arrays.toString(groupNodes.toArray()).replace("[", "").replace("]", "");
+			String list = Arrays.toString(groupNodes.toArray())
+					.replace("[", "").replace("]", "");
 			sender.sendMessage(group + " in world:" + world
 					+ " has these nodes:");
 			sender.sendMessage(list);

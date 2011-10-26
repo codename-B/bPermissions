@@ -35,83 +35,94 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+
 /*
-@
+ @
  */
 
 @SuppressWarnings("deprecation")
-public class CallHome{
+public class CallHome {
 
-    private static Configuration cfg=null;
+	private static Configuration cfg = null;
 
-    public static void load(Plugin plugin) {
-        if(cfg==null) {
-            if(!verifyConfig()) return;
-        }
-        if(cfg.getBoolean("opt-out",false)) return;
-        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin,new CallTask(plugin,cfg.getBoolean("list-server",true)),0L,20L*60L*60);
-        System.out.println(plugin.getDescription().getName() + " is keeping usage stats an. To opt-out for whatever bizarre reason, check plugins/stats.");
+	public static void load(Plugin plugin) {
+		if (cfg == null) {
+			if (!verifyConfig())
+				return;
+		}
+		if (cfg.getBoolean("opt-out", false))
+			return;
+		plugin.getServer()
+				.getScheduler()
+				.scheduleAsyncRepeatingTask(
+						plugin,
+						new CallTask(plugin, cfg
+								.getBoolean("list-server", true)), 0L,
+						20L * 60L * 60);
+		System.out
+				.println(plugin.getDescription().getName()
+						+ " is keeping usage stats an. To opt-out for whatever bizarre reason, check plugins/stats.");
 
-    }
+	}
 
-    private static Boolean verifyConfig() {
-        Boolean ret = true;
-        File config = new File("plugins/stats/config.yml");
-        if(!config.getParentFile().exists()) config.getParentFile().mkdir();
-        if(!config.exists()) try {
-            config.createNewFile();
-            ret = false;
-            System.out.println("BukkitStats has initialized for the first time. To opt-out check plugins/stats");
-        } catch (IOException e) {
-            return false;
-        }
-        cfg=new Configuration(config);
-        cfg.load();
-        cfg.getBoolean("opt-out",false);
-        cfg.getBoolean("list-server", true);
-        cfg.save();
-        return ret;
-    }
-
+	private static Boolean verifyConfig() {
+		Boolean ret = true;
+		File config = new File("plugins/stats/config.yml");
+		if (!config.getParentFile().exists())
+			config.getParentFile().mkdir();
+		if (!config.exists())
+			try {
+				config.createNewFile();
+				ret = false;
+				System.out
+						.println("BukkitStats has initialized for the first time. To opt-out check plugins/stats");
+			} catch (IOException e) {
+				return false;
+			}
+		cfg = new Configuration(config);
+		cfg.load();
+		cfg.getBoolean("opt-out", false);
+		cfg.getBoolean("list-server", true);
+		cfg.save();
+		return ret;
+	}
 
 }
 
 class CallTask implements Runnable {
-    private Plugin plugin;
-    private int pub=1;
+	private Plugin plugin;
+	private int pub = 1;
 
-    public CallTask(Plugin plugin,Boolean pub) {
-        this.plugin = plugin;
-        if(!pub) this.pub = 0;
-    }
+	public CallTask(Plugin plugin, Boolean pub) {
+		this.plugin = plugin;
+		if (!pub)
+			this.pub = 0;
+	}
 
+	public void run() {
+		try {
+			if (postUrl().contains("Success"))
+				return;
+		} catch (Exception ignored) {
+		}
+		System.out.println("Could not call home.");
+	}
 
-
-    public void run() {
-        try {
-            if(postUrl().contains("Success")) return;
-        } catch (Exception ignored) {
-        }
-        System.out.println("Could not call home.");
-    }
-
-    private String postUrl() throws Exception {
-        String url = String.format("http://usage.blockface.org/update.php?name=%s&build=%s&plugin=%s&port=%s&public=%s&bukkit=%s",
-                plugin.getServer().getName(),
-                plugin.getDescription().getVersion(),
-                plugin.getDescription().getName(),
-                plugin.getServer().getPort(),
-                pub,
-                Bukkit.getVersion());
-        URL oracle = new URL(url);
-        URLConnection yc = oracle.openConnection();
-        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(
-                                yc.getInputStream()));
-        String inputLine;
-        String result = "";
-        while ((inputLine = in.readLine()) != null)
-            result += inputLine;
-        return result;
-    }
+	private String postUrl() throws Exception {
+		String url = String
+				.format("http://usage.blockface.org/update.php?name=%s&build=%s&plugin=%s&port=%s&public=%s&bukkit=%s",
+						plugin.getServer().getName(), plugin.getDescription()
+								.getVersion(), plugin.getDescription()
+								.getName(), plugin.getServer().getPort(), pub,
+						Bukkit.getVersion());
+		URL oracle = new URL(url);
+		URLConnection yc = oracle.openConnection();
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				yc.getInputStream()));
+		String inputLine;
+		String result = "";
+		while ((inputLine = in.readLine()) != null)
+			result += inputLine;
+		return result;
+	}
 }

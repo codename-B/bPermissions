@@ -178,10 +178,11 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void setup() {
-		if(!setup) {
-		log("Setting up config for world:" + world.getName());
-		reload();
-		} setup = true;
+		if (!setup) {
+			log("Setting up config for world:" + world.getName());
+			reload();
+		}
+		setup = true;
 	}
 
 	@Override
@@ -204,9 +205,10 @@ public abstract class PermissionClass implements PermissionSet {
 			setupPlayer(player);
 		}
 		long finish = System.currentTimeMillis() - start;
-		log("Setup players for world:"+getWorld().getName()+" took "+finish+"ms.");
+		log("Setup players for world:" + getWorld().getName() + " took "
+				+ finish + "ms.");
 	}
-	
+
 	public String parse(List<String> rList) {
 		String[] rArray = new String[rList.size()];
 		rArray = rList.toArray(rArray);

@@ -43,23 +43,20 @@ public class WorldPermissionsManager {
 			PermissionSet p = null;
 			p = getPermissionSet(world);
 			p.setup();
-			
-			/*String wName = world.getName();
-			if (jp.mirror.containsKey(world.getName())
-					&& jp.mirror.get(world.getName()) != null)
-				wName = jp.mirror.get(world.getName());
-			World tWorld = jp.getServer().getWorld(wName) != null ? jp
-					.getServer().getWorld(wName) : world;
-			if (ps.containsKey(wName)) {
-				p = this.getPermissionSet(wName);
-				p.reload();
-			} else
-				p = jp.wps.get(tWorld, jp);
-			p.setupPlayers();
 
-			ps.put(world.getName(), p);
-			log("Setup world:" + world.getName());
-			*/
+			/*
+			 * String wName = world.getName(); if
+			 * (jp.mirror.containsKey(world.getName()) &&
+			 * jp.mirror.get(world.getName()) != null) wName =
+			 * jp.mirror.get(world.getName()); World tWorld =
+			 * jp.getServer().getWorld(wName) != null ? jp
+			 * .getServer().getWorld(wName) : world; if (ps.containsKey(wName))
+			 * { p = this.getPermissionSet(wName); p.reload(); } else p =
+			 * jp.wps.get(tWorld, jp); p.setupPlayers();
+			 * 
+			 * ps.put(world.getName(), p); log("Setup world:" +
+			 * world.getName());
+			 */
 		}
 	}
 
@@ -88,13 +85,13 @@ public class WorldPermissionsManager {
 			return ps.get(world);
 		} else {
 			World w = jp.getServer().getWorld(world);
-			
+
 			if (w == null)
 				return null;
-			
+
 			PermissionSet p = jp.wps.get(w, jp);
 			ps.put(world, p);
-			log("Created PermissionSet for world:"+world);
+			log("Created PermissionSet for world:" + world);
 			return p;
 		}
 	}

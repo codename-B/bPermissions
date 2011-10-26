@@ -22,52 +22,59 @@ import de.bananaco.permissions.worlds.WorldPermissionsManager;
 public class ForNoobs {
 	private final Server s;
 	private final WorldPermissionsManager wpm;
-	
+
 	public ForNoobs(JavaPlugin p) {
 		Server s = p.getServer();
 		this.s = s;
 		this.wpm = Permissions.getWorldPermissionsManager();
 	}
-	
+
 	public void addAll() {
-		for(PermissionSet ps : this.getPermissionSets()) {
+		for (PermissionSet ps : this.getPermissionSets()) {
 			try {
-			addDefaults(ps);
+				addDefaults(ps);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	private void addDefaults(PermissionSet ps) throws Exception {
 		String defaultGroup = ps.getDefaultGroup();
 		String moderatorGroup = "moderator";
 		String adminGroup = "admin";
-		
+
 		ArrayList<String> admins = new ArrayList<String>();
-		BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream("ops.txt"))));
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				new DataInputStream(new FileInputStream("ops.txt"))));
 		String line = "";
-		while((line = br.readLine()) != null)
+		while ((line = br.readLine()) != null)
 			admins.add(line);
 		// Basic default setup
-		ps.addNode("prefix.0.&"+ChatColor.YELLOW.getCode()+"default", defaultGroup);
-		ps.addNode("suffix.0.&"+ChatColor.GREEN.getCode()+"imnew", defaultGroup);
+		ps.addNode("prefix.0.&" + ChatColor.YELLOW.getCode() + "default",
+				defaultGroup);
+		ps.addNode("suffix.0.&" + ChatColor.GREEN.getCode() + "imnew",
+				defaultGroup);
 		// Basic moderator setup
-		ps.addNode("prefix.10.&"+ChatColor.DARK_RED.getCode()+"moderator", moderatorGroup);
-		ps.addNode("suffix.10.&"+ChatColor.LIGHT_PURPLE.getCode()+"ihelp", moderatorGroup);
+		ps.addNode("prefix.10.&" + ChatColor.DARK_RED.getCode() + "moderator",
+				moderatorGroup);
+		ps.addNode("suffix.10.&" + ChatColor.LIGHT_PURPLE.getCode() + "ihelp",
+				moderatorGroup);
 		// Basic admin setup
-		ps.addNode("prefix.100.&"+ChatColor.RED.getCode()+"admin", adminGroup);
-		ps.addNode("suffix.100.&"+ChatColor.DARK_PURPLE.getCode()+"over9000", adminGroup);
+		ps.addNode("prefix.100.&" + ChatColor.RED.getCode() + "admin",
+				adminGroup);
+		ps.addNode("suffix.100.&" + ChatColor.DARK_PURPLE.getCode()
+				+ "over9000", adminGroup);
 		// Add the online admins
-		for(String player : admins) {
+		for (String player : admins) {
 			String name = PlayerCase.correctCase(player);
-			if(name != null) {
-			ps.addGroup(name, defaultGroup);
-			ps.addGroup(name, moderatorGroup);
-			ps.addGroup(name, adminGroup);
+			if (name != null) {
+				ps.addGroup(name, defaultGroup);
+				ps.addGroup(name, moderatorGroup);
+				ps.addGroup(name, adminGroup);
 			}
 		}
-		
+
 		// Add the example admin
 		ps.addGroup("HerpaDerpa", defaultGroup);
 		ps.addGroup("HerpaDerpa", moderatorGroup);
@@ -75,54 +82,53 @@ public class ForNoobs {
 		// Add the example mod
 		ps.addGroup("Derpy", defaultGroup);
 		ps.addGroup("Derpy", moderatorGroup);
-		
+
 		List<String> def = new ArrayList<String>();
 		List<String> mod = new ArrayList<String>();
 		List<String> adm = new ArrayList<String>();
-		
+
 		// Add the permissions to the admins
-		for(String permission : getPermissions()) {
-			if(permission.contains("user") || permission.contains("default") || permission.contains("build"))
+		for (String permission : getPermissions()) {
+			if (permission.contains("user") || permission.contains("default")
+					|| permission.contains("build"))
 				def.add(permission);
-			else if(permission.contains("ban") || permission.contains("kick") || permission.contains("mod"))
+			else if (permission.contains("ban") || permission.contains("kick")
+					|| permission.contains("mod"))
 				mod.add(permission);
 			else
-			adm.add(permission);
+				adm.add(permission);
 		}
-		
+
 		ps.setNodes(defaultGroup, def);
 		ps.setNodes(moderatorGroup, mod);
 		ps.setNodes(adminGroup, adm);
-		
+
 	}
-	
+
 	private ArrayList<String> getPermissions() {
 		ArrayList<String> regPerms = new ArrayList<String>();
-		for(Permission p : s.getPluginManager().getPermissions()) {
-			if(!p.getName().equals("*") && !p.getName().equals("*.*"))
-			regPerms.add(p.getName());
+		for (Permission p : s.getPluginManager().getPermissions()) {
+			if (!p.getName().equals("*") && !p.getName().equals("*.*"))
+				regPerms.add(p.getName());
 		}
 		Collections.sort(regPerms, new Comparator<String>() {
-			
-		public int compare(String a, String b) {
-			return a.compareTo(b); 
+
+			public int compare(String a, String b) {
+				return a.compareTo(b);
 			};
 		});
-			
+
 		return regPerms;
 	}
-	
+
 	private PermissionSet[] getPermissionSets() {
 		List<World> worlds = s.getWorlds();
 		PermissionSet[] ps = new PermissionSet[worlds.size()];
-	
-	for(int i=0; i<s.getWorlds().size(); i++) {
-		ps[i] = wpm.getPermissionSet(worlds.get(i));
-	}
-	return ps;
+
+		for (int i = 0; i < s.getWorlds().size(); i++) {
+			ps[i] = wpm.getPermissionSet(worlds.get(i));
+		}
+		return ps;
 	}
 
-	
-	
 }
-

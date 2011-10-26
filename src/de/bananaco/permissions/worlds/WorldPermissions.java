@@ -15,7 +15,8 @@ class WorldPermissions extends PermissionClass {
 
 	public WorldPermissions(World world, Permissions plugin) {
 		super(world, plugin);
-		this.c = new Configuration(new File("plugins/bPermissions/worlds/"+ world.getName() + ".yml"));
+		this.c = new Configuration(new File("plugins/bPermissions/worlds/"
+				+ world.getName() + ".yml"));
 	}
 
 	@Override
