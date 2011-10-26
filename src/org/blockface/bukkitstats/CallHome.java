@@ -27,7 +27,7 @@ package org.blockface.bukkitstats;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import de.bananaco.permissions.oldschool.Configuration;
+import org.bukkit.util.config.Configuration;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,6 +39,7 @@ import java.net.URLConnection;
 @
  */
 
+@SuppressWarnings("deprecation")
 public class CallHome{
 
     private static Configuration cfg=null;

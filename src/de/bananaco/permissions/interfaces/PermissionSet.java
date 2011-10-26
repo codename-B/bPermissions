@@ -125,10 +125,7 @@ public interface PermissionSet {
 	 * Sets up the online players in that world
 	 */
 	public void setupPlayers();
-	/**
-	 * Overrides the CraftPlayers in the set world
-	 */
-	public void overrideCraftPlayers();
+
 	/**
 	 * Method added to account for infinite loop in the bridge, silly me.
 	 * @param player
@@ -136,6 +133,15 @@ public interface PermissionSet {
 	 */
 	public boolean has(Player player, String node);
 	public String getDefaultGroup();
+	
+	public void setGroups(Player player, List<String> groups);
+	public void setGroups(String player, List<String> groups);
+	
+	public void setNodes(String group, List<String> nodes);
+	
+	public void setupPlayer(Player player);
+	public void setupPlayer(String player);
+	
 	public List<String> getAllCachedGroups();
 	public List<String> getAllCachedPlayers();
 }

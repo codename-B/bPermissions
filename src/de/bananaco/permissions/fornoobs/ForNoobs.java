@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.permissions.Permission;
@@ -49,14 +50,14 @@ public class ForNoobs {
 		while((line = br.readLine()) != null)
 			admins.add(line);
 		// Basic default setup
-		ps.addNode("prefix.0.default", defaultGroup);
-		ps.addNode("suffix.0.imnew", defaultGroup);
+		ps.addNode("prefix.0.&"+ChatColor.YELLOW.getCode()+"default", defaultGroup);
+		ps.addNode("suffix.0.&"+ChatColor.GREEN.getCode()+"imnew", defaultGroup);
 		// Basic moderator setup
-		ps.addNode("prefix.10.moderator", moderatorGroup);
-		ps.addNode("suffix.10.ihelp", moderatorGroup);
+		ps.addNode("prefix.10.&"+ChatColor.DARK_RED.getCode()+"moderator", moderatorGroup);
+		ps.addNode("suffix.10.&"+ChatColor.LIGHT_PURPLE.getCode()+"ihelp", moderatorGroup);
 		// Basic admin setup
-		ps.addNode("prefix.100.admin", adminGroup);
-		ps.addNode("suffix.100.over9000", adminGroup);
+		ps.addNode("prefix.100.&"+ChatColor.RED.getCode()+"admin", adminGroup);
+		ps.addNode("suffix.100.&"+ChatColor.DARK_PURPLE.getCode()+"over9000", adminGroup);
 		// Add the online admins
 		for(String player : admins) {
 			String name = PlayerCase.correctCase(player);

@@ -116,6 +116,7 @@ public class Configuration extends YamlConfiguration {
 	}
 
 	public List<String> getStringList(String path, List<String> def) {
+		load();
 		if(def == null)
 			def = new ArrayList<String>();
 		

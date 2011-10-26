@@ -85,7 +85,7 @@ public class Tracks {
 		List<World> worlds = new ArrayList<World>();
 		// Return false if nothing will happen
 		if(groups.size() == 0 || worldStrings.size() == 0)
-			return false;
+			return false;		
 		// Setting up the actual worlds
 		for(String world : worldStrings)
 			if(p.getServer().getWorld(world) != null)

@@ -26,10 +26,12 @@ import com.ubempire.binfo.PlayerInfo;
 import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
+import de.bananaco.permissions.debug.Debugger;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.fornoobs.PermissionsCommandSuggestions;
 import de.bananaco.permissions.fornoobs.Tutorial;
 import de.bananaco.permissions.info.InfoReader;
+import de.bananaco.permissions.interfaces.PermissionSet;
 import de.bananaco.permissions.iplock.IpLock;
 import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.override.SpoutMonkey;
@@ -116,9 +118,12 @@ public class Permissions extends JavaPlugin {
 	public String promotePlayer;
 	public String demotePlayer;
 	
+	
 	public String lock;
 	public String unlock;
 	public boolean useIpLock;
+	
+	public boolean formatChat;
 	
 	public WorldPermissionSet wps;
 
@@ -200,6 +205,11 @@ public class Permissions extends JavaPlugin {
 				Event.Type.PLAYER_JOIN, pl, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
+		
+		if(formatChat)
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_CHAT, pl, Priority.Normal, this);
+		
 		
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
@@ -379,7 +389,8 @@ public class Permissions extends JavaPlugin {
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("reload")) {
 				if(sender.hasPermission("bPermissions.admin") || sender.hasPermission("bPermissions.reload") || !(sender instanceof Player)) {
-				pm.addAllWorlds();
+				for(PermissionSet ps : pm.getPermissionSets())
+					ps.reload();
 				sender.sendMessage("Permissions reloaded.");
 				return true;
 				} else {
@@ -503,6 +514,12 @@ public class Permissions extends JavaPlugin {
 		lock = c.getString("commands.lock", "lock");
 		unlock = c.getString("commands.unlock", "unlock");
 		
+		formatChat = c.getBoolean("format-chat", false);
+		
+		boolean debug = c.getBoolean("enable-debug", true);
+		Debugger.setDebugging(debug);
+		c.setProperty("enable-debug", debug);
+		
 		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", true);
 		
 		//c.setProperty("use-bml", bml);
@@ -536,6 +553,8 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.unlock", unlock);
 		c.setProperty("commands.lock", lock);
 		c.setProperty("use-iplock", useIpLock);
+		
+		c.setProperty("format-chat", formatChat);
 
 		c.save();
 		sworldCommand = this.worldCommand;

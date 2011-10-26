@@ -14,10 +14,7 @@ public class WorldCommands {
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		String world = args[args.length - 1];
-		if(!plugin.permissionsExec.exec(sender, args, world))
-			if(plugin.suggestSimilarCommands)
-				return plugin.suggest(sender, command, args, label);
-		return true;
+		return plugin.permissionsExec.exec(sender, args, world);
 	}
 
 }

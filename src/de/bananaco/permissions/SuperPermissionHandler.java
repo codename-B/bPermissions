@@ -10,14 +10,9 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SuperPermissionHandler {
-	private final Player p;
 
-	public SuperPermissionHandler(Player p) {
-		this.p = p;
-	}
-
-	public void setupPlayer(List<String> nodes, JavaPlugin plugin) {
-		unsetupPlayer();
+	public static void setupPlayer(Player p, List<String> nodes, JavaPlugin plugin) {
+		unsetupPlayer(p, plugin);
 		/*
 		 * Test fix for mChat - dunno wtf is up
 		 */
@@ -33,7 +28,7 @@ public class SuperPermissionHandler {
 		}
 	}
 
-	public void unsetupPlayer() {
+	public static void unsetupPlayer(Player p, JavaPlugin plugin) {
 		Set<PermissionAttachmentInfo> pAtt = p.getEffectivePermissions();
 		if (pAtt != null) {
 			for (PermissionAttachmentInfo pInfo : pAtt) {
