@@ -5,7 +5,7 @@ website: http://tetragaming.com/codename_B/
 main: de.bananaco.permissions.Permissions
 commands:
   permissions:
-    aliases: [p, perm]
+    aliases: [p, bp, perm]
     description: reloads the nodes
     usage: |
       Need help? Type in-game: /<command> tutorial
