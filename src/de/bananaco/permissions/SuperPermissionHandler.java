@@ -16,6 +16,7 @@ public class SuperPermissionHandler {
 		long start = System.currentTimeMillis();
 		unsetupPlayer(p, plugin);
 		PermissionAttachment att = p.addAttachment(plugin);
+		
 		for (String node : nodes) {
 			String tNode = (node.startsWith("^")?node.replace("^",""):node);
 			if (node.startsWith("^")) {
