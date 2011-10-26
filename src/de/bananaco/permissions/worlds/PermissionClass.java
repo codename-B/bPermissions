@@ -195,7 +195,7 @@ public abstract class PermissionClass implements PermissionSet {
 	public final void setupPlayer(String player) {
 		Player p = plugin.getServer().getPlayer(player);
 		if (p != null)
-			setupPlayer(player);
+			setupPlayer(p);
 	}
 
 	@Override

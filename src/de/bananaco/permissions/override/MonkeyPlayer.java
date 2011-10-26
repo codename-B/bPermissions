@@ -21,7 +21,6 @@ public class MonkeyPlayer extends CraftPlayer {
 	public boolean hasPermission(String name) {
 		boolean has = isOp();
 		try {
-
 			has = HasPermission.has(this, name);
 		} catch (Exception e) {
 			System.err
