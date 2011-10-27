@@ -59,6 +59,8 @@ class WorldPermissions extends PermissionClass {
 	public void setGroups(String player, List<String> groups) {
 		c.setProperty("players." + player, groups);
 		c.save();
+		if(groups.size() == 0)
+			c.removeProperty("players." + player);
 		super.setGroups(player, groups);
 	}
 
@@ -66,6 +68,8 @@ class WorldPermissions extends PermissionClass {
 	public void setNodes(String group, List<String> nodes) {
 		c.setProperty("groups." + group, nodes);
 		c.save();
+		if(nodes.size() == 0)
+			c.removeProperty("groups." + group);
 		super.setNodes(group, nodes);
 	}
 
