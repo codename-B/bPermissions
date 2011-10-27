@@ -111,8 +111,10 @@ public class Tracks {
 		// Doing the groups
 		for (World world : worlds) {
 			PermissionSet ps = wpm.getPermissionSet(world);
+			List<String> pGroups = ps.getGroups(player);
 			for (String group : groups)
-				ps.addGroup(player, group);
+				pGroups.add(group);
+			ps.setGroups(player, pGroups);
 		}
 		return true;
 	}
@@ -147,8 +149,10 @@ public class Tracks {
 		// Doing the groups
 		for (World world : worlds) {
 			PermissionSet ps = wpm.getPermissionSet(world);
+			List<String> pGroups = ps.getGroups(player);
 			for (String group : groups)
-				ps.removeGroup(player, group);
+				pGroups.remove(group);
+			ps.setGroups(player, pGroups);
 		}
 		return true;
 	}
