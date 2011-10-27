@@ -27,6 +27,7 @@ import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.debug.Debugger;
+import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.fornoobs.PermissionsCommandSuggestions;
 import de.bananaco.permissions.fornoobs.Tutorial;
@@ -164,6 +165,8 @@ public class Permissions extends JavaPlugin {
 	public WorldCommands worldExec;
 
 	public WorldPermissionSet wps;
+	
+	private BackupPermissionsCommand bpc;
 
 	/**
 	 * Just the logger man
@@ -346,6 +349,11 @@ public class Permissions extends JavaPlugin {
 					sender.sendMessage("Attempted to setup default groups - please view your worldname.yml files");
 					return true;
 				}
+				if(args[0].equals("backup")) {
+					bpc.backup();
+					sender.sendMessage("Permissions files backed up, share this zip with codename_B if you have issues.");
+					return true;
+				}
 			}
 			if (args.length == 2) {
 				if (args[0].equalsIgnoreCase("import")) {
@@ -407,7 +415,9 @@ public class Permissions extends JavaPlugin {
 		Help.load(this);
 		
 		sanityCheck();
-
+		
+		bpc = new BackupPermissionsCommand(this);
+		
 		mirror = new HashMap<String, String>();
 
 		im = new ImportManager(this);
@@ -607,6 +617,7 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("format-chat", formatChat);
 
 		c.save();
+		
 		sworldCommand = this.worldCommand;
 
 		worldCommands.add(this.globalCommand);
