@@ -80,6 +80,17 @@ public class PermissionsExec {
 					+ " has these groups:");
 			sender.sendMessage(list);
 			return true;
+		} else if (args.length >= 3
+				&& args[1].equalsIgnoreCase(plugin.inGroup)) {
+			String group = args[2];
+
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			List<String> players = p.getAllCachedPlayersWithGroup(group);
+			String list = Arrays.toString(players.toArray())
+					.replace("[", "").replace("]", "");
+			sender.sendMessage(players.size()+" players found in group:"+group+" for world:"+world);
+			sender.sendMessage(list);
+			return true;
 		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addNode)) {
 			String node = args[2];
 			String group = args[3];

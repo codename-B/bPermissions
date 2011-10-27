@@ -124,6 +124,7 @@ public class Permissions extends JavaPlugin {
 	public ImportManager im;
 	public IpLock iplock;
 	public String listGroup;
+	public String inGroup;
 	public String listNode;
 	public String localCommand;
 	public LocalCommands localExec;
@@ -538,6 +539,7 @@ public class Permissions extends JavaPlugin {
 		setGroup = c.getString("commands.set-group", "setgroup");
 		removeGroup = c.getString("commands.remove-group", "rmgroup");
 		listGroup = c.getString("commands.list-group", "lsgroup");
+		inGroup = c.getString("commands.in-group", "ingroup");
 
 		addNode = c.getString("commands.add-node", "addnode");
 		removeNode = c.getString("commands.remove-node", "rmnode");
@@ -588,6 +590,7 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.add-group", addGroup);
 		c.setProperty("commands.remove-group", removeGroup);
 		c.setProperty("commands.list-group", listGroup);
+		c.setProperty("commands.in-group", inGroup);
 
 		c.setProperty("commands.add-node", addNode);
 		c.setProperty("commands.remove-node", removeNode);
@@ -615,9 +618,11 @@ public class Permissions extends JavaPlugin {
 
 		commands.add(this.listGroup);
 		commands.add(this.listNode);
+		commands.add(this.inGroup);
 
 		listCommands.add(this.listGroup);
 		listCommands.add(this.listNode);
+		listCommands.add(this.inGroup);
 	}
 
 	public boolean suggest(CommandSender sender, Command command,

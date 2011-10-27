@@ -214,5 +214,29 @@ public abstract class PermissionClass implements PermissionSet {
 		rArray = rList.toArray(rArray);
 		return Arrays.toString(rArray);
 	}
+	
+	@Override
+	public final List<String> getAllCachedPlayersWithGroup(String group) {
+		long start = System.currentTimeMillis();
+		List<String> players = new ArrayList<String>();
+		for(String player : getAllCachedPlayers()) {
+			if(hasGroup(player, group)) {
+				players.add(player);
+			}
+		}
+		long finish = System.currentTimeMillis() - start;
+		Debugger.getDebugger().log(players.size()+" players found in group "+group+". Search took "+finish+"ms.");
+		return players;
+	}
+	
+	@Override
+	public boolean hasGroup(Player player, String group) {
+		return hasGroup(player.getName(), group);
+	}
+	
+	public boolean hasGroup(String player, String group) {
+		List<String> groups = getGroups(player);
+		return groups.contains(group);
+	}
 
 }

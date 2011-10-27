@@ -32,6 +32,7 @@ public class CommandPreprocess extends PlayerListener {
 				|| (command.equalsIgnoreCase(permissions.setGroup))
 				|| (command.equalsIgnoreCase(permissions.removeGroup))
 				|| (command.equalsIgnoreCase(permissions.listGroup))
+				|| (command.equalsIgnoreCase(permissions.inGroup))
 				|| (command.equalsIgnoreCase(permissions.addNode))
 				|| (command.equalsIgnoreCase(permissions.removeNode))
 				|| (command.equalsIgnoreCase(permissions.listNode))) {
@@ -65,6 +66,7 @@ class ExtraCommandPreprocess extends ServerListener {
 				|| (command.equalsIgnoreCase(permissions.setGroup))
 				|| (command.equalsIgnoreCase(permissions.removeGroup))
 				|| (command.equalsIgnoreCase(permissions.listGroup))
+				|| (command.equalsIgnoreCase(permissions.inGroup))
 				|| (command.equalsIgnoreCase(permissions.addNode))
 				|| (command.equalsIgnoreCase(permissions.removeNode))
 				|| (command.equalsIgnoreCase(permissions.listNode))) {

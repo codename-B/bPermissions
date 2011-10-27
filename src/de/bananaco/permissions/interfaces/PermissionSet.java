@@ -131,24 +131,71 @@ public interface PermissionSet {
 	/**
 	 * Method added to account for infinite loop in the bridge, silly me.
 	 * 
-	 * @param player
+	 * @param Player
 	 * @return boolean
 	 */
 	public boolean has(Player player, String node);
-
+	/**
+	 * Gets the default gruop
+	 * @return String
+	 */
 	public String getDefaultGroup();
-
+	/**
+	 * New, use to set the groups to a specific list
+	 * @param player
+	 * @param groups
+	 */
 	public void setGroups(Player player, List<String> groups);
-
+	/**
+	 * New, use to set the groups to a specific list
+	 * @param player
+	 * @param groups
+	 */
 	public void setGroups(String player, List<String> groups);
-
+	/**
+	 * New, use to set the nodes to a specific list
+	 * @param group
+	 * @param nodes
+	 */
 	public void setNodes(String group, List<String> nodes);
-
+	/**
+	 * New, use to setup only one player
+	 * @param player
+	 */
 	public void setupPlayer(Player player);
-
+	/**
+	 * New, use to search for (and if online) setup one player.
+	 * @param player
+	 */
 	public void setupPlayer(String player);
-
+	/**
+	 * Gets all cached groups
+	 * @return List<String>
+	 */
 	public List<String> getAllCachedGroups();
-
+	/**
+	 * Gets all cached players
+	 * @return List<String>
+	 */
 	public List<String> getAllCachedPlayers();
+	/**
+	 * Recursively searches through all cached players/groups and returns the players with a specific group
+	 * @param group
+	 * @return
+	 */
+	public List<String> getAllCachedPlayersWithGroup(String group);
+	/**
+	 * New method added for getAllCachedPlayersWithGroup(String group);
+	 * @param player
+	 * @param group
+	 * @return boolean
+	 */
+	public boolean hasGroup(Player player, String group);
+	/**
+	 * New method added for getAllCachedPlayersWithGroup(String group);
+	 * @param player
+	 * @param group
+	 * @return boolean
+	 */
+	public boolean hasGroup(String player, String group);
 }
