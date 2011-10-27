@@ -3,6 +3,8 @@ package de.bananaco.permissions.worlds;
 import java.io.File;
 import java.util.List;
 import org.bukkit.World;
+
+import de.bananaco.permissions.debug.Debugger;
 import de.bananaco.permissions.oldschool.Configuration;
 
 import de.bananaco.permissions.Permissions;
@@ -58,18 +60,22 @@ class WorldPermissions extends PermissionClass {
 	@Override
 	public void setGroups(String player, List<String> groups) {
 		c.setProperty("players." + player, groups);
-		c.save();
-		if(groups.size() == 0)
+		if(groups.size() == 0) {
 			c.removeProperty("players." + player);
+		Debugger.getDebugger().log(player+" removed from "+world.getName()+".yml");
+		}
+		c.save();
 		super.setGroups(player, groups);
 	}
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
 		c.setProperty("groups." + group, nodes);
-		c.save();
-		if(nodes.size() == 0)
+		if(nodes.size() == 0) {
 			c.removeProperty("groups." + group);
+			Debugger.getDebugger().log(group+" removed from "+world.getName()+".yml");
+		}
+		c.save();
 		super.setNodes(group, nodes);
 	}
 
