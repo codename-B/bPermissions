@@ -22,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ubempire.binfo.PlayerInfo;
 
+import de.bananaco.help.Help;
 import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
@@ -401,7 +402,10 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		// Do static things
 		CallHome.load(this);
+		Help.load(this);
+		
 		sanityCheck();
 
 		mirror = new HashMap<String, String>();
