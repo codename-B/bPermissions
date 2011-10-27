@@ -168,12 +168,14 @@ public abstract class PermissionClass implements PermissionSet {
 	public void setGroups(String player, List<String> groups) {
 		log(parse(groups) + " set to player:" + player);
 		setupPlayer(player);
+		Permissions.getInfoReader().clear();
 	}
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
 		log(parse(nodes) + " set to group:" + group);
 		setupPlayers();
+		Permissions.getInfoReader().clear();		
 	}
 
 	@Override
