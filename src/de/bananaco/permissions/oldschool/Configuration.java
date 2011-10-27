@@ -39,7 +39,7 @@ public class Configuration extends YamlConfiguration {
 		if (file == null)
 			System.err.println("File should not be null!");
 		this.file = file;
-		this.options().header("");
+		this.options().header(null);
 	}
 
 	public void load() {
