@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.blockface.bukkitstats.CallHome;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -412,7 +411,7 @@ public class Permissions extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Do static things
-		CallHome.load(this);
+		org.blockface.stats.CallHome.load(this);
 		Help.load(this);
 		
 		sanityCheck();
