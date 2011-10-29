@@ -27,6 +27,7 @@ import de.bananaco.permissions.commands.GlobalCommands;
 import de.bananaco.permissions.commands.LocalCommands;
 import de.bananaco.permissions.commands.WorldCommands;
 import de.bananaco.permissions.debug.Debugger;
+import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.fornoobs.PermissionsCommandSuggestions;
@@ -576,6 +577,10 @@ public class Permissions extends JavaPlugin {
 		boolean debug = c.getBoolean("enable-debug", true);
 		Debugger.setDebugging(debug);
 		c.setProperty("enable-debug", debug);
+		
+		boolean mcma = c.getBoolean("enable-mcma", false);
+		MCMA.setDebugging(debug);
+		c.setProperty("enable-mcma", mcma);
 
 		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", true);
 

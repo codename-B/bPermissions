@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.debug.Debugger;
+import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
 public abstract class PermissionClass implements PermissionSet {
@@ -188,6 +189,7 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		log(parse(groups) + " set to player:" + player);
+		MCMA.getDebugger().log(getWorld().getName());
 		setupPlayer(player);
 		Permissions.getInfoReader().clear();
 	}
@@ -201,6 +203,7 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		log(parse(nodes) + " set to group:" + group);
+		MCMA.getDebugger().log(getWorld().getName());
 		setupPlayers();
 		Permissions.getInfoReader().clear();		
 	}
