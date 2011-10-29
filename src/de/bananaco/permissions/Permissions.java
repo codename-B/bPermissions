@@ -561,10 +561,15 @@ public class Permissions extends JavaPlugin {
 		listNode = c.getString("commands.list-node", "lsnode");
 
 		hostname = c.getString("sql.hostname", hostname);
+		c.setProperty("sql.hostname", hostname);
 		port = c.getString("sql.port", port);
+		c.setProperty("sql.port", port);
 		database = c.getString("sql.database", database);
+		c.setProperty("sql.database", database);
 		username = c.getString("sql.username", username);
+		c.setProperty("sql.username", username);
 		password = c.getString("sql.password", password);
+		c.setProperty("sql.password", password);
 
 		useIpLock = c.getBoolean("use-iplock", false);
 		lock = c.getString("commands.lock", "lock");
