@@ -2,7 +2,9 @@ package de.bananaco.permissions.worlds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -164,8 +166,27 @@ public abstract class PermissionClass implements PermissionSet {
 		setGroups(player.getName(), groups);
 	}
 
+	private List<String> sanitise(List<String> input) {
+		Set<String> san = new HashSet<String>();
+		List<String> output = new ArrayList<String>();
+		for(String in : input) {
+			if(!san.contains(in)) {
+				san.add(in);
+				output.add(in);
+			}
+		}
+		san.clear();
+		return output;
+	}
+	
 	@Override
 	public void setGroups(String player, List<String> groups) {
+		List<String> sanity = sanitise(groups);
+		if(sanity.size() < groups.size()) {
+			Debugger.getDebugger().log("Duplicates detected!");
+			setGroups(player, sanity);
+			return;
+		}
 		log(parse(groups) + " set to player:" + player);
 		setupPlayer(player);
 		Permissions.getInfoReader().clear();
@@ -173,6 +194,12 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
+		List<String> sanity = sanitise(nodes);
+		if(sanity.size() < nodes.size()) {
+			Debugger.getDebugger().log("Duplicates detected!");
+			setNodes(group, sanity);
+			return;
+		}
 		log(parse(nodes) + " set to group:" + group);
 		setupPlayers();
 		Permissions.getInfoReader().clear();		
