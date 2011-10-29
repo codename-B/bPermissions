@@ -22,10 +22,14 @@ public class HasPermission {
 			return true;
 		return false;
 	}
-
+	
 	public static boolean has(Player player, String node) {
+		return has(player.getName(), player.getWorld().getName(), node);
+	}
+
+	public static boolean has(String player, String world, String node) {
 		List<String> nodes = Permissions.getWorldPermissionsManager()
-				.getPermissionSet(player.getWorld()).getPlayerNodes(player);
+				.getPermissionSet(world).getPlayerNodes(player);
 		HashSet<String> hnodes = new HashSet<String>();
 		hnodes.addAll(nodes);
 		if (contains(hnodes, node))
@@ -41,7 +45,7 @@ public class HasPermission {
 		if (contains(hnodes, "*"))
 			return get(hnodes, "*");
 		hnodes.clear();
-		return player.isOp();
+		return false;
 	}
 
 }
