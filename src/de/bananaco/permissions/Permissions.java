@@ -37,6 +37,7 @@ import de.bananaco.permissions.iplock.IpLock;
 import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.override.SpoutMonkey;
 import de.bananaco.permissions.tracks.Tracks;
+import de.bananaco.permissions.worlds.HasPermission;
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -157,6 +158,8 @@ public class Permissions extends JavaPlugin {
 	public String unlock;
 
 	public boolean useIpLock;
+	
+	public static boolean idiotVariable = false;
 
 	public String username = "minecraft";
 
@@ -304,6 +307,7 @@ public class Permissions extends JavaPlugin {
 					for (PermissionSet ps : pm.getPermissionSets())
 						ps.reload();
 					info.clear();
+					HasPermission.clearCache();
 					sender.sendMessage("Permissions reloaded.");
 					return true;
 				} else {
@@ -330,16 +334,16 @@ public class Permissions extends JavaPlugin {
 					return true;
 				} else {
 					Player player = getServer().getPlayer(args[1]);
+					boolean perm = false;
 					if(player == null) {
-						sender.sendMessage(ChatColor.RED+args[1] + " is not online!");
-						return true;
+						perm = HasPermission.has(args[1], getServer().getWorlds().get(0).getName(), args[2]);
 					} else {
-						boolean perm = sender.hasPermission(args[2]);
+						perm = sender.hasPermission(args[2]);
+					}
 						sender.sendMessage(ChatColor.AQUA+args[2]+ChatColor.GREEN+":"+ChatColor.AQUA+perm);
 						return true;	
 					}
 				}
-			}
 		}
 		
 		if (args.length > 0) {
@@ -413,6 +417,7 @@ public class Permissions extends JavaPlugin {
 		// Do static things
 		org.blockface.stats.CallHome.load(this);
 		Help.load(this);
+		SuperPermissionHandler.setPlugin(this);
 		
 		sanityCheck();
 		
@@ -578,6 +583,10 @@ public class Permissions extends JavaPlugin {
 
 		cacheValues = c.getBoolean("cache-values", true);
 
+		idiotVariable = c.getBoolean("lowercase-all", false);
+		
+		c.setProperty("lowercase-all", idiotVariable);
+		
 		boolean debug = c.getBoolean("enable-debug", true);
 		Debugger.setDebugging(debug);
 		c.setProperty("enable-debug", debug);

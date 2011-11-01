@@ -50,6 +50,8 @@ public class JSONWorldPermissions extends PermissionClass {
 
 	@Override
 	public List<String> getGroupNodes(String group) {
+		group = caseCheck(group);
+		
 		List<String> nodes = new ArrayList<String>();
 		if (groups.containsKey(group))
 			return groups.get(group);
@@ -58,6 +60,8 @@ public class JSONWorldPermissions extends PermissionClass {
 
 	@Override
 	public List<String> getGroups(String player) {
+		player = caseCheck(player);
+		
 		List<String> groups = getDefaultArrayList();
 		if (players.containsKey(player))
 			return players.get(player);
@@ -80,6 +84,8 @@ public class JSONWorldPermissions extends PermissionClass {
 	}
 
 	public void setGroups(String player, List<String> groups) {
+		player = caseCheck(player);
+		
 		players.put(player, groups);
 		save();
 		super.setGroups(player, groups);
@@ -87,6 +93,8 @@ public class JSONWorldPermissions extends PermissionClass {
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
+		group = caseCheck(group);
+		
 		groups.put(group, nodes);
 		save();
 		super.setNodes(group, nodes);

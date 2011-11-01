@@ -12,8 +12,17 @@ import de.bananaco.permissions.debug.Debugger;
 
 public class SuperPermissionHandler {
 
-	public static void setupPlayer(Player p, List<String> nodes,
-			JavaPlugin plugin) {
+	private static JavaPlugin plugin;
+	public static void setPlugin(JavaPlugin pl) {
+		plugin = pl;
+	}
+	
+	public static void setupPlayer(Player p) {
+		List<String> nodes = Permissions.getWorldPermissionsManager().getPermissionSet(p.getWorld()).getPlayerNodes(p);
+		setupPlayer(p, nodes);
+	}
+	
+	public static void setupPlayer(Player p, List<String> nodes) {
 		long start = System.currentTimeMillis();
 		unsetupPlayer(p, plugin);
 		PermissionAttachment att = p.addAttachment(plugin);

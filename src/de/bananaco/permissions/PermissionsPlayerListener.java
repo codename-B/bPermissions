@@ -110,7 +110,7 @@ public class PermissionsPlayerListener extends PlayerListener {
 		PermissionSet ps = permissions.pm.getPermissionSet(event.getPlayer()
 				.getLocation().getWorld());
 		SuperPermissionHandler.setupPlayer(event.getPlayer(),
-				ps.getPlayerNodes(event.getPlayer()), permissions);
+				ps.getPlayerNodes(event.getPlayer()));
 	}
 
 	@Override
@@ -128,6 +128,6 @@ public class PermissionsPlayerListener extends PlayerListener {
 		PermissionSet ps = permissions.pm.getPermissionSet(event.getTo()
 				.getWorld());
 		SuperPermissionHandler.setupPlayer(event.getPlayer(),
-				ps.getPlayerNodes(event.getPlayer()), permissions);
+				ps.getPlayerNodes(event.getPlayer()));
 	}
 }

@@ -1,11 +1,20 @@
 package de.bananaco.permissions.worlds;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import de.bananaco.permissions.Permissions;
 
 public class HasPermission {
+	
+	private static Map<String, Boolean> perms = new HashMap<String, Boolean>();
+	
+	public static void clearCache() {
+		perms.clear();
+	}
 
 	private static boolean contains(HashSet<String> hnodes, String node) {
 		if (hnodes.contains("^" + node))
@@ -28,10 +37,29 @@ public class HasPermission {
 	}
 
 	public static boolean has(String player, String world, String node) {
+		player = PermissionClass.caseCheck(player);
+		
+		node = PermissionClass.caseCheck(node);
+		
+		String pString = player+"."+world+"."+node;
+		boolean perm = false;
+		if(perms.containsKey(pString))
+			perm = perms.get(pString);
+		else {
+			perm = hasPerm(player, world, node);
+			perms.put(pString, perm);
+		}
+		return perm;
+	}
+	
+	private static boolean hasPerm(String player, String world, String node) {
 		List<String> nodes = Permissions.getWorldPermissionsManager()
 				.getPermissionSet(world).getPlayerNodes(player);
 		HashSet<String> hnodes = new HashSet<String>();
-		hnodes.addAll(nodes);
+		for(String n : nodes) {
+			n = PermissionClass.caseCheck(n);
+			hnodes.add(n);
+		}
 		if (contains(hnodes, node))
 			return get(hnodes, node);
 		int index = node.lastIndexOf('.');

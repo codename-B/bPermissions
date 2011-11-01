@@ -49,6 +49,8 @@ public class SQLWorldPermissions extends PermissionClass {
 
 	@Override
 	public List<String> getGroupNodes(String group) {
+		group = caseCheck(group);
+		
 		if (groupCache.containsKey(group))
 			return groupCache.get(group);
 
@@ -76,6 +78,8 @@ public class SQLWorldPermissions extends PermissionClass {
 
 	@Override
 	public List<String> getGroups(String player) {
+		player = caseCheck(player);
+		
 		if (userCache.containsKey(player))
 			return userCache.get(player);
 
@@ -147,7 +151,8 @@ public class SQLWorldPermissions extends PermissionClass {
 	}
 
 	@Override
-	public void setGroups(final String player, final List<String> groups) {
+	public void setGroups(final String pl, final List<String> groups) {
+		final String player = caseCheck(pl);
 		userCache.put(player, groups);
 		PermissionsThread.run(new Runnable() {
 			public void run() {
@@ -164,7 +169,9 @@ public class SQLWorldPermissions extends PermissionClass {
 	}
 
 	@Override
-	public void setNodes(final String group, final List<String> nodes) {
+	public void setNodes(final String gr, final List<String> nodes) {
+		final String group = caseCheck(gr);
+		
 		groupCache.put(group, nodes);
 		PermissionsThread.run(new Runnable() {
 			public void run() {

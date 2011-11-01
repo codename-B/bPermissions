@@ -25,6 +25,13 @@ public abstract class PermissionClass implements PermissionSet {
 	 * The world
 	 */
 	public final World world;
+	
+	public static String caseCheck(String input) {
+		String output = input;
+		if(Permissions.idiotVariable)
+			output = output.toLowerCase();
+		return output;
+	}
 
 	PermissionClass(World world, Permissions plugin) {
 		this.plugin = plugin;
@@ -38,6 +45,9 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void addGroup(String player, String group) {
+		player = caseCheck(player);
+		group = caseCheck(group);
+		
 		List<String> playerGroups = getGroups(player);
 		if (!playerGroups.contains(group)) {
 			playerGroups.add(group);
@@ -51,6 +61,9 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void addNode(String node, String group) {
+		node = caseCheck(node);
+		group = caseCheck(group);
+		
 		List<String> groupNodes = getGroupNodes(group);
 		if (groupNodes == null) {
 			log("the group:" + group + " does not exist for world:"
@@ -69,7 +82,7 @@ public abstract class PermissionClass implements PermissionSet {
 
 	public final ArrayList<String> getDefaultArrayList() {
 		ArrayList<String> ar = new ArrayList<String>();
-		ar.add(getDefaultGroup());
+		ar.add(caseCheck(getDefaultGroup()));
 		return ar;
 	}
 
@@ -88,9 +101,14 @@ public abstract class PermissionClass implements PermissionSet {
 		List<String> playerGroups = getGroups(player);
 		List<String> playerNodes = new ArrayList<String>();
 		for (String group : playerGroups) {
+			if(group.startsWith("p:")) {
+			String node = group.substring(2);
+			playerNodes.add(node);
+			} else {
 			for (String node : getGroupNodes(group)) {
 				if (!playerNodes.contains(node))
 					playerNodes.add(node);
+			}
 			}
 		}
 		return playerNodes;
@@ -121,6 +139,9 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void removeGroup(String player, String group) {
+		player = caseCheck(player);
+		group = caseCheck(group);
+		
 		List<String> playerGroups = getGroups(player);
 		if (playerGroups.contains(group)) {
 			playerGroups.remove(group);
@@ -134,6 +155,9 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void removeNode(String node, String group) {
+		node = caseCheck(node);
+		group = caseCheck(group);
+		
 		List<String> groupNodes = getGroupNodes(group);
 		if (groupNodes == null) {
 			log("the group:" + group + " does not exist for world:"
@@ -157,6 +181,8 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void setGroup(String player, String group) {
+		player = caseCheck(player);
+		
 		List<String> groups = new ArrayList<String>();
 		groups.add(group);
 		setGroups(player, groups);
@@ -182,6 +208,8 @@ public abstract class PermissionClass implements PermissionSet {
 	
 	@Override
 	public void setGroups(String player, List<String> groups) {
+		player = caseCheck(player);
+		
 		List<String> sanity = sanitise(groups);
 		if(sanity.size() < groups.size()) {
 			Debugger.getDebugger().log("Duplicates detected!");
@@ -192,10 +220,13 @@ public abstract class PermissionClass implements PermissionSet {
 		MCMA.getDebugger().log(getWorld().getName());
 		setupPlayer(player);
 		Permissions.getInfoReader().clear();
+		HasPermission.clearCache();
 	}
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
+		group = caseCheck(group);
+		
 		List<String> sanity = sanitise(nodes);
 		if(sanity.size() < nodes.size()) {
 			Debugger.getDebugger().log("Duplicates detected!");
@@ -205,7 +236,8 @@ public abstract class PermissionClass implements PermissionSet {
 		log(parse(nodes) + " set to group:" + group);
 		MCMA.getDebugger().log(getWorld().getName());
 		setupPlayers();
-		Permissions.getInfoReader().clear();		
+		Permissions.getInfoReader().clear();
+		HasPermission.clearCache();
 	}
 
 	@Override
@@ -219,8 +251,7 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void setupPlayer(Player player) {
-		SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player),
-				plugin);
+		SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player));
 	}
 
 	@Override
@@ -249,6 +280,8 @@ public abstract class PermissionClass implements PermissionSet {
 	
 	@Override
 	public final List<String> getAllCachedPlayersWithGroup(String group) {
+		group = caseCheck(group);
+		
 		long start = System.currentTimeMillis();
 		List<String> players = new ArrayList<String>();
 		for(String player : getAllCachedPlayers()) {
