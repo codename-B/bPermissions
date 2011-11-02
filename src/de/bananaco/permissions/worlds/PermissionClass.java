@@ -39,13 +39,6 @@ public abstract class PermissionClass implements PermissionSet {
 
 	private static Pattern p = Pattern.compile("\\[[0-9]*-[0-9]*\\]");
 
-	public static void main(String[] args) {
-		String test = "main.n[0-24]de";
-		List<String> list = getRangePermissions(test);
-		for (String perm : list)
-			System.out.println(perm);
-	}
-
 	public static boolean isRangePermission(String input) {
 		Matcher m = p.matcher(input);
 		return m.find();
