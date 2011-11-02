@@ -38,6 +38,7 @@ import de.bananaco.permissions.override.MonkeyListener;
 import de.bananaco.permissions.override.SpoutMonkey;
 import de.bananaco.permissions.tracks.Tracks;
 import de.bananaco.permissions.worlds.HasPermission;
+import de.bananaco.permissions.worlds.PermissionClass;
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -340,6 +341,7 @@ public class Permissions extends JavaPlugin {
 					} else {
 						perm = sender.hasPermission(args[2]);
 					}
+						PermissionClass.isRangePermission(args[2]);
 						sender.sendMessage(ChatColor.AQUA+args[2]+ChatColor.GREEN+":"+ChatColor.AQUA+perm);
 						return true;	
 					}

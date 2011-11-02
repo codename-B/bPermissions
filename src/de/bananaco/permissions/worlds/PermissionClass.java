@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -31,6 +33,36 @@ public abstract class PermissionClass implements PermissionSet {
 		if(Permissions.idiotVariable)
 			output = output.toLowerCase();
 		return output;
+	}
+	
+	public static void main(String[] args) {
+		String test = "test.[2-10]";
+		for(String perm : getRangePermissions(test))
+			System.out.println(perm);
+	}
+	
+	private static Pattern p = Pattern.compile("\\[[0-9]*-[0-9]*\\]");
+				
+	public static boolean isRangePermission(String input) {
+		Matcher m = p.matcher(input);
+		return m.find();
+	}
+	
+	public static List<String> getRangePermissions(String input) {
+		List<String> perms = new ArrayList<String>();
+		
+		String o = input;
+		String t = input.substring(0, input.lastIndexOf("."));
+		while(o.contains(".") && o.indexOf(".") < o.indexOf("[")) {
+			o = o.replace(o.substring(0, o.indexOf(".")+1), "").replace("[", "").replace("]", "");
+			System.out.println(o);
+		}
+		String[] se = o.split("-");
+		int x = Integer.parseInt(se[0]);
+		int y = Integer.parseInt(se[1]);
+		for(int i=x; i<=y; i++)
+			perms.add(t+"."+i);
+		return perms;
 	}
 
 	PermissionClass(World world, Permissions plugin) {
@@ -106,7 +138,14 @@ public abstract class PermissionClass implements PermissionSet {
 			playerNodes.add(node);
 			} else {
 			for (String node : getGroupNodes(group)) {
-				if (!playerNodes.contains(node))
+				if(isRangePermission(node)) {
+					List<String> rNodes = getRangePermissions(node);
+					for(String nd : rNodes) {
+						if (!playerNodes.contains(nd))
+							playerNodes.add(nd);
+					}
+				}
+				else if (!playerNodes.contains(node))
 					playerNodes.add(node);
 			}
 			}
@@ -272,7 +311,7 @@ public abstract class PermissionClass implements PermissionSet {
 				+ finish + "ms.");
 	}
 
-	public String parse(List<String> rList) {
+	public final String parse(List<String> rList) {
 		String[] rArray = new String[rList.size()];
 		rArray = rList.toArray(rArray);
 		return Arrays.toString(rArray);
@@ -295,13 +334,15 @@ public abstract class PermissionClass implements PermissionSet {
 	}
 	
 	@Override
-	public boolean hasGroup(Player player, String group) {
+	public final boolean hasGroup(Player player, String group) {
 		return hasGroup(player.getName(), group);
 	}
 	
-	public boolean hasGroup(String player, String group) {
+	public final boolean hasGroup(String player, String group) {
 		List<String> groups = getGroups(player);
 		return groups.contains(group);
 	}
+	
+	
 
 }
