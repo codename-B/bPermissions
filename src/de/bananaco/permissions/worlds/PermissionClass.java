@@ -2,6 +2,8 @@ package de.bananaco.permissions.worlds;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,34 +29,78 @@ public abstract class PermissionClass implements PermissionSet {
 	 * The world
 	 */
 	public final World world;
-	
+
 	public static String caseCheck(String input) {
 		String output = input;
-		if(Permissions.idiotVariable)
+		if (Permissions.idiotVariable)
 			output = output.toLowerCase();
 		return output;
 	}
-	
+
 	private static Pattern p = Pattern.compile("\\[[0-9]*-[0-9]*\\]");
-				
+
+	public static void main(String[] args) {
+		String test = "main.n[0-24]de";
+		List<String> list = getRangePermissions(test);
+		for (String perm : list)
+			System.out.println(perm);
+	}
+
 	public static boolean isRangePermission(String input) {
 		Matcher m = p.matcher(input);
 		return m.find();
 	}
-	
+
 	public static List<String> getRangePermissions(String input) {
 		List<String> perms = new ArrayList<String>();
 		String o = input;
-		String t = input.substring(0, input.lastIndexOf("."));
-		while(o.contains(".") && o.indexOf(".") < o.indexOf("[")) {
-			o = o.replace(o.substring(0, o.indexOf(".")+1), "").replace("[", "").replace("]", "");
+
+		String[] parts = o.split("\\.");
+
+		for (String part : parts) {
+			if (isRangePermission(part)) {
+				int[] pair = recurse(part);
+				if (pair != null) {
+					String pr = String.valueOf("[" + pair[0] + "-" + pair[1]
+							+ "]");
+					for (int i = pair[0]; i <= pair[1]; i++) {
+						perms.add(o.replace(pr, String.valueOf(i)));
+					}
+				}
+			}
 		}
-		String[] se = o.split("-");
-		int x = Integer.parseInt(se[0]);
-		int y = Integer.parseInt(se[1]);
-		for(int i=x; i<=y; i++)
-			perms.add(t+"."+i);
+		Set<String> fPerms = new HashSet<String>();
+		for (String perm : perms) {
+			if (isRangePermission(perm)) {
+				List<String> per = new ArrayList<String>();
+				per.addAll(getRangePermissions(perm));
+				fPerms.addAll(per);
+			}
+		}
+		perms.addAll(fPerms);
+		fPerms.clear();
+		for (String perm : perms) {
+			if (!isRangePermission(perm))
+				fPerms.add(perm);
+		}
+		perms.clear();
+		perms.addAll(fPerms);
+		fPerms.clear();
+		Collections.sort(perms, new Comparator<String>() {
+			public int compare(String a, String b) {
+				return a.compareTo(b);
+			};
+		});
 		return perms;
+	}
+
+	private static int[] recurse(String part) {
+		int[] out = new int[2];
+		part = part.replace("[", "").replace("]", "");
+		String[] parts = part.split("-");
+		out[0] = Integer.parseInt(parts[0].replaceAll("[A-z]", ""));
+		out[1] = Integer.parseInt(parts[1].replaceAll("[A-z]", ""));
+		return out;
 	}
 
 	PermissionClass(World world, Permissions plugin) {
@@ -71,7 +117,7 @@ public abstract class PermissionClass implements PermissionSet {
 	public final void addGroup(String player, String group) {
 		player = caseCheck(player);
 		group = caseCheck(group);
-		
+
 		List<String> playerGroups = getGroups(player);
 		if (!playerGroups.contains(group)) {
 			playerGroups.add(group);
@@ -87,7 +133,7 @@ public abstract class PermissionClass implements PermissionSet {
 	public final void addNode(String node, String group) {
 		node = caseCheck(node);
 		group = caseCheck(group);
-		
+
 		List<String> groupNodes = getGroupNodes(group);
 		if (groupNodes == null) {
 			log("the group:" + group + " does not exist for world:"
@@ -125,21 +171,20 @@ public abstract class PermissionClass implements PermissionSet {
 		List<String> playerGroups = getGroups(player);
 		List<String> playerNodes = new ArrayList<String>();
 		for (String group : playerGroups) {
-			if(group.startsWith("p:")) {
-			String node = group.substring(2);
-			playerNodes.add(node);
+			if (group.startsWith("p:")) {
+				String node = group.substring(2);
+				playerNodes.add(node);
 			} else {
-			for (String node : getGroupNodes(group)) {
-				if(isRangePermission(node)) {
-					List<String> rNodes = getRangePermissions(node);
-					for(String nd : rNodes) {
-						if (!playerNodes.contains(nd))
-							playerNodes.add(nd);
-					}
+				for (String node : getGroupNodes(group)) {
+					if (isRangePermission(node)) {
+						List<String> rNodes = getRangePermissions(node);
+						for (String nd : rNodes) {
+							if (!playerNodes.contains(nd))
+								playerNodes.add(nd);
+						}
+					} else if (!playerNodes.contains(node))
+						playerNodes.add(node);
 				}
-				else if (!playerNodes.contains(node))
-					playerNodes.add(node);
-			}
 			}
 		}
 		return playerNodes;
@@ -172,7 +217,7 @@ public abstract class PermissionClass implements PermissionSet {
 	public final void removeGroup(String player, String group) {
 		player = caseCheck(player);
 		group = caseCheck(group);
-		
+
 		List<String> playerGroups = getGroups(player);
 		if (playerGroups.contains(group)) {
 			playerGroups.remove(group);
@@ -188,7 +233,7 @@ public abstract class PermissionClass implements PermissionSet {
 	public final void removeNode(String node, String group) {
 		node = caseCheck(node);
 		group = caseCheck(group);
-		
+
 		List<String> groupNodes = getGroupNodes(group);
 		if (groupNodes == null) {
 			log("the group:" + group + " does not exist for world:"
@@ -213,7 +258,7 @@ public abstract class PermissionClass implements PermissionSet {
 	@Override
 	public final void setGroup(String player, String group) {
 		player = caseCheck(player);
-		
+
 		List<String> groups = new ArrayList<String>();
 		groups.add(group);
 		setGroups(player, groups);
@@ -227,8 +272,8 @@ public abstract class PermissionClass implements PermissionSet {
 	private List<String> sanitise(List<String> input) {
 		Set<String> san = new HashSet<String>();
 		List<String> output = new ArrayList<String>();
-		for(String in : input) {
-			if(!san.contains(in)) {
+		for (String in : input) {
+			if (!san.contains(in)) {
 				san.add(in);
 				output.add(in);
 			}
@@ -236,13 +281,13 @@ public abstract class PermissionClass implements PermissionSet {
 		san.clear();
 		return output;
 	}
-	
+
 	@Override
 	public void setGroups(String player, List<String> groups) {
 		player = caseCheck(player);
-		
+
 		List<String> sanity = sanitise(groups);
-		if(sanity.size() < groups.size()) {
+		if (sanity.size() < groups.size()) {
 			Debugger.getDebugger().log("Duplicates detected!");
 			setGroups(player, sanity);
 			return;
@@ -257,9 +302,9 @@ public abstract class PermissionClass implements PermissionSet {
 	@Override
 	public void setNodes(String group, List<String> nodes) {
 		group = caseCheck(group);
-		
+
 		List<String> sanity = sanitise(nodes);
-		if(sanity.size() < nodes.size()) {
+		if (sanity.size() < nodes.size()) {
 			Debugger.getDebugger().log("Duplicates detected!");
 			setNodes(group, sanity);
 			return;
@@ -308,33 +353,33 @@ public abstract class PermissionClass implements PermissionSet {
 		rArray = rList.toArray(rArray);
 		return Arrays.toString(rArray);
 	}
-	
+
 	@Override
 	public final List<String> getAllCachedPlayersWithGroup(String group) {
 		group = caseCheck(group);
-		
+
 		long start = System.currentTimeMillis();
 		List<String> players = new ArrayList<String>();
-		for(String player : getAllCachedPlayers()) {
-			if(hasGroup(player, group)) {
+		for (String player : getAllCachedPlayers()) {
+			if (hasGroup(player, group)) {
 				players.add(player);
 			}
 		}
 		long finish = System.currentTimeMillis() - start;
-		Debugger.getDebugger().log(players.size()+" players found in group "+group+". Search took "+finish+"ms.");
+		Debugger.getDebugger().log(
+				players.size() + " players found in group " + group
+						+ ". Search took " + finish + "ms.");
 		return players;
 	}
-	
+
 	@Override
 	public final boolean hasGroup(Player player, String group) {
 		return hasGroup(player.getName(), group);
 	}
-	
+
 	public final boolean hasGroup(String player, String group) {
 		List<String> groups = getGroups(player);
 		return groups.contains(group);
 	}
-	
-	
 
 }
