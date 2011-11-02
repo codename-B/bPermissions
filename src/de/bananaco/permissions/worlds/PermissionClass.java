@@ -35,12 +35,6 @@ public abstract class PermissionClass implements PermissionSet {
 		return output;
 	}
 	
-	public static void main(String[] args) {
-		String test = "test.[2-10]";
-		for(String perm : getRangePermissions(test))
-			System.out.println(perm);
-	}
-	
 	private static Pattern p = Pattern.compile("\\[[0-9]*-[0-9]*\\]");
 				
 	public static boolean isRangePermission(String input) {
@@ -50,12 +44,10 @@ public abstract class PermissionClass implements PermissionSet {
 	
 	public static List<String> getRangePermissions(String input) {
 		List<String> perms = new ArrayList<String>();
-		
 		String o = input;
 		String t = input.substring(0, input.lastIndexOf("."));
 		while(o.contains(".") && o.indexOf(".") < o.indexOf("[")) {
 			o = o.replace(o.substring(0, o.indexOf(".")+1), "").replace("[", "").replace("]", "");
-			System.out.println(o);
 		}
 		String[] se = o.split("-");
 		int x = Integer.parseInt(se[0]);
