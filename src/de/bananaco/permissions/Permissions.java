@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sourceforge.sizeof.SizeOf;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,6 +18,7 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -415,8 +418,7 @@ public class Permissions extends JavaPlugin {
 	}
 
 	@Override
-	public void onEnable() {
-		// Do static things
+	public void onEnable() {		
 		org.blockface.stats.CallHome.load(this);
 		Help.load(this);
 		SuperPermissionHandler.setPlugin(this);
@@ -486,6 +488,15 @@ public class Permissions extends JavaPlugin {
 		registerPermissions();
 
 		log("Enabled");
+		// Do static things
+		try {
+		log("Using "+SizeOf.humanReadable(SizeOf.deepSizeOf(this))+" ram");
+		} catch (Exception e) {
+			log("SizeOf.jar not in startup path, skipping!");
+			log("To enable bPermissions to track its memory usage, add SizeOf.jar to the startup script");
+			log("See http://sizeof.sourceforge.net/ for details");
+		}
+
 	}
 
 	@Override
