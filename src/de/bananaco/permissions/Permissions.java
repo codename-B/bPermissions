@@ -419,7 +419,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {		
-		org.blockface.stats.CallHome.load(this);
+                com.randomappdev.bukkitstats.CallHome.load(this);
 		Help.load(this);
 		SuperPermissionHandler.setPlugin(this);
 		
