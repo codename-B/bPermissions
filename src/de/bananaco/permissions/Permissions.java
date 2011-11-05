@@ -419,7 +419,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {		
-                com.randomappdev.bukkitstats.CallHome.load(this);
+                com.arandomappdev.bukkitstats.CallHome.load(this);
 		Help.load(this);
 		SuperPermissionHandler.setPlugin(this);
 		
