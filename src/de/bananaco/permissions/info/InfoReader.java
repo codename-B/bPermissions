@@ -45,8 +45,8 @@ public class InfoReader implements PlayerInfo {
 	 * @return String
 	 */
 	public String getGroupValue(String group, String world, String valueToGet) {
-		if (groups.containsKey(group+"."+valueToGet))
-			return groups.get(group+"."+valueToGet);
+		if (groups.containsKey(group+"."+world+"."+valueToGet))
+			return groups.get(group+"."+world+"."+valueToGet);
 
 		// Blame CraftIRC
 		if (world == null || world.equals("")) {
@@ -70,7 +70,7 @@ public class InfoReader implements PlayerInfo {
 		}
 
 		if (!value.equals("") && cache)
-			groups.put(group+"."+valueToGet, value);
+			groups.put(group+"."+world+"."+valueToGet, value);
 
 		return value;
 	}
@@ -84,8 +84,8 @@ public class InfoReader implements PlayerInfo {
 	 * @return String
 	 */
 	public String getValue(String player, String world, String valueToGet) {
-		if (players.containsKey(player+"."+valueToGet))
-			return players.get(player+"."+valueToGet);
+		if (players.containsKey(player+"."+world+"."+valueToGet))
+			return players.get(player+"."+world+"."+valueToGet);
 
 		if (world == null || world.equals("")) {
 			System.err
@@ -112,7 +112,7 @@ public class InfoReader implements PlayerInfo {
 		}
 
 		if (!value.equals("") && cache)
-			players.put(player+"."+valueToGet, value);
+			players.put(player+"."+world+"."+valueToGet, value);
 
 		return value;
 	}
