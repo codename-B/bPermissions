@@ -1,6 +1,5 @@
 package de.bananaco.permissions;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.ServicePriority;
@@ -36,8 +34,7 @@ import de.bananaco.permissions.fornoobs.Tutorial;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.interfaces.PermissionSet;
 import de.bananaco.permissions.iplock.IpLock;
-import de.bananaco.permissions.override.MonkeyListener;
-import de.bananaco.permissions.override.SpoutMonkey;
+
 import de.bananaco.permissions.tracks.Tracks;
 import de.bananaco.permissions.worlds.HasPermission;
 import de.bananaco.permissions.worlds.PermissionClass;
@@ -50,52 +47,13 @@ public class Permissions extends JavaPlugin {
 
 	private static Set<String> commands = new HashSet<String>();
 
-	public static final Field entity_bukkitEntity;
 	private static InfoReader info;
 	private static Set<String> listCommands = new HashSet<String>();
 
 	private static WorldPermissionsManager perm;
 	private static String sworldCommand;
-	/**
-	 * Whether to use MonkeyPlayer class to proxy CraftPlayer. Will only be true
-	 * if CraftPlayer was found.
-	 */
-	public static final boolean useMonkeyPlayer;
+	
 	private static Set<String> worldCommands = new HashSet<String>();
-	static {
-		boolean result = true;
-		try {
-			Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer");
-		} catch (ClassNotFoundException e) {
-			System.err
-					.println("Cannot use MonkeyPlayer unless on CraftBukkit! Not attempting to use!");
-			result = false;
-		}
-		Field field_bukkitEntity = null;
-		try {
-			@SuppressWarnings("rawtypes")
-			Class class_Entity = Class.forName("net.minecraft.server.Entity");
-
-			field_bukkitEntity = class_Entity.getDeclaredField("bukkitEntity");
-			field_bukkitEntity.setAccessible(true);
-		} catch (ClassNotFoundException e) {
-			System.err
-					.println("net.minecrat.server.Entity missing, cannot use MonkeyPlayer!");
-			result = false;
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			System.err
-					.println("net.minecrat.server.Entity missing field bukkitEntity, cannot use MonkeyPlayer!");
-			result = false;
-			e.printStackTrace();
-		}
-		useMonkeyPlayer = result;
-		if (useMonkeyPlayer) {
-			entity_bukkitEntity = field_bukkitEntity;
-		} else {
-			entity_bukkitEntity = null;
-		}
-	}
 
 	public static Set<String> getCommands() {
 		return commands;
@@ -137,8 +95,6 @@ public class Permissions extends JavaPlugin {
 	public String lock;
 
 	public Map<String, String> mirror;
-	public final MonkeyListener monkeylistener = new MonkeyListener(this);
-	public boolean overridePlayer;
 
 	public String password = "minecraft";
 
@@ -464,16 +420,6 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
 
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN,
-				monkeylistener, Priority.Lowest, this);
-
-		if (this.overridePlayer
-				&& getServer().getPluginManager().getPlugin("Spout") != null) {
-			log("Spout detected, registering PlayerPermissionEvent");
-			getServer().getPluginManager().registerEvent(Type.CUSTOM_EVENT,
-					new SpoutMonkey(), Priority.Normal, this);
-		}
-
 		tutorial = new Tutorial(this);
 		// The tutorial
 		getServer().getPluginManager().registerEvent(
@@ -508,6 +454,10 @@ public class Permissions extends JavaPlugin {
 		getServer().getServicesManager().register(PlayerInfo.class, info, this,
 				ServicePriority.Normal);
 		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
+		if(getServer().getPluginManager().getPlugin("WorldGuard") != null)
+		WorldGuardProvider.loadPseudoPlugin(this, getClassLoader());
+		else
+		Debugger.getDebugger().log("WorldGuard/WorldEdit not detected, skipping bridge plugin");
 	}
 
 	public void registerPermissions() {
@@ -556,8 +506,6 @@ public class Permissions extends JavaPlugin {
 		if (mirrors != null)
 			for (String world : mirrors)
 				mirror.put(world, c.getString("mirrors." + world));
-
-		overridePlayer = c.getBoolean("override-player", false);
 
 		globalCommand = c.getString("commands.global-command", "global");
 		localCommand = c.getString("commands.local-command", "local");
@@ -618,8 +566,9 @@ public class Permissions extends JavaPlugin {
 					c.getString("permission-type", "yaml"));
 			wps = WorldPermissionSet.getSet(c.getString("permission-type"));
 		}
+		
 		c.removeProperty("use-bml");
-		c.setProperty("override-player", overridePlayer);
+		c.removeProperty("override-player");
 
 		c.setProperty("suggest-similar-commands", suggestSimilarCommands);
 
