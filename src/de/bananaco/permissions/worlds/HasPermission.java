@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.interfaces.PermissionSet;
 
 public class HasPermission {
 	
@@ -53,8 +54,10 @@ public class HasPermission {
 	}
 	
 	private static boolean hasPerm(String player, String world, String node) {
-		List<String> nodes = Permissions.getWorldPermissionsManager()
-				.getPermissionSet(world).getPlayerNodes(player);
+		PermissionSet set = Permissions.getWorldPermissionsManager().getPermissionSet(world);
+		if (set == null)
+			return false;
+		List<String> nodes = set.getPlayerNodes(player);
 		HashSet<String> hnodes = new HashSet<String>();
 		for(String n : nodes) {
 			n = PermissionClass.caseCheck(n);
