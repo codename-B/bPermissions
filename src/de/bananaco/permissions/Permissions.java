@@ -129,6 +129,8 @@ public class Permissions extends JavaPlugin {
 	public WorldPermissionSet wps;
 	
 	private BackupPermissionsCommand bpc;
+	
+	private PermissionsRunnable pr;
 
 	/**
 	 * Just the logger man
@@ -368,6 +370,9 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		pr.setRunning(false);
+		// And wait for the task to finish
+		while(pr.isAlive()) {}
 		getServer().getScheduler().cancelTasks(this);
 		log("Disabled");
 	}
@@ -432,7 +437,6 @@ public class Permissions extends JavaPlugin {
 
 		registerPermissions();
 
-		log("Enabled");
 		// Do static things
 		try {
 		log("Using "+SizeOf.humanReadable(SizeOf.deepSizeOf(this))+" ram");
@@ -442,6 +446,11 @@ public class Permissions extends JavaPlugin {
 			log("See http://sizeof.sourceforge.net/ for details");
 		}
 
+		// And new shizz!
+		pr = new PermissionsRunnable();
+		pr.start();
+		
+		log("Enabled");
 	}
 
 	@Override

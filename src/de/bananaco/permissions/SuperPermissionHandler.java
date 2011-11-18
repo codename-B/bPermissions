@@ -35,6 +35,9 @@ public class SuperPermissionHandler {
 				att.setPermission(tNode, true);
 			}
 		}
+		
+		Permissions.getWorldPermissionsManager().correct(p);
+		
 		long finish = System.currentTimeMillis() - start;
 		Debugger.getDebugger().log(
 				"Setup player:" + p.getName() + " took " + finish + "ms");
