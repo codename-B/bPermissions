@@ -11,11 +11,16 @@
     </properties>
     <!-- Repository locations -->
     <repositories>
-        <!-- Spout-related stufff -->
-        <repository>
+        <!-- Spout-related stuff (not currently used) -->
+        <!--<repository>
             <id>spout-repo</id>
             <url>http://ci.getspout.org/plugin/repository/everything/</url>
-        </repository>
+        </repository>-->
+        <!--  WorldEdit/WorldGuard-related stuff -->
+        <repository>
+			<id>sk89q-mvn2</id>
+			<url>http://mvn2.sk89q.com/repo</url>
+		</repository>
         <!-- Bukkit-related stuff -->
         <repository>
             <id>bukkit-repo</id>
