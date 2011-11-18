@@ -65,9 +65,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.getspout</groupId>
-            <artifactId>spoutapi</artifactId>
-            <version>dev-SNAPSHOT</version>
+            <groupId>com.sk89q</groupId>
+            <artifactId>worldedit</artifactId>
+            <version>4.7</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

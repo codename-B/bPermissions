@@ -34,7 +34,7 @@ public class PermissionsRunnable extends Thread {
 			try {
 				for(int i=0; i<10; i++)
 					if(isRunning)
-				sleep(10);
+				sleep(100);
 			} catch (InterruptedException e) {
 				//e.printStackTrace();
 			}
