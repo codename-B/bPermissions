@@ -102,10 +102,6 @@ public class WorldGuardProvider extends JavaPlugin implements PermissionsProvide
 		this.server = server;
 		this.wpm = wpm;
 	}
-	
-	@Override
-	public void onLoad() {
-	}
 
 	@Override
 	public void onDisable() {
@@ -113,6 +109,7 @@ public class WorldGuardProvider extends JavaPlugin implements PermissionsProvide
 
 	@Override
 	public void onEnable() {
+		server = Bukkit.getServer();
 		inst(Bukkit.getServer(), Permissions.getWorldPermissionsManager());
 		Debugger.getDebugger().log("WorldGuard bridge enabled");
 	}
