@@ -117,6 +117,12 @@ public class WorldGuardProvider extends JavaPlugin implements PermissionsProvide
 	@Override
 	public String[] getGroups(String player) {
 		PermissionSet ps;
+		// Still getting that wierd npe :/
+		if(server == null)
+			server = Bukkit.getServer();
+		// STILL getting that wierd npe :/ :/
+		if(wpm == null)
+			wpm = Permissions.getWorldPermissionsManager();
 		if(server.getPlayer(player) != null) {
 			ps = wpm.getPermissionSet(server.getPlayer(player).getWorld());
 		} else {

@@ -40,7 +40,7 @@ public class HasPermission {
 	public static boolean has(String player, String world, String node) {
 		player = PermissionClass.caseCheck(player);
 		
-		node = PermissionClass.caseCheck(node);
+		node = node.toLowerCase();
 		
 		String pString = player+"."+world+"."+node;
 		boolean perm = false;
@@ -60,7 +60,7 @@ public class HasPermission {
 		List<String> nodes = set.getPlayerNodes(player);
 		HashSet<String> hnodes = new HashSet<String>();
 		for(String n : nodes) {
-			n = PermissionClass.caseCheck(n);
+			n = n.toLowerCase();
 			hnodes.add(n);
 		}
 		if (contains(hnodes, node))
