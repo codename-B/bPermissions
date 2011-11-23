@@ -463,10 +463,13 @@ public class Permissions extends JavaPlugin {
 		getServer().getServicesManager().register(PlayerInfo.class, info, this,
 				ServicePriority.Normal);
 		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
-		if(getServer().getPluginManager().getPlugin("WorldGuard") != null)
-		WorldGuardProvider.loadPseudoPlugin(this, getClassLoader());
-		else
-		Debugger.getDebugger().log("WorldGuard/WorldEdit not detected, skipping bridge plugin");
+		
+		// TODO re-implement sk89q's stupid WEPIF system
+		
+		//if(getServer().getPluginManager().getPlugin("WorldGuard") != null)
+		//WorldGuardProvider.loadPseudoPlugin(this, getClassLoader());
+		//else
+		//Debugger.getDebugger().log("WorldGuard/WorldEdit not detected, skipping bridge plugin");
 	}
 
 	public void registerPermissions() {
