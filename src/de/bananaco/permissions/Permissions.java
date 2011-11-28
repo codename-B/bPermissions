@@ -176,6 +176,19 @@ public class Permissions extends JavaPlugin {
 					return true;
 				}
 		}
+		if (args.length == 2 && sender instanceof Player) {
+			Player player = (Player) sender;
+			if (args[0].equalsIgnoreCase("tutorial") && args[1].equalsIgnoreCase("leave"))
+				if (player.hasPermission("bPermissions.admin")) {
+					tutorial.disable(player);
+					player.sendMessage(ChatColor.BLUE
+							+ "bPermissions tutorial aborted.");
+					return true;
+				} else {
+					player.sendMessage(ChatColor.RED + "Nice try buckaroo!");
+					return true;
+				}
+		}
 		if (args.length == 2 && args[0].equalsIgnoreCase("lock")
 				&& sender instanceof Player && useIpLock) {
 			Player player = (Player) sender;
