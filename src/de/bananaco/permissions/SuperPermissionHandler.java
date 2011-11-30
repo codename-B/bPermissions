@@ -29,6 +29,7 @@ public class SuperPermissionHandler {
 
 		for (String node : nodes) {
 			String tNode = (node.startsWith("^") ? node.replace("^", "") : node);
+			
 			if (node.startsWith("^")) {
 				att.setPermission(tNode, false);
 			} else {
