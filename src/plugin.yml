@@ -1,0 +1,11 @@
+name: bPermissions
+version: 1.9.1d
+author: codename_B
+website: http://tetragaming.com/codename_B/
+main: de.bananaco.permissions.Permissions
+commands:
+  permissions:
+    aliases: [p, bp, perm]
+    description: reloads the nodes
+    usage: |
+      Need help? Type in-game: /<command> tutorial
