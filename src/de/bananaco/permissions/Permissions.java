@@ -176,8 +176,6 @@ public class Permissions extends JavaPlugin {
 					return true;
 				}
 		}
-<<<<<<< HEAD
-=======
 		if (args.length == 2 && sender instanceof Player) {
 			Player player = (Player) sender;
 			if (args[0].equalsIgnoreCase("tutorial") && args[1].equalsIgnoreCase("leave"))
@@ -191,7 +189,6 @@ public class Permissions extends JavaPlugin {
 					return true;
 				}
 		}
->>>>>>> b1d291c9462cadfa001455f56c402a15e510b66a
 		if (args.length == 2 && args[0].equalsIgnoreCase("lock")
 				&& sender instanceof Player && useIpLock) {
 			Player player = (Player) sender;
