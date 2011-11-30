@@ -138,10 +138,14 @@ public abstract class PermissionClass implements PermissionSet {
 			log("added node:" + node + " to group:" + group + " for world:"
 					+ world.getName());
 		} else {
+<<<<<<< HEAD
 			groupNodes.remove(node);
 			groupNodes.add(node);
 			log("overriding node:" + node + " to group:" + group + " for world:"
 					+ world.getName());
+=======
+			return;
+>>>>>>> b1d291c9462cadfa001455f56c402a15e510b66a
 		}
 		setNodes(group, groupNodes);
 	}
@@ -175,6 +179,7 @@ public abstract class PermissionClass implements PermissionSet {
 					if (isRangePermission(node)) {
 						List<String> rNodes = getRangePermissions(node);
 						for (String nd : rNodes) {
+<<<<<<< HEAD
 							if (playerNodes.contains(nd))
 								playerNodes.remove(nd);
 							playerNodes.add(nd);
@@ -182,6 +187,13 @@ public abstract class PermissionClass implements PermissionSet {
 					} else if (playerNodes.contains(node))
 						playerNodes.remove(node);
 					playerNodes.add(node);
+=======
+							if (!playerNodes.contains(nd))
+								playerNodes.add(nd);
+						}
+					} else if (!playerNodes.contains(node))
+						playerNodes.add(node);
+>>>>>>> b1d291c9462cadfa001455f56c402a15e510b66a
 				}
 			}
 		}

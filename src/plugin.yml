@@ -1,5 +1,9 @@
 name: bPermissions
+<<<<<<< HEAD
 version: 1.9.1d
+=======
+version: 1.9.1
+>>>>>>> b1d291c9462cadfa001455f56c402a15e510b66a
 author: codename_B
 website: http://tetragaming.com/codename_B/
 main: de.bananaco.permissions.Permissions
@@ -8,4 +12,8 @@ commands:
     aliases: [p, bp, perm]
     description: reloads the nodes
     usage: |
+<<<<<<< HEAD
       Need help? Type in-game: /<command> tutorial
+=======
+      Need help? Type in-game: /<command> tutorial
+>>>>>>> b1d291c9462cadfa001455f56c402a15e510b66a

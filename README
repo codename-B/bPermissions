@@ -1,0 +1,54 @@
+Version 1.2 of bPermissions brings a complete command restructuring with configurable commands!
+
+************config.yml************
+commands:
+    global-command: global
+    world-command: world
+    add-node: addnode
+    list-node: lsnode
+    add-group: addgroup
+    local-command: local
+    remove-node: rmnode
+    list-group: lsgroup
+    remove-group: rmgroup
+**********************************
+
+Explanation:
+	global-command: sets the designation for editing in all worlds
+	world-command: sets the designation for editing a specific worlds permissions
+	local-command: sets the designation for editing the permissions of the world you are in (player only)
+	add-node: sets the command for adding a node
+	remove-node: sets the command for removing a node
+	list-node: sets the command for listing nodes
+	add-group: sets the command for adding a group
+	remove-group: sets the command for removing a group
+	list-group: sets the command for listing a group
+
+How to use:
+/p|permissions designation(world|local|global) command target (?world)
+
+Examples:
+/p world addnode bPermissions.admin admin world
+/p global addgroup builders
+/permissions local rmgroup EvilSeph admin
+
+*********worldname.yml************
+default: group1
+players:
+    playername:
+    - group1
+    codename_B:
+    - group1
+groups:
+    group1:
+    - node.node
+    - ^node2.node
+    - bPermissions.build
+**********************************
+
+Negative permissions?
+Just prefix the permission node with the "^" symbol for example "^node2.node" will mean that player.hasPermission("node2.node") will return false nomatter what.
+
+Spacing?
+Yes, unfortunately the expanding config file means spacing has had to be added to the config files.
+Remember, if you can't format yaml correctly, you can always do everything by the commands!
