@@ -61,11 +61,9 @@ public class Permissions extends JavaPlugin {
 		Security = this.getHandler();
 	}
 
-	@Override
 	public void onEnable() {
 	}
 
-	@Override
 	public void onDisable() {
 		Security = null;
 	}

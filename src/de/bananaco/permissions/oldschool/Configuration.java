@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author codename_B
  * 
  */
+@SuppressWarnings("unchecked")
 public class Configuration extends YamlConfiguration {
 	private final File file;
 
@@ -125,7 +126,6 @@ public class Configuration extends YamlConfiguration {
 		if (list == null)
 			return def;
 		try {
-			@SuppressWarnings("unchecked")
 			List<String> sList = (List<String>) list;
 			return sList;
 		} catch (Exception e) {

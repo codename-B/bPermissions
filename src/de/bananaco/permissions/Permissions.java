@@ -392,13 +392,11 @@ public class Permissions extends JavaPlugin {
 		return false;
 	}
 
-	@Override
 	public void onDisable() {
 		getServer().getScheduler().cancelTasks(this);
 		log("Disabled");
 	}
 
-	@Override
 	public void onEnable() {
 		CallHome.load(this);
 		sanityCheck();
@@ -496,7 +494,6 @@ public class Permissions extends JavaPlugin {
 			getServer().getScheduler().scheduleAsyncRepeatingTask(this,
 					new Runnable() {
 
-						@Override
 						public void run() {
 							getServer()
 									.broadcastMessage(

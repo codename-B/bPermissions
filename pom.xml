@@ -11,6 +11,10 @@
 	</properties>
 	<!-- Repository locations -->
 	<repositories>
+        <repository>
+            <id>nexisonline-repo</id>
+            <url>http://repo.nexisonline.net:8080/nexus/content/groups/public/</url>
+        </repository>
 		<!-- Spout-related stufff -->
 		<repository>
 			<id>spout-repo</id>
@@ -50,13 +54,13 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0-R1-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 			<type>jar</type>
 		</dependency>        
 		<!-- SpoutAPI -->
