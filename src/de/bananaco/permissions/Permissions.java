@@ -81,7 +81,6 @@ public class Permissions extends JavaPlugin {
 	public boolean cacheValues;
 	public String database = "bPermissions";
 	public String demotePlayer;
-	public boolean formatChat;
 	public String globalCommand;
 	public GlobalCommands globalExec;
 	public String hostname = "localhost";
@@ -426,13 +425,15 @@ public class Permissions extends JavaPlugin {
 				pl, Priority.Low, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN,
 				pl, Priority.Monitor, this);
+		
+		// NEW THINGS
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
-
-		if (formatChat)
-			getServer().getPluginManager().registerEvent(
-					Event.Type.PLAYER_CHAT, pl, Priority.Normal, this);
-
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_RESPAWN, pl, Priority.Monitor, this);
+		getServer().getPluginManager().registerEvent(
+				Event.Type.PLAYER_CHANGED_WORLD, pl, Priority.Monitor, this);
+		
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
 		getServer().getPluginManager().registerEvent(
@@ -476,13 +477,6 @@ public class Permissions extends JavaPlugin {
 		getServer().getServicesManager().register(PlayerInfo.class, info, this,
 				ServicePriority.Normal);
 		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
-		
-		// TODO re-implement sk89q's stupid WEPIF system
-		
-		//if(getServer().getPluginManager().getPlugin("WorldGuard") != null)
-		//WorldGuardProvider.loadPseudoPlugin(this, getClassLoader());
-		//else
-		//Debugger.getDebugger().log("WorldGuard/WorldEdit not detected, skipping bridge plugin");
 	}
 
 	public void registerPermissions() {
@@ -564,8 +558,6 @@ public class Permissions extends JavaPlugin {
 		lock = c.getString("commands.lock", "lock");
 		unlock = c.getString("commands.unlock", "unlock");
 
-		formatChat = c.getBoolean("format-chat", false);
-
 		cacheValues = c.getBoolean("cache-values", true);
 
 		idiotVariable = c.getBoolean("lowercase-all", false);
@@ -618,7 +610,7 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.lock", lock);
 		c.setProperty("use-iplock", useIpLock);
 
-		c.setProperty("format-chat", formatChat);
+		c.removeProperty("format-chat");
 
 		c.save();
 		
