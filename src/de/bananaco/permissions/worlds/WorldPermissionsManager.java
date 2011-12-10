@@ -8,7 +8,7 @@ import org.bukkit.World;
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
-public class WorldPermissionsManager extends WorldPermissionsPlayers {
+public class WorldPermissionsManager {
 	private boolean engaged = false;
 	/**
 	 * The instance of the main class

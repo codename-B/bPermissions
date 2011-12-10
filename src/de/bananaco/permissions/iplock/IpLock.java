@@ -17,7 +17,7 @@ public class IpLock {
 	public int loginTimeout;
 	private Permissions p;
 	public HashSet<String> kickPlayers;
-
+	
 	public IpLock(Permissions p) {
 		this.kickPlayers = new HashSet<String>();
 		p.getServer()

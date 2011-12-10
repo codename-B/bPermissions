@@ -26,11 +26,9 @@ public class PermissionsRunnable extends Thread {
 		while(isRunning) {
 			// Here we go loopedeyloo!
 			Player[] players = server.getOnlinePlayers();
-				for(Player player : players) {
-					if(!wpm.isCorrect(player)) {
-						SuperPermissionHandler.setupPlayer(player);
-					}
-				}
+				for(Player player : players) 
+						SuperPermissionHandler.setupPlayerIfChangedWorlds(player);
+
 			try {
 				for(int i=0; i<10; i++)
 					if(isRunning)

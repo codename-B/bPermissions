@@ -29,7 +29,6 @@ public class SuperPermissionHandler {
 				return;
 		}
 		setupPlayer(p);
-		players.put(p.getName(), p.getWorld().getName());
 	}
 	
 	public static synchronized void setupPlayer(Player p) {
@@ -51,9 +50,7 @@ public class SuperPermissionHandler {
 				att.setPermission(tNode, true);
 			}
 		}
-		
-		Permissions.getWorldPermissionsManager().correct(p);
-		
+		players.put(p.getName(), p.getWorld().getName());
 		long finish = System.currentTimeMillis() - start;
 		Debugger.getDebugger().log(
 				"Setup player:" + p.getName() + " took " + finish + "ms");
