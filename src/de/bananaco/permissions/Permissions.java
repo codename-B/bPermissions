@@ -426,9 +426,13 @@ public class Permissions extends JavaPlugin {
 		commands.add(this.setGroup);
 		commands.add(this.addGroup);
 		commands.add(this.removeGroup);
-
+		commands.add(this.addGroupToGroup);
+		commands.add(this.removeGroupFromGroup);
+		
 		commands.add(this.addNode);
 		commands.add(this.removeNode);
+		commands.add(this.addPlayerNode);
+		commands.add(this.removePlayerNode);
 
 		commands.add(this.listGroup);
 		commands.add(this.listNode);
@@ -436,6 +440,8 @@ public class Permissions extends JavaPlugin {
 
 		listCommands.add(this.listGroup);
 		listCommands.add(this.listNode);
+		listCommands.add(this.listGroupGroup);
+		listCommands.add(this.listPlayerNode);
 		listCommands.add(this.inGroup);
 	}
 
