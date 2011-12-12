@@ -1,35 +1,17 @@
 package de.bananaco.permissions.info;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.entity.Player;
 
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.util.Group;
+import de.bananaco.permissions.util.Permission;
+import de.bananaco.permissions.util.User;
+import de.bananaco.permissions.worlds.WorldPermissions;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class InfoReader {
 
-	private final boolean cache;
-
-	private final Map<String, String> groups = new HashMap<String, String>();
-	private final Map<String, String> players = new HashMap<String, String>();
-
 	private WorldPermissionsManager wpm;
-
-	public InfoReader() {
-		this(true);
-	}
-
-	public InfoReader(boolean cache) {
-		this.cache = cache;
-	}
-
-	public void clear() {
-		groups.clear();
-		players.clear();
-	}
 
 	/**
 	 * Workaround for lazy people - group prefix
@@ -62,33 +44,33 @@ public class InfoReader {
 	 * @return String
 	 */
 	public String getGroupValue(String group, String world, String valueToGet) {
-		if (groups.containsKey(group + "." + world + "." + valueToGet))
-			return groups.get(group + "." + world + "." + valueToGet);
-
 		// Blame CraftIRC
 		if (world == null || world.equals("")) {
-			System.err
-					.println("[bPermissions] Some silly developer is checking for a blank world!");
+			System.err.println("[bPermissions] Some silly developer is checking for a blank world!");
 			return "BLANKWORLD";
 		}
-
+		
+		WorldPermissions perms = wpm.getPermissionSet(world).getWorldPermissions();
+		Group gr = perms.getGroup(group);
+		if(gr.contains(valueToGet))
+			return gr.getValue(valueToGet);
+		
 		String value = "";
 		int priority = -1;
-		for (String set : wpm.getPermissionSet(world).getGroupNodes(group)) {
-			if (!set.startsWith("^")) {
-				String name = set;
-				String[] index = name.split("\\.", 4);
+		for (Permission perm : gr.getEffectivePermissions()) {
+			if (perm.isTrue()) {
+				String name = perm.name();
+				String[] index = name.split("\\.", 3);
 				if (index.length == 3 && index[0].equals(valueToGet)) {
 					int pr = Integer.parseInt(index[1]);
-					if (pr > priority)
+					if (pr > priority) {
 						value = index[2];
+						priority = pr;
+					}
 				}
 			}
 		}
-
-		if (!value.equals("") && cache)
-			groups.put(group + "." + world + "." + valueToGet, value);
-
+		gr.setValue(valueToGet, value);
 		return value;
 	}
 
@@ -156,23 +138,22 @@ public class InfoReader {
 	 * @return String
 	 */
 	public String getValue(String player, String world, String valueToGet) {
-		if (players.containsKey(player + "." + world + "." + valueToGet))
-			return players.get(player + "." + world + "." + valueToGet);
-
+		// Blame CraftIRC
 		if (world == null || world.equals("")) {
-			System.err
-					.println("[bPermissions] Some silly developer is checking for a blank world!");
+			System.err.println("[bPermissions] Some silly developer is checking for a blank world!");
 			return "BLANKWORLD";
 		}
-
+		WorldPermissions perms = wpm.getPermissionSet(world).getWorldPermissions();
+		User us = perms.getUser(player);
+		if(us.contains(valueToGet))
+			return us.getValue(valueToGet);
+		
 		String value = "";
 		int priority = -1;
-		for (String set : wpm.getPermissionSet(world).getPlayerNodes(player) != null ? wpm
-				.getPermissionSet(world).getPlayerNodes(player)
-				: new ArrayList<String>()) {
-			if (!set.startsWith("^")) {
-				String name = set;
-				String[] index = name.split("\\.", 4);
+		for (Permission perm : us.getEffectivePermissions()) {
+			if (perm.isTrue()) {
+				String name = perm.name();
+				String[] index = name.split("\\.", 3);
 				if (index.length == 3 && index[0].equals(valueToGet)) {
 					int pr = Integer.parseInt(index[1]);
 					if (pr > priority) {
@@ -182,10 +163,7 @@ public class InfoReader {
 				}
 			}
 		}
-
-		if (!value.equals("") && cache)
-			players.put(player + "." + world + "." + valueToGet, value);
-
+		us.setValue(valueToGet, value);
 		return value;
 	}
 

@@ -3,7 +3,7 @@ package de.bananaco.permissions.util;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class PermissionCarrier {
+public abstract class PermissionCarrier extends MetaData {
 
 	private final Set<Permission> permissions;
 

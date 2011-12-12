@@ -62,7 +62,7 @@ public class YamlPermissionSet extends WorldPermissions {
 				List<String> nGroup = usersConfig.getStringList(name + "."
 						+ GROUPS);
 				Set<Permission> perms = Permission.loadFromString(nPerm);
-				// Create the new user
+				// Create the new user 
 				add(new User(name, nGroup, perms, this));
 			}
 
@@ -120,6 +120,7 @@ public class YamlPermissionSet extends WorldPermissions {
 					user.getPermissionsAsString()));
 			config.set(USERS + "." + name + "." + GROUPS,
 					new ArrayList(user.getGroupsAsString()));
+			
 		}
 
 		Set<Group> groups = getGroups();
