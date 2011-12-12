@@ -7,8 +7,8 @@ import de.bananaco.permissions.worlds.WorldPermissions;
 
 public abstract class GroupCarrier extends PermissionCarrier {
 
-	private final WorldPermissions parent;
 	private final Set<String> groups;
+	private final WorldPermissions parent;
 
 	protected GroupCarrier(Set<String> groups, Set<Permission> permissions,
 			WorldPermissions parent) {

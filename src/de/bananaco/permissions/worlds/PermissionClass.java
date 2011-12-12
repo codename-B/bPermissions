@@ -17,30 +17,7 @@ import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
 public abstract class PermissionClass implements PermissionSet {
-	private boolean setup = false;
-	/**
-	 * The main class instance
-	 */
-	public final Permissions plugin;
-	/**
-	 * The world
-	 */
-	public final World world;
-
-	public String caseCheck(String input) {
-		String output = input;
-		if (Permissions.idiotVariable)
-			output = output.toLowerCase();
-		return output;
-	}
-
 	private static Pattern p = Pattern.compile("\\[[0-9]*-[0-9]*\\]");
-
-	public static boolean isRangePermission(String input) {
-		Matcher m = p.matcher(input);
-		return m.find();
-	}
-
 	public static List<String> getRangePermissions(String input) {
 		List<String> perms = new ArrayList<String>();
 		String o = input;
@@ -83,6 +60,10 @@ public abstract class PermissionClass implements PermissionSet {
 		});
 		return perms;
 	}
+	public static boolean isRangePermission(String input) {
+		Matcher m = p.matcher(input);
+		return m.find();
+	}
 
 	private static int[] recurse(String part) {
 		int[] out = new int[2];
@@ -92,6 +73,18 @@ public abstract class PermissionClass implements PermissionSet {
 		out[1] = Integer.parseInt(parts[1].replaceAll("[A-z]", ""));
 		return out;
 	}
+
+	/**
+	 * The main class instance
+	 */
+	public final Permissions plugin;
+
+	private boolean setup = false;
+
+	/**
+	 * The world
+	 */
+	public final World world;
 
 	protected PermissionClass(World world, Permissions plugin) {
 		this.plugin = plugin;
@@ -159,6 +152,30 @@ public abstract class PermissionClass implements PermissionSet {
 		setNodes(group, groupNodes);
 	}
 
+	public String caseCheck(String input) {
+		String output = input;
+		if (Permissions.idiotVariable)
+			output = output.toLowerCase();
+		return output;
+	}
+
+	@Override
+	public final List<String> getAllCachedPlayersWithGroup(String group) {
+		group = caseCheck(group);
+
+		long start = System.currentTimeMillis();
+		List<String> players = new ArrayList<String>();
+		for (String player : getAllCachedPlayers()) {
+			if (hasGroup(player, group)) {
+				players.add(player);
+			}
+		}
+		long finish = System.currentTimeMillis() - start;
+		log(players.size() + " players found in group " + group
+				+ ". Search took " + finish + "ms.");
+		return players;
+	}
+
 	public final ArrayList<String> getDefaultArrayList() {
 		ArrayList<String> ar = new ArrayList<String>();
 		ar.add(caseCheck(getDefaultGroup()));
@@ -180,6 +197,16 @@ public abstract class PermissionClass implements PermissionSet {
 		return world;
 	}
 
+	@Override
+	public final boolean hasGroup(Player player, String group) {
+		return hasGroup(player.getName(), group);
+	}
+
+	public final boolean hasGroup(String player, String group) {
+		List<String> groups = getGroups(player);
+		return groups.contains(group);
+	}
+
 	/**
 	 * Just the logger man
 	 * 
@@ -187,6 +214,12 @@ public abstract class PermissionClass implements PermissionSet {
 	 */
 	public final void log(Object input) {
 		// Debugger.getDebugger().log(String.valueOf(input));
+	}
+
+	public final String parse(List<String> rList) {
+		String[] rArray = new String[rList.size()];
+		rArray = rList.toArray(rArray);
+		return Arrays.toString(rArray);
 	}
 
 	@Override
@@ -247,6 +280,19 @@ public abstract class PermissionClass implements PermissionSet {
 		setNodes(group, groupNodes);
 	}
 
+	private List<String> sanitise(List<String> input) {
+		Set<String> san = new HashSet<String>();
+		List<String> output = new ArrayList<String>();
+		for (String in : input) {
+			if (!san.contains(in)) {
+				san.add(in);
+				output.add(in);
+			}
+		}
+		san.clear();
+		return output;
+	}
+
 	@Override
 	public final void setGroup(Player player, String group) {
 		setGroup(player.getName(), group);
@@ -264,19 +310,6 @@ public abstract class PermissionClass implements PermissionSet {
 	@Override
 	public final void setGroups(Player player, List<String> groups) {
 		setGroups(player.getName(), groups);
-	}
-
-	private List<String> sanitise(List<String> input) {
-		Set<String> san = new HashSet<String>();
-		List<String> output = new ArrayList<String>();
-		for (String in : input) {
-			if (!san.contains(in)) {
-				san.add(in);
-				output.add(in);
-			}
-		}
-		san.clear();
-		return output;
 	}
 
 	@Override
@@ -341,39 +374,6 @@ public abstract class PermissionClass implements PermissionSet {
 		long finish = System.currentTimeMillis() - start;
 		log("Setup players for world:" + getWorld().getName() + " took "
 				+ finish + "ms.");
-	}
-
-	public final String parse(List<String> rList) {
-		String[] rArray = new String[rList.size()];
-		rArray = rList.toArray(rArray);
-		return Arrays.toString(rArray);
-	}
-
-	@Override
-	public final List<String> getAllCachedPlayersWithGroup(String group) {
-		group = caseCheck(group);
-
-		long start = System.currentTimeMillis();
-		List<String> players = new ArrayList<String>();
-		for (String player : getAllCachedPlayers()) {
-			if (hasGroup(player, group)) {
-				players.add(player);
-			}
-		}
-		long finish = System.currentTimeMillis() - start;
-		log(players.size() + " players found in group " + group
-				+ ". Search took " + finish + "ms.");
-		return players;
-	}
-
-	@Override
-	public final boolean hasGroup(Player player, String group) {
-		return hasGroup(player.getName(), group);
-	}
-
-	public final boolean hasGroup(String player, String group) {
-		List<String> groups = getGroups(player);
-		return groups.contains(group);
 	}
 
 }

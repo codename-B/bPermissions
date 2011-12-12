@@ -6,26 +6,6 @@ import java.util.Set;
 
 public class Permission {
 
-	private final boolean isTrue;
-	private final String name;
-
-	Permission(String name, boolean isTrue) {
-		this.name = name;
-		this.isTrue = isTrue;
-	}
-
-	public boolean isTrue() {
-		return isTrue;
-	}
-
-	public String name() {
-		return name;
-	}
-
-	public int hashCode() {
-		return name.hashCode();
-	}
-
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Set<Permission> loadFromString(List<String> listPerms) {
 		Set<Permission> permissions = new HashSet();
@@ -38,6 +18,26 @@ public class Permission {
 					permissions.add(new Permission(perm, true));
 
 		return permissions;
+	}
+	private final boolean isTrue;
+
+	private final String name;
+
+	Permission(String name, boolean isTrue) {
+		this.name = name;
+		this.isTrue = isTrue;
+	}
+
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	public boolean isTrue() {
+		return isTrue;
+	}
+
+	public String name() {
+		return name;
 	}
 
 	public String toString() {

@@ -34,11 +34,6 @@ public class PermissionsPlayerListener extends PlayerListener {
 	}
 
 	@Override
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		SuperPermissionHandler.setupPlayerIfChangedWorlds(event.getPlayer());
-	}
-
-	@Override
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (!can(event.getPlayer()))
 			event.setCancelled(true);
@@ -52,6 +47,11 @@ public class PermissionsPlayerListener extends PlayerListener {
 		if (event.getPlayer().getLocation() == null)
 			return;
 		SuperPermissionHandler.setupPlayer(event.getPlayer());
+	}
+
+	@Override
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		SuperPermissionHandler.setupPlayerIfChangedWorlds(event.getPlayer());
 	}
 
 	@Override

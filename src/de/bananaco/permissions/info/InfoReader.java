@@ -11,19 +11,19 @@ import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class InfoReader {
 
-	private WorldPermissionsManager wpm;
+	private final boolean cache;
 
 	private final Map<String, String> groups = new HashMap<String, String>();
 	private final Map<String, String> players = new HashMap<String, String>();
 
-	private final boolean cache;
-
-	public InfoReader(boolean cache) {
-		this.cache = cache;
-	}
+	private WorldPermissionsManager wpm;
 
 	public InfoReader() {
 		this(true);
+	}
+
+	public InfoReader(boolean cache) {
+		this.cache = cache;
 	}
 
 	public void clear() {
@@ -31,8 +31,26 @@ public class InfoReader {
 		players.clear();
 	}
 
-	public void instantiate() {
-		wpm = Permissions.getWorldPermissionsManager();
+	/**
+	 * Workaround for lazy people - group prefix
+	 * 
+	 * @param group
+	 * @param world
+	 * @return String
+	 */
+	public String getGroupPrefix(String group, String world) {
+		return getGroupValue(group, world, "prefix");
+	}
+
+	/**
+	 * Workaround for lazy people - group suffix
+	 * 
+	 * @param group
+	 * @param world
+	 * @return String
+	 */
+	public String getGroupSuffix(String group, String world) {
+		return getGroupValue(group, world, "suffix");
 	}
 
 	/**
@@ -72,6 +90,61 @@ public class InfoReader {
 			groups.put(group + "." + world + "." + valueToGet, value);
 
 		return value;
+	}
+
+	/**
+	 * Workaround for lazy people - player prefix
+	 * 
+	 * @param player
+	 * @return String
+	 */
+	public String getPrefix(Player player) {
+		return getValue(player, "prefix");
+	}
+
+	/**
+	 * Workaround for lazy people - player prefix
+	 * 
+	 * @param player
+	 * @param world
+	 * @return String
+	 */
+	public String getPrefix(String player, String world) {
+		return getValue(player, world, "prefix");
+	}
+
+	/**
+	 * Workaround for lazy people - player suffix
+	 * 
+	 * @param player
+	 * @return String
+	 */
+	public String getSuffix(Player player) {
+		return getValue(player, "suffix");
+	}
+
+	/**
+	 * Workaround for lazy people - player suffix
+	 * 
+	 * @param player
+	 * @param world
+	 * @return String
+	 */
+	public String getSuffix(String player, String world) {
+		return getValue(player, world, "suffix");
+	}
+
+	/**
+	 * Bridging method - calls getValue(String player, String world, String
+	 * valueToGet);
+	 * 
+	 * @param player
+	 * @param valueToGet
+	 * @return String
+	 */
+	public String getValue(Player player, String valueToGet) {
+		return getValue(player.getName(), player.getWorld().getName(),
+				valueToGet);
 	}
 
 	/**
@@ -116,81 +189,8 @@ public class InfoReader {
 		return value;
 	}
 
-	/**
-	 * Workaround for lazy people - group prefix
-	 * 
-	 * @param group
-	 * @param world
-	 * @return String
-	 */
-	public String getGroupPrefix(String group, String world) {
-		return getGroupValue(group, world, "prefix");
-	}
-
-	/**
-	 * Workaround for lazy people - group suffix
-	 * 
-	 * @param group
-	 * @param world
-	 * @return String
-	 */
-	public String getGroupSuffix(String group, String world) {
-		return getGroupValue(group, world, "suffix");
-	}
-
-	/**
-	 * Bridging method - calls getValue(String player, String world, String
-	 * valueToGet);
-	 * 
-	 * @param player
-	 * @param valueToGet
-	 * @return String
-	 */
-	public String getValue(Player player, String valueToGet) {
-		return getValue(player.getName(), player.getWorld().getName(),
-				valueToGet);
-	}
-
-	/**
-	 * Workaround for lazy people - player prefix
-	 * 
-	 * @param player
-	 * @return String
-	 */
-	public String getPrefix(Player player) {
-		return getValue(player, "prefix");
-	}
-
-	/**
-	 * Workaround for lazy people - player suffix
-	 * 
-	 * @param player
-	 * @return String
-	 */
-	public String getSuffix(Player player) {
-		return getValue(player, "suffix");
-	}
-
-	/**
-	 * Workaround for lazy people - player prefix
-	 * 
-	 * @param player
-	 * @param world
-	 * @return String
-	 */
-	public String getPrefix(String player, String world) {
-		return getValue(player, world, "prefix");
-	}
-
-	/**
-	 * Workaround for lazy people - player suffix
-	 * 
-	 * @param player
-	 * @param world
-	 * @return String
-	 */
-	public String getSuffix(String player, String world) {
-		return getValue(player, world, "suffix");
+	public void instantiate() {
+		wpm = Permissions.getWorldPermissionsManager();
 	}
 
 }

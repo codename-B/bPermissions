@@ -10,16 +10,20 @@ import de.bananaco.permissions.Permissions;
 public class PermissionsCommandSuggestions {
 
 	private static Set<String> commands = null;
-	private static Set<String> worldCommands = null;
 	private static Set<String> listCommands = null;
 	private static Set<String> worldCommand = null;
+	private static Set<String> worldCommands = null;
+
+	public static boolean contains(String[] strings, Set<String> set) {
+		for (String s : set)
+			for (String string : strings)
+				if (s.equalsIgnoreCase(string))
+					return true;
+		return false;
+	}
 
 	public static void grabCommands() {
 		commands = Permissions.getCommands();
-	}
-
-	public static void grabWorldCommands() {
-		worldCommands = Permissions.getWorldCommands();
 	}
 
 	public static void grabListCommands() {
@@ -29,6 +33,10 @@ public class PermissionsCommandSuggestions {
 	public static void grabWorldCommand() {
 		worldCommand = new HashSet<String>();
 		worldCommand.add(Permissions.getWorldCommand());
+	}
+
+	public static void grabWorldCommands() {
+		worldCommands = Permissions.getWorldCommands();
 	}
 
 	public static String suggestSimilarCommands(CommandSender sender,
@@ -87,14 +95,6 @@ public class PermissionsCommandSuggestions {
 			sb.append(c).append(" ");
 		}
 		return sb.toString();
-	}
-
-	public static boolean contains(String[] strings, Set<String> set) {
-		for (String s : set)
-			for (String string : strings)
-				if (s.equalsIgnoreCase(string))
-					return true;
-		return false;
 	}
 
 }

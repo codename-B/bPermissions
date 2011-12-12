@@ -2,15 +2,6 @@ package de.bananaco.permissions.fornoobs;
 
 public class LevenshteinImpl {
 
-	private static int minimum(int a, int b, int c) {
-		int mi = a;
-		if (b < mi)
-			mi = b;
-		if (c < mi)
-			mi = c;
-		return mi;
-	}
-
 	// *****************************
 	// Compute Levenshtein distance
 	// *****************************
@@ -61,5 +52,14 @@ public class LevenshteinImpl {
 
 		// Step 7
 		return d[n][m];
+	}
+
+	private static int minimum(int a, int b, int c) {
+		int mi = a;
+		if (b < mi)
+			mi = b;
+		if (c < mi)
+			mi = c;
+		return mi;
 	}
 }

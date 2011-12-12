@@ -14,21 +14,12 @@ import de.bananaco.permissions.util.Permission;
 
 public class SuperPermissionHandler {
 
-	private static JavaPlugin plugin;
-
 	private static Map<String, String> players = new HashMap<String, String>();
+
+	private static JavaPlugin plugin;
 
 	public static void setPlugin(JavaPlugin pl) {
 		plugin = pl;
-	}
-
-	public static synchronized void setupPlayerIfChangedWorlds(Player p) {
-		if (players.containsKey(p.getName())) {
-			String world = players.get(p.getName());
-			if (world.equals(p.getWorld().getName()))
-				return;
-		}
-		setupPlayer(p);
 	}
 
 	public static synchronized void setupPlayer(Player p) {
@@ -50,6 +41,15 @@ public class SuperPermissionHandler {
 		long finish = System.currentTimeMillis() - start;
 		Debugger.getDebugger().log(
 				"Setup player:" + p.getName() + " took " + finish + "ms");
+	}
+
+	public static synchronized void setupPlayerIfChangedWorlds(Player p) {
+		if (players.containsKey(p.getName())) {
+			String world = players.get(p.getName());
+			if (world.equals(p.getWorld().getName()))
+				return;
+		}
+		setupPlayer(p);
 	}
 
 	public static synchronized void unsetupPlayer(Player p) {

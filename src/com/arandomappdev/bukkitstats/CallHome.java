@@ -36,9 +36,9 @@ import java.net.URLEncoder;
 import java.util.UUID;
 
 public class CallHome {
-	private static final File file = new File("plugins/stats/config.yml");
 	private static final YamlConfiguration config = YamlConfiguration
 			.loadConfiguration(file);
+	private static final File file = new File("plugins/stats/config.yml");
 
 	public static void load(Plugin plugin) {
 		if (!verifyConfig()) {
@@ -81,21 +81,12 @@ public class CallHome {
 }
 
 class CallTask implements Runnable {
-	private Plugin plugin;
 	private String hash;
+	private Plugin plugin;
 
 	public CallTask(Plugin plugin, String hash) {
 		this.plugin = plugin;
 		this.hash = hash;
-	}
-
-	public void run() {
-		try {
-			postUrl();
-		} catch (Exception ignored) {
-			System.out.println("Could not call home.");
-			ignored.printStackTrace();
-		}
 	}
 
 	private void postUrl() throws Exception {
@@ -124,5 +115,14 @@ class CallTask implements Runnable {
 
 		new URL(url).openConnection().getInputStream();
 
+	}
+
+	public void run() {
+		try {
+			postUrl();
+		} catch (Exception ignored) {
+			System.out.println("Could not call home.");
+			ignored.printStackTrace();
+		}
 	}
 }

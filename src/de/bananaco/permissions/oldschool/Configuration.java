@@ -20,6 +20,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Configuration extends YamlConfiguration {
 	private final File file;
 
+	public Configuration(File file) {
+		super();
+		if (file == null)
+			System.err.println("File should not be null!");
+		this.file = file;
+		this.options().header(null);
+	}
+
 	/**
 	 * A substitute for getConfiguration();
 	 * 
@@ -33,48 +41,6 @@ public class Configuration extends YamlConfiguration {
 
 	public Configuration(String fileName) {
 		this(new File(fileName));
-	}
-
-	public Configuration(File file) {
-		super();
-		if (file == null)
-			System.err.println("File should not be null!");
-		this.file = file;
-		this.options().header(null);
-	}
-
-	public void load() {
-		try {
-			// First do checks to create the initial file
-			if (!file.exists()) {
-				if (file.getParentFile() != null)
-					file.getParentFile().mkdirs();
-				if (file.createNewFile())
-					super.save(file);
-				else
-					throw new Exception("Cannot load: File can not be created!");
-			}
-			// Then do checks to save the file
-			super.load(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void save() {
-		try {
-			if (!file.exists()) {
-				if (file.getParentFile() != null)
-					file.getParentFile().mkdirs();
-				if (file.createNewFile())
-					super.save(file);
-				else
-					throw new Exception("Cannot save: File can not be created!");
-			} else
-				super.save(file);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public List<String> getKeys() {
@@ -101,23 +67,6 @@ public class Configuration extends YamlConfiguration {
 		return lkeys;
 	}
 
-	public void setProperty(String path, Object object) {
-		super.set(path, object);
-	}
-
-	/**
-	 * Should work according to the javadocs, but doesn't. Fixed in the latest
-	 * bukkit builds
-	 * 
-	 * @param path
-	 */
-	public void removeProperty(String path) {
-		try {
-			super.set(path, null);
-		} catch (Exception e) {
-		}
-	}
-
 	public List<String> getStringList(String path, List<String> def) {
 		load();
 		if (def == null)
@@ -133,6 +82,57 @@ public class Configuration extends YamlConfiguration {
 			e.printStackTrace();
 		}
 		return def;
+	}
+
+	public void load() {
+		try {
+			// First do checks to create the initial file
+			if (!file.exists()) {
+				if (file.getParentFile() != null)
+					file.getParentFile().mkdirs();
+				if (file.createNewFile())
+					super.save(file);
+				else
+					throw new Exception("Cannot load: File can not be created!");
+			}
+			// Then do checks to save the file
+			super.load(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Should work according to the javadocs, but doesn't. Fixed in the latest
+	 * bukkit builds
+	 * 
+	 * @param path
+	 */
+	public void removeProperty(String path) {
+		try {
+			super.set(path, null);
+		} catch (Exception e) {
+		}
+	}
+
+	public void save() {
+		try {
+			if (!file.exists()) {
+				if (file.getParentFile() != null)
+					file.getParentFile().mkdirs();
+				if (file.createNewFile())
+					super.save(file);
+				else
+					throw new Exception("Cannot save: File can not be created!");
+			} else
+				super.save(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setProperty(String path, Object object) {
+		super.set(path, object);
 	}
 
 }

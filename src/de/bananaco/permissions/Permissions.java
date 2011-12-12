@@ -38,10 +38,12 @@ public class Permissions extends JavaPlugin {
 
 	private static Set<String> commands = new HashSet<String>();
 
+	public static boolean idiotVariable = false;
 	private static InfoReader info;
-	private static Set<String> listCommands = new HashSet<String>();
 
+	private static Set<String> listCommands = new HashSet<String>();
 	private static WorldPermissionsManager perm;
+
 	private static String sworldCommand;
 
 	private static Set<String> worldCommands = new HashSet<String>();
@@ -69,26 +71,28 @@ public class Permissions extends JavaPlugin {
 	public static WorldPermissionsManager getWorldPermissionsManager() {
 		return Permissions.perm;
 	}
-
 	public String addGroup;
 	public String addGroupToGroup;
 	public String addNode;
 	public String addPlayerNode;
+	private BackupPermissionsCommand bpc;
 	public Configuration c;
 	public boolean cacheValues;
 	public String database = "bPermissions";
 	public String demotePlayer;
 	public String globalCommand;
 	public GlobalCommands globalExec;
+
 	public String hostname = "localhost";
 	public ImportManager im;
-
+	public String inGroup;
 	public String listGroup;
 	public String listGroupGroup;
-	public String inGroup;
 	public String listNode;
 	public String listPlayerNode;
+
 	public String localCommand;
+
 	public LocalCommands localExec;
 
 	public Map<String, String> mirror;
@@ -100,19 +104,17 @@ public class Permissions extends JavaPlugin {
 	public WorldPermissionsManager pm;
 
 	public String port = "3306";
-
 	public String promotePlayer;
 
 	public String removeGroup;
 	public String removeGroupFromGroup;
-
 	public String removeNode;
+
 	public String removePlayerNode;
+
 	public String setGroup;
 
 	public boolean suggestSimilarCommands;
-
-	public static boolean idiotVariable = false;
 
 	public String username = "minecraft";
 
@@ -121,8 +123,6 @@ public class Permissions extends JavaPlugin {
 	public WorldCommands worldExec;
 
 	public WorldPermissionSet wps;
-
-	private BackupPermissionsCommand bpc;
 
 	/**
 	 * Just the logger man

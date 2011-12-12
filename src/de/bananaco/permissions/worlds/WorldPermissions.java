@@ -17,9 +17,9 @@ import de.bananaco.permissions.util.User;
 
 public abstract class WorldPermissions extends PermissionClass {
 
-	private final World world;
-	private final Map<String, User> users;
 	private final Map<String, Group> groups;
+	private final Map<String, User> users;
+	private final World world;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WorldPermissions(World world, Permissions plugin) {
@@ -27,50 +27,6 @@ public abstract class WorldPermissions extends PermissionClass {
 		this.world = world;
 		this.users = new HashMap();
 		this.groups = new HashMap();
-	}
-
-	public String getWorldName() {
-		if (world == null)
-			return "world";
-		return world.getName();
-	}
-
-	public int hashCode() {
-		return world.hashCode();
-	}
-
-	public User getUser(String name) {
-		return users.get(name);
-	}
-
-	public Group getGroup(String name) {
-		return groups.get(name);
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Set<User> getUsers() {
-		Set<String> names = users.keySet();
-		Set<User> users = new HashSet();
-		for (String name : names)
-			users.add(getUser(name));
-		return users;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Set<Group> getGroups() {
-		Set<String> names = groups.keySet();
-		Set<Group> groups = new HashSet();
-		for (String name : names)
-			groups.add(getGroup(name));
-		return groups;
-	}
-
-	public Set<String> getUsersAsString() {
-		return users.keySet();
-	}
-
-	public Set<String> getGroupsAsString() {
-		return groups.keySet();
 	}
 
 	public void add(Calculable calculable) {
@@ -94,6 +50,56 @@ public abstract class WorldPermissions extends PermissionClass {
 		return new ArrayList(getUsersAsString());
 	}
 
+	public Group getGroup(String name) {
+		return groups.get(name);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<String> getGroupGroups(String group) {
+		if (getGroup(group) == null) {
+			Group gr = new Group(group, null, null, this);
+			add(gr);
+			gr.calculateEffectivePermissions();
+		}
+		return new ArrayList(getGroup(group).getGroupsAsString());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<String> getGroupNodes(String group) {
+		if (getGroup(group) == null) {
+			Group gr = new Group(group, null, null, this);
+			add(gr);
+			gr.calculateEffectivePermissions();
+		}
+		return new ArrayList(getGroup(group).getPermissionsAsString());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Set<Group> getGroups() {
+		Set<String> names = groups.keySet();
+		Set<Group> groups = new HashSet();
+		for (String name : names)
+			groups.add(getGroup(name));
+		return groups;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<String> getGroups(String player) {
+		if (getUser(player) == null) {
+			User us = new User(player, getDefaultArrayList(), null, this);
+			add(us);
+			us.calculateEffectivePermissions();
+		}
+		return new ArrayList(getUser(player).getGroupsAsString());
+	}
+
+	public Set<String> getGroupsAsString() {
+		return groups.keySet();
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getPlayerNodes(String player) {
@@ -115,42 +121,52 @@ public abstract class WorldPermissions extends PermissionClass {
 		return getUser(player).getEffectivePermissions();
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public List<String> getGroupNodes(String group) {
-		if (getGroup(group) == null) {
-			Group gr = new Group(group, null, null, this);
-			add(gr);
-			gr.calculateEffectivePermissions();
-		}
-		return new ArrayList(getGroup(group).getPermissionsAsString());
+	public User getUser(String name) {
+		return users.get(name);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public List<String> getGroups(String player) {
-		if (getUser(player) == null) {
-			User us = new User(player, getDefaultArrayList(), null, this);
-			add(us);
-			us.calculateEffectivePermissions();
-		}
-		return new ArrayList(getUser(player).getGroupsAsString());
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Set<User> getUsers() {
+		Set<String> names = users.keySet();
+		Set<User> users = new HashSet();
+		for (String name : names)
+			users.add(getUser(name));
+		return users;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Set<String> getUsersAsString() {
+		return users.keySet();
+	}
+
+	public String getWorldName() {
+		if (world == null)
+			return "world";
+		return world.getName();
+	}
+
 	@Override
-	public List<String> getGroupGroups(String group) {
-		if (getGroup(group) == null) {
-			Group gr = new Group(group, null, null, this);
-			add(gr);
-			gr.calculateEffectivePermissions();
-		}
-		return new ArrayList(getGroup(group).getGroupsAsString());
+	public WorldPermissions getWorldPermissions() {
+		return this;
+
+	}
+
+	public int hashCode() {
+		return world.hashCode();
 	}
 
 	public abstract void load();
 
 	public abstract void save();
+
+	@Override
+	public void setGroupGroups(String group, List<String> groups) {
+		Group gr = getGroup(group);
+		Set<String> grgr = gr.getGroupsAsString();
+		grgr.clear();
+		grgr.addAll(groups);
+		gr.calculateEffectivePermissions();
+		save();
+	}
 
 	@Override
 	public void setGroups(String player, List<String> groups) {
@@ -180,21 +196,5 @@ public abstract class WorldPermissions extends PermissionClass {
 		pr.addAll(Permission.loadFromString(nodes));
 		us.calculateEffectivePermissions();
 		save();
-	}
-
-	@Override
-	public void setGroupGroups(String group, List<String> groups) {
-		Group gr = getGroup(group);
-		Set<String> grgr = gr.getGroupsAsString();
-		grgr.clear();
-		grgr.addAll(groups);
-		gr.calculateEffectivePermissions();
-		save();
-	}
-
-	@Override
-	public WorldPermissions getWorldPermissions() {
-		return this;
-
 	}
 }

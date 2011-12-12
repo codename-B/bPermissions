@@ -15,16 +15,21 @@ import de.bananaco.permissions.util.User;
 
 public class YamlPermissionSet extends WorldPermissions {
 
+	private static final String GROUPS = "groups";
+	private static final String PERMISSIONS = "permissions";
+
+	private static final String USERS = "users";
 	private final YamlConfiguration config = new YamlConfiguration();
 	private final File file = new File("plugins/bPermissions/" + getWorldName()
 			+ ".yml");
 
-	private static final String PERMISSIONS = "permissions";
-	private static final String GROUPS = "groups";
-	private static final String USERS = "users";
-
 	public YamlPermissionSet(World world, Permissions plugin) {
 		super(world, plugin);
+	}
+
+	@Override
+	public String getDefaultGroup() {
+		return config.getString("default", "default");
 	}
 
 	public void load() {
@@ -33,45 +38,6 @@ public class YamlPermissionSet extends WorldPermissions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void save() {
-		try {
-			saveUnsafe();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void saveUnsafe() throws Exception {
-
-		if (!file.exists()) {
-			file.getParentFile().mkdirs();
-			file.createNewFile();
-		}
-
-		Set<User> users = getUsers();
-
-		for (User user : users) {
-			String name = user.getName();
-			config.set(USERS + "." + name + "." + PERMISSIONS, new ArrayList(
-					user.getPermissionsAsString()));
-			config.set(USERS + "." + name + "." + GROUPS,
-					new ArrayList(user.getGroupsAsString()));
-		}
-
-		Set<Group> groups = getGroups();
-
-		for (Group group : groups) {
-			String name = group.getName();
-			config.set(GROUPS + "." + name + "." + PERMISSIONS, new ArrayList(
-					group.getPermissionsAsString()));
-			config.set(GROUPS + "." + name + "." + GROUPS,
-					new ArrayList(group.getGroupsAsString()));
-		}
-
-		config.save(file);
 	}
 
 	private void loadUnsafe() throws Exception {
@@ -136,9 +102,43 @@ public class YamlPermissionSet extends WorldPermissions {
 		save();
 	}
 
-	@Override
-	public String getDefaultGroup() {
-		return config.getString("default", "default");
+	public void save() {
+		try {
+			saveUnsafe();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void saveUnsafe() throws Exception {
+
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+		}
+
+		Set<User> users = getUsers();
+
+		for (User user : users) {
+			String name = user.getName();
+			config.set(USERS + "." + name + "." + PERMISSIONS, new ArrayList(
+					user.getPermissionsAsString()));
+			config.set(USERS + "." + name + "." + GROUPS,
+					new ArrayList(user.getGroupsAsString()));
+		}
+
+		Set<Group> groups = getGroups();
+
+		for (Group group : groups) {
+			String name = group.getName();
+			config.set(GROUPS + "." + name + "." + PERMISSIONS, new ArrayList(
+					group.getPermissionsAsString()));
+			config.set(GROUPS + "." + name + "." + GROUPS,
+					new ArrayList(group.getGroupsAsString()));
+		}
+
+		config.save(file);
 	}
 
 }
