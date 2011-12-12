@@ -1,0 +1,8 @@
+
+
+
+users:
+  codename_B:
+    permissions: []
+    groups:
+    - test

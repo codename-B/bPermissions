@@ -83,6 +83,7 @@ public class JSONWorldPermissions extends PermissionClass {
 		permission.save();
 	}
 
+	@Override
 	public void setGroups(String player, List<String> groups) {
 		player = caseCheck(player);
 		
