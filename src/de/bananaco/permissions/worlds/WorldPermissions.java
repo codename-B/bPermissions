@@ -29,6 +29,15 @@ public abstract class WorldPermissions extends PermissionClass {
 		this.groups = new HashMap();
 	}
 
+	/**
+	 * This adds the Calculable to either groups or users depending
+	 * on if the calculable is an instance of either.
+	 * If the calculable is not an instance of a group or a user, it is
+	 * not added.
+	 * This means you cannot add base calculables (or any other class which
+	 * extends calculable) to this.
+	 * @param calculable
+	 */
 	public void add(Calculable calculable) {
 		if (calculable instanceof User)
 			users.put(calculable.getName(), (User) calculable);

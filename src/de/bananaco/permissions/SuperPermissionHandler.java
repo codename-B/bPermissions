@@ -37,6 +37,9 @@ public class SuperPermissionHandler {
 		for (Permission node : nodes)
 			att.setPermission(node.name(), node.isTrue());
 
+		att.setPermission("world."+p.getWorld().getName(), true);
+				
+		p.recalculatePermissions();
 		players.put(p.getName(), p.getWorld().getName());
 		long finish = System.currentTimeMillis() - start;
 		Debugger.getDebugger().log(
@@ -46,7 +49,7 @@ public class SuperPermissionHandler {
 	public static synchronized void setupPlayerIfChangedWorlds(Player p) {
 		if (players.containsKey(p.getName())) {
 			String world = players.get(p.getName());
-			if (world.equals(p.getWorld().getName()))
+			if (world.equals(p.getWorld().getName()) && p.hasPermission("world."+p.getWorld().getName()))
 				return;
 		}
 		setupPlayer(p);
@@ -66,8 +69,8 @@ public class SuperPermissionHandler {
 					pInfo.getAttachment().remove();
 				}
 			}
+			p.recalculatePermissions();
 		}
-		p.recalculatePermissions();
 	}
 
 }
