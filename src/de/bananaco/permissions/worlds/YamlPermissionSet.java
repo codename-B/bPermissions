@@ -19,7 +19,7 @@ public class YamlPermissionSet extends WorldPermissions {
 	private static final String PERMISSIONS = "permissions";
 
 	private static final String USERS = "users";
-	private final YamlConfiguration config = new YamlConfiguration();
+	private YamlConfiguration config;
 	private final File file = new File("plugins/bPermissions/" + getWorldName()
 			+ ".yml");
 
@@ -47,7 +47,7 @@ public class YamlPermissionSet extends WorldPermissions {
 				file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
-
+		config = new YamlConfiguration();
 		config.load(file);
 
 		ConfigurationSection usersConfig = config
@@ -94,12 +94,6 @@ public class YamlPermissionSet extends WorldPermissions {
 			group.calculateEffectivePermissions();
 		}
 
-	}
-
-	@Override
-	public void reload() {
-		load();
-		save();
 	}
 
 	public void save() {

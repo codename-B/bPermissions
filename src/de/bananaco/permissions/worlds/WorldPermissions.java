@@ -28,6 +28,14 @@ public abstract class WorldPermissions extends PermissionClass {
 		this.users = new HashMap();
 		this.groups = new HashMap();
 	}
+	
+	@Override
+	public void reload() {
+		groups.clear();
+		users.clear();
+		load();
+		save();
+	}
 
 	/**
 	 * This adds the Calculable to either groups or users depending

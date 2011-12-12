@@ -13,7 +13,7 @@ public class Permission {
 		if (listPerms != null)
 			for (String perm : listPerms)
 				if (perm.startsWith("^"))
-					permissions.add(new Permission(perm, false));
+					permissions.add(new Permission(perm.replace("^", ""), false));
 				else
 					permissions.add(new Permission(perm, true));
 
