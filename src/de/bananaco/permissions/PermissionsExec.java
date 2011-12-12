@@ -101,8 +101,11 @@ public class PermissionsExec {
 			sender.sendMessage("Removed group:" + group + " from group:"
 					+ main);
 			return true;
-		} else if (args.length >= 3
+		}  else if (args.length >= 3
 				&& args[1].equalsIgnoreCase(plugin.listGroup)) {
+			/*
+			 * LISTGROUP
+			 */
 			String player = args[2];
 			player = checkPlayer(player);
 
@@ -111,6 +114,21 @@ public class PermissionsExec {
 			String list = Arrays.toString(playerGroups.toArray())
 					.replace("[", "").replace("]", "");
 			sender.sendMessage(player + " in world:" + world
+					+ " has these groups:");
+			sender.sendMessage(list);
+			return true;
+		} else if (args.length >= 3
+				&& args[1].equalsIgnoreCase(plugin.listGroupGroup)) {
+			/*
+			 * LISTGROUPGROUP
+			 */
+			String main = args[2];
+
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			List<String> groupGroups = p.getGroupGroups(main);
+			String list = Arrays.toString(groupGroups.toArray())
+					.replace("[", "").replace("]", "");
+			sender.sendMessage(main + " in world:" + world
 					+ " has these groups:");
 			sender.sendMessage(list);
 			return true;
