@@ -1,7 +1,6 @@
 package de.bananaco.permissions;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,6 +10,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bananaco.permissions.debug.Debugger;
+import de.bananaco.permissions.util.Permission;
 
 public class SuperPermissionHandler {
 
@@ -32,24 +32,18 @@ public class SuperPermissionHandler {
 	}
 	
 	public static synchronized void setupPlayer(Player p) {
-		List<String> nodes = Permissions.getWorldPermissionsManager().getPermissionSet(p.getWorld()).getPlayerNodes(p);
+		Set<Permission> nodes = Permissions.getWorldPermissionsManager().getPermissionSet(p.getWorld()).getPlayerPermissions(p.getName());
 		setupPlayer(p, nodes);
 	}
 	
-	public static synchronized void setupPlayer(Player p, List<String> nodes) {
+	public static synchronized void setupPlayer(Player p, Set<Permission> nodes) {
 		long start = System.currentTimeMillis();
 		unsetupPlayer(p, plugin);
 		PermissionAttachment att = p.addAttachment(plugin);
-
-		for (String node : nodes) {
-			String tNode = (node.startsWith("^") ? node.replace("^", "") : node);
-			
-			if (node.startsWith("^")) {
-				att.setPermission(tNode, false);
-			} else {
-				att.setPermission(tNode, true);
-			}
-		}
+		
+		for(Permission node : nodes)
+			att.setPermission(node.name(), node.isTrue());
+				
 		players.put(p.getName(), p.getWorld().getName());
 		long finish = System.currentTimeMillis() - start;
 		Debugger.getDebugger().log(

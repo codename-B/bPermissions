@@ -1,9 +1,12 @@
 package de.bananaco.permissions.interfaces;
 
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import de.bananaco.permissions.util.Permission;
 
 public interface PermissionSet {
 	/**
@@ -201,4 +204,6 @@ public interface PermissionSet {
 	public void addGroupToGroup(String main, String group);
 
 	public void removeGroupFromGroup(String player, String group);
+
+	Set<Permission> getPlayerPermissions(String player);
 }

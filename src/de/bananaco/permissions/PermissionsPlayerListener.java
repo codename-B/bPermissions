@@ -9,8 +9,6 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import de.bananaco.permissions.interfaces.PermissionSet;
-
 public class PermissionsPlayerListener extends PlayerListener {
 
 	private final Permissions permissions;
@@ -53,10 +51,7 @@ public class PermissionsPlayerListener extends PlayerListener {
 			return;
 		if (event.getPlayer().getLocation() == null)
 			return;
-		PermissionSet ps = permissions.pm.getPermissionSet(event.getPlayer()
-				.getLocation().getWorld());
-		SuperPermissionHandler.setupPlayer(event.getPlayer(),
-				ps.getPlayerNodes(event.getPlayer()));
+		SuperPermissionHandler.setupPlayer(event.getPlayer());
 	}
 
 	@Override

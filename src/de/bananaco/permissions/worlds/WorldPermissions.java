@@ -105,6 +105,16 @@ public abstract class WorldPermissions extends PermissionClass {
 		return new ArrayList(getUser(player).getPermissionsAsString());
 	}
 	
+	@Override
+	public Set<Permission> getPlayerPermissions(String player) {
+		if(getUser(player) == null) {
+			User us = new User(player, null, null, this);
+			add(us);
+			us.calculateEffectivePermissions();
+		}
+		return getUser(player).getEffectivePermissions();
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroupNodes(String group) {
