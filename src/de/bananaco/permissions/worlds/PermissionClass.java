@@ -14,9 +14,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import de.bananaco.permissions.Permissions;
-import de.bananaco.permissions.SuperPermissionHandler;
-import de.bananaco.permissions.debug.Debugger;
-import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.interfaces.PermissionSet;
 
 public abstract class PermissionClass implements PermissionSet {
@@ -30,7 +27,7 @@ public abstract class PermissionClass implements PermissionSet {
 	 */
 	public final World world;
 
-	public static String caseCheck(String input) {
+	public String caseCheck(String input) {
 		String output = input;
 		if (Permissions.idiotVariable)
 			output = output.toLowerCase();
@@ -96,7 +93,7 @@ public abstract class PermissionClass implements PermissionSet {
 		return out;
 	}
 
-	PermissionClass(World world, Permissions plugin) {
+	protected PermissionClass(World world, Permissions plugin) {
 		this.plugin = plugin;
 		this.world = world;
 	}
@@ -193,17 +190,13 @@ public abstract class PermissionClass implements PermissionSet {
 		return world;
 	}
 
-	public final boolean has(Player player, String node) {
-		return HasPermission.has(player, node);
-	}
-
 	/**
 	 * Just the logger man
 	 * 
 	 * @param input
 	 */
 	public final void log(Object input) {
-		Debugger.getDebugger().log(String.valueOf(input));
+		//Debugger.getDebugger().log(String.valueOf(input));
 	}
 
 	@Override
@@ -286,15 +279,14 @@ public abstract class PermissionClass implements PermissionSet {
 
 		List<String> sanity = sanitise(groups);
 		if (sanity.size() < groups.size()) {
-			Debugger.getDebugger().log("Duplicates detected!");
+			log("Duplicates detected!");
 			setGroups(player, sanity);
 			return;
 		}
 		log(parse(groups) + " set to player:" + player);
-		MCMA.getDebugger().log(getWorld().getName());
+		//MCMA.getDebugger().log(getWorld().getName());
 		setupPlayer(player);
-		Permissions.getInfoReader().clear();
-		HasPermission.clearCache();
+		//Permissions.getInfoReader().clear();
 	}
 
 	@Override
@@ -303,15 +295,14 @@ public abstract class PermissionClass implements PermissionSet {
 
 		List<String> sanity = sanitise(nodes);
 		if (sanity.size() < nodes.size()) {
-			Debugger.getDebugger().log("Duplicates detected!");
+			log("Duplicates detected!");
 			setNodes(group, sanity);
 			return;
 		}
 		log(parse(nodes) + " set to group:" + group);
-		MCMA.getDebugger().log(getWorld().getName());
+		//MCMA.getDebugger().log(getWorld().getName());
 		setupPlayers();
-		Permissions.getInfoReader().clear();
-		HasPermission.clearCache();
+		//Permissions.getInfoReader().clear();
 	}
 
 	@Override
@@ -325,7 +316,7 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void setupPlayer(Player player) {
-		SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player));
+		//SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player));
 	}
 
 	@Override
@@ -364,7 +355,7 @@ public abstract class PermissionClass implements PermissionSet {
 			}
 		}
 		long finish = System.currentTimeMillis() - start;
-		Debugger.getDebugger().log(
+		log(
 				players.size() + " players found in group " + group
 						+ ". Search took " + finish + "ms.");
 		return players;

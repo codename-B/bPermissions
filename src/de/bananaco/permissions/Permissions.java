@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sourceforge.sizeof.SizeOf;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,10 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
-import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.ubempire.binfo.PlayerInfo;
 
 import de.bananaco.help.Help;
 import de.bananaco.permissions.commands.GlobalCommands;
@@ -30,14 +25,10 @@ import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.fornoobs.PermissionsCommandSuggestions;
-import de.bananaco.permissions.fornoobs.Tutorial;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.interfaces.PermissionSet;
-import de.bananaco.permissions.iplock.IpLock;
-
-import de.bananaco.permissions.tracks.Tracks;
-import de.bananaco.permissions.worlds.HasPermission;
 import de.bananaco.permissions.worlds.PermissionClass;
+
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
@@ -76,7 +67,9 @@ public class Permissions extends JavaPlugin {
 	}
 
 	public String addGroup;
+	public String addGroupToGroup;
 	public String addNode;
+	public String addPlayerNode;
 	public Configuration c;
 	public boolean cacheValues;
 	public String database = "bPermissions";
@@ -85,10 +78,12 @@ public class Permissions extends JavaPlugin {
 	public GlobalCommands globalExec;
 	public String hostname = "localhost";
 	public ImportManager im;
-	public IpLock iplock;
+	
 	public String listGroup;
+	public String listGroupGroup;
 	public String inGroup;
 	public String listNode;
+	public String listPlayerNode;
 	public String localCommand;
 	public LocalCommands localExec;
 	public String lock;
@@ -106,12 +101,13 @@ public class Permissions extends JavaPlugin {
 	public String promotePlayer;
 
 	public String removeGroup;
+	public String removeGroupFromGroup;
 
 	public String removeNode;
+	public String removePlayerNode;
 	public String setGroup;
+	
 	public boolean suggestSimilarCommands;
-	public Tracks tracks;
-	public Tutorial tutorial;
 
 	public String unlock;
 
@@ -128,8 +124,6 @@ public class Permissions extends JavaPlugin {
 	public WorldPermissionSet wps;
 	
 	private BackupPermissionsCommand bpc;
-	
-	private PermissionsRunnable pr;
 
 	/**
 	 * Just the logger man
@@ -151,127 +145,7 @@ public class Permissions extends JavaPlugin {
 					+ " tutorial\" in-game for help");
 			return true;
 		}
-		if (args.length == 1 && sender instanceof Player) {
-			Player player = (Player) sender;
-			if (args[0].equalsIgnoreCase("tutorial"))
-				if (player.hasPermission("bPermissions.admin")) {
-					player.sendMessage(ChatColor.GREEN + "--" + ChatColor.BLUE
-							+ "bPermissions tutorial" + ChatColor.GREEN + "--");
-					player.sendMessage(ChatColor.BLUE
-							+ "bPermissions tutorial started.");
-					player.sendMessage(ChatColor.BLUE
-							+ "A basic command to start with");
-					player.sendMessage(ChatColor.BLUE
-							+ "To list the permission nodes of a group, try it!");
-					player.sendMessage(ChatColor.WHITE
-							+ "/permissions global lsnode "
-							+ Permissions.getWorldPermissionsManager()
-									.getPermissionSet(player.getWorld())
-									.getDefaultGroup());
-					tutorial.enable(player);
-					return true;
-				} else {
-					player.sendMessage(ChatColor.RED + "Nice try buckaroo!");
-					return true;
-				}
-		}
-		if (args.length == 2 && sender instanceof Player) {
-			Player player = (Player) sender;
-			if (args[0].equalsIgnoreCase("tutorial") && args[1].equalsIgnoreCase("leave"))
-				if (player.hasPermission("bPermissions.admin")) {
-					tutorial.disable(player);
-					player.sendMessage(ChatColor.BLUE
-							+ "bPermissions tutorial aborted.");
-					return true;
-				} else {
-					player.sendMessage(ChatColor.RED + "Nice try buckaroo!");
-					return true;
-				}
-		}
-		if (args.length == 2 && args[0].equalsIgnoreCase("lock")
-				&& sender instanceof Player && useIpLock) {
-			Player player = (Player) sender;
-			if (!player.hasPermission("bPermissions.iplock.lock")
-					|| iplock.kickPlayers.contains(player.getName())) {
-				player.sendMessage("Nope.");
-				return true;
-			}
-			if (iplock.hasEntry(player)) {
-				iplock.createEntry(player, args[1]);
-				sender.sendMessage("Your entry has been reset");
-				return true;
-			} else {
-				iplock.createEntry(player, args[1]);
-				sender.sendMessage("A new entry was created with your password");
-				return true;
-			}
-		}
-		if (args.length == 2 && args[0].equalsIgnoreCase("unlock")
-				&& sender instanceof Player && useIpLock) {
-			Player player = (Player) sender;
-			if (!player.hasPermission("bPermissions.iplock.lock")) {
-				player.sendMessage("Nope.");
-				return true;
-			}
-			if (!iplock.kickPlayers.contains(player.getName())) {
-				sender.sendMessage("You are already logged in!");
-				return true;
-			}
-			if (iplock.hasEntry(player)) {
-				boolean isPassword = iplock.isPassword(player, args[1]);
-				if (isPassword) {
-					sender.sendMessage("Welcome, Professor.");
-					iplock.stopTimeout(player);
-					iplock.addIp(player);
-					return true;
-				} else {
-					sender.sendMessage("Incorrect password! Attempt logged!");
-					log(player.getAddress().toString()
-							+ " attempted to login to account "
-							+ player.getName());
-					return true;
-				}
-			} else {
-				sender.sendMessage("You can't do this.");
-				return true;
-			}
-		}
-		if (args.length == 3 && args[0].equalsIgnoreCase(promotePlayer)) {
-			String player = args[1];
-			String track = args[2];
-			String permission = "bPermissions.promote." + track;
-			if (sender instanceof Player) {
-				if (!(sender.hasPermission(permission))) {
-					sender.sendMessage("Nopromotion.");
-					return true;
-				}
-			}
-			if (tracks.promote(player, track)) {
-				sender.sendMessage(player + " promoted via " + track);
-				return true;
-			} else {
-				sender.sendMessage("Please check tracks.yml");
-				return true;
-			}
-		}
-		if (args.length == 3 && args[0].equalsIgnoreCase(demotePlayer)) {
-			String player = args[1];
-			String track = args[2];
-			String permission = "bPermissions.demote." + track;
-			if (sender instanceof Player) {
-				if (!sender.hasPermission(permission)) {
-					sender.sendMessage("Nodemotion.");
-					return true;
-				}
-			}
-			if (tracks.demote(player, track)) {
-				sender.sendMessage(player + " demoted via " + track);
-				return true;
-			} else {
-				sender.sendMessage("Please check tracks.yml");
-				return true;
-			}
-		}
+		
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("reload")) {
 				if (sender.hasPermission("bPermissions.admin")
@@ -279,8 +153,7 @@ public class Permissions extends JavaPlugin {
 						|| !(sender instanceof Player)) {
 					for (PermissionSet ps : pm.getPermissionSets())
 						ps.reload();
-					info.clear();
-					HasPermission.clearCache();
+							
 					sender.sendMessage("Permissions reloaded.");
 					return true;
 				} else {
@@ -309,7 +182,8 @@ public class Permissions extends JavaPlugin {
 					Player player = getServer().getPlayer(args[1]);
 					boolean perm = false;
 					if(player == null) {
-						perm = HasPermission.has(args[1], getServer().getWorlds().get(0).getName(), args[2]);
+						perm = false;
+						//perm = HasPermission.has(args[1], getServer().getWorlds().get(0).getName(), args[2]);
 					} else {
 						perm = sender.hasPermission(args[2]);
 					}
@@ -382,20 +256,18 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		pr.setRunning(false);
-		// And wait for the task to finish
-		while(pr.isAlive()) {}
 		getServer().getScheduler().cancelTasks(this);
 		log("Disabled");
 	}
 
 	@Override
 	public void onEnable() {		
-                com.arandomappdev.bukkitstats.CallHome.load(this);
-		Help.load(this);
-		SuperPermissionHandler.setPlugin(this);
+        
+		com.arandomappdev.bukkitstats.CallHome.load(this);
+		registerPermissions();
 		
-		sanityCheck();
+        Help.load(this);
+		SuperPermissionHandler.setPlugin(this);
 		
 		bpc = new BackupPermissionsCommand(this);
 		
@@ -423,8 +295,6 @@ public class Permissions extends JavaPlugin {
 				new CommandPreprocess(this), Priority.Lowest, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN,
 				pl, Priority.Low, this);
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN,
-				pl, Priority.Monitor, this);
 		
 		// NEW THINGS
 		getServer().getPluginManager().registerEvent(
@@ -439,30 +309,6 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
 
-		tutorial = new Tutorial(this);
-		// The tutorial
-		getServer().getPluginManager().registerEvent(
-				Event.Type.PLAYER_COMMAND_PREPROCESS, tutorial,
-				Priority.Normal, this);
-
-		// Just some extra stuff
-		iplock = new IpLock(this);
-		tracks = new Tracks(this);
-
-		registerPermissions();
-
-		// Do static things
-		try {
-		log("Using "+SizeOf.humanReadable(SizeOf.deepSizeOf(this))+" ram");
-		} catch (Exception e) {
-			log("SizeOf.jar not in startup path, skipping!");
-			log("To enable bPermissions to track its memory usage, add SizeOf.jar to the startup script");
-			log("See http://sizeof.sourceforge.net/ for details");
-		}
-
-		// And new shizz!
-		pr = new PermissionsRunnable();
-		pr.start();
 		
 		log("Enabled");
 	}
@@ -470,45 +316,17 @@ public class Permissions extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		pm = new WorldPermissionsManager(this);
-
 		perm = pm;
-
 		info = new InfoReader();
-		getServer().getServicesManager().register(PlayerInfo.class, info, this,
-				ServicePriority.Normal);
-		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
 	}
 
-	public void registerPermissions() {
+	private void registerPermissions() {
 
 		getServer().getPluginManager().addPermission(
 				new Permission("bPermissions.admin", PermissionDefault.OP));
 		getServer().getPluginManager().addPermission(
 				new Permission("bPermissions.build", PermissionDefault.OP));
 
-	}
-
-	/**
-	 * May as well include this - it'll let even the most lazy of server owners
-	 * know it's time to get rid of bInfo
-	 */
-	public void sanityCheck() {
-		if (getServer().getPluginManager().getPlugin("bInfo") != null) {
-			getServer().getScheduler().scheduleAsyncRepeatingTask(this,
-					new Runnable() {
-
-						@Override
-						public void run() {
-							getServer()
-									.broadcastMessage(
-											ChatColor.RED
-													+ "bInfo is installed! Please uninstall it for bPermissions to work correctly!");
-							System.err
-									.println("bInfo is installed! Please uninstall it for bPermissions to work correctly!");
-						}
-
-					}, 100, 100);
-		}
 	}
 
 	public void setupCommands() {
@@ -543,23 +361,6 @@ public class Permissions extends JavaPlugin {
 		removeNode = c.getString("commands.remove-node", "rmnode");
 		listNode = c.getString("commands.list-node", "lsnode");
 
-		hostname = c.getString("sql.hostname", hostname);
-		c.setProperty("sql.hostname", hostname);
-		port = c.getString("sql.port", port);
-		c.setProperty("sql.port", port);
-		database = c.getString("sql.database", database);
-		c.setProperty("sql.database", database);
-		username = c.getString("sql.username", username);
-		c.setProperty("sql.username", username);
-		password = c.getString("sql.password", password);
-		c.setProperty("sql.password", password);
-
-		useIpLock = c.getBoolean("use-iplock", false);
-		lock = c.getString("commands.lock", "lock");
-		unlock = c.getString("commands.unlock", "unlock");
-
-		cacheValues = c.getBoolean("cache-values", true);
-
 		idiotVariable = c.getBoolean("lowercase-all", false);
 		
 		c.setProperty("lowercase-all", idiotVariable);
@@ -576,13 +377,11 @@ public class Permissions extends JavaPlugin {
 
 		c.setProperty("cache-values", cacheValues);
 		// c.setProperty("use-bml", bml);
-		if (c.getBoolean("use-bml", false)) {
-			wps = WorldPermissionSet.BML;
-		} else {
-			c.setProperty("permission-type",
+		
+		c.setProperty("permission-type",
 					c.getString("permission-type", "yaml"));
 			wps = WorldPermissionSet.getSet(c.getString("permission-type"));
-		}
+		
 		
 		c.removeProperty("use-bml");
 		c.removeProperty("override-player");
@@ -598,14 +397,21 @@ public class Permissions extends JavaPlugin {
 
 		c.setProperty("commands.set-group", setGroup);
 		c.setProperty("commands.add-group", addGroup);
+		c.setProperty("commands.add-group-to-group", addGroupToGroup);
 		c.setProperty("commands.remove-group", removeGroup);
+		c.setProperty("commands.remove-group-from-group", removeGroupFromGroup);
 		c.setProperty("commands.list-group", listGroup);
+		c.setProperty("commands.list-group-group", listGroupGroup);
 		c.setProperty("commands.in-group", inGroup);
 
 		c.setProperty("commands.add-node", addNode);
 		c.setProperty("commands.remove-node", removeNode);
 		c.setProperty("commands.list-node", listNode);
 
+		c.setProperty("commands.add-player-node", addPlayerNode);
+		c.setProperty("commands.remove-player-node", removePlayerNode);
+		c.setProperty("commands.list-player-node", listPlayerNode);
+		
 		c.setProperty("commands.unlock", unlock);
 		c.setProperty("commands.lock", lock);
 		c.setProperty("use-iplock", useIpLock);

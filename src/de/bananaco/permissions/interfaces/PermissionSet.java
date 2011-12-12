@@ -129,13 +129,6 @@ public interface PermissionSet {
 	public void setupPlayers();
 
 	/**
-	 * Method added to account for infinite loop in the bridge, silly me.
-	 * 
-	 * @param Player
-	 * @return boolean
-	 */
-	public boolean has(Player player, String node);
-	/**
 	 * Gets the default gruop
 	 * @return String
 	 */

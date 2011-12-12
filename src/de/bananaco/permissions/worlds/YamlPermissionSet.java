@@ -1,27 +1,28 @@
-package de.bananaco.permissions.set;
+package de.bananaco.permissions.worlds;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-
+import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.util.Group;
 import de.bananaco.permissions.util.Permission;
 import de.bananaco.permissions.util.User;
 
-public class YamlPermissionSet extends WorldPermissionSet {
+public class YamlPermissionSet extends WorldPermissions {
 
 	private final YamlConfiguration config = new YamlConfiguration();
-	private final File file = new File(getWorld()+".yml");
+	private final File file = new File("plugins/bPermissions/"+getWorldName()+".yml");
 	
 	private static final String PERMISSIONS = "permissions";
 	private static final String GROUPS = "groups";
 	
-	public YamlPermissionSet(String world) {
-		super(world);
+	public YamlPermissionSet(World world, Permissions plugin) {
+		super(world, plugin);
 	}
 	
 	public void load() {
@@ -106,6 +107,26 @@ public class YamlPermissionSet extends WorldPermissionSet {
 		}
 		
 		}
+		
+		for(User user : getUsers()) {
+			user.calculateEffectivePermissions();
+		}
+		
+		for(Group group : getGroups()) {
+			group.calculateEffectivePermissions();
+		}
+
+	}
+
+	@Override
+	public void reload() {
+		load();
+		save();
+	}
+
+	@Override
+	public String getDefaultGroup() {
+		return config.getString("default", "default");
 	}
 
 }

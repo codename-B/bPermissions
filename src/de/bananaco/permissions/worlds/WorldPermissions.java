@@ -1,90 +1,143 @@
 package de.bananaco.permissions.worlds;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.World;
 
-import de.bananaco.permissions.debug.Debugger;
-import de.bananaco.permissions.oldschool.Configuration;
-
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.util.Calculable;
+import de.bananaco.permissions.util.Group;
+import de.bananaco.permissions.util.Permission;
+import de.bananaco.permissions.util.User;
 
-class WorldPermissions extends PermissionClass {
-	/**
-	 * The configuration object
-	 */
-	private final Configuration c;
+public abstract class WorldPermissions extends PermissionClass {
 
+	private final World world;
+	private final Map<String, User> users;
+	private final Map<String, Group> groups;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WorldPermissions(World world, Permissions plugin) {
 		super(world, plugin);
-		this.c = new Configuration(new File("plugins/bPermissions/worlds/"
-				+ world.getName() + ".yml"));
+		this.world = world;
+		this.users = new HashMap();
+		this.groups = new HashMap();
 	}
-
+	
+	public String getWorldName() {
+		if(world == null)
+			return "world";
+		return world.getName();
+	}
+	
+	public int hashCode() {
+		return world.hashCode();
+	}
+	
+	public User getUser(String name) {
+		return users.get(name);
+	}
+	
+	public Group getGroup(String name) {
+		return groups.get(name);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Set<User> getUsers() {
+		Set<String> names = users.keySet();
+		Set<User> users = new HashSet();
+		for(String name : names)
+			users.add(getUser(name));
+		return users;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Set<Group> getGroups() {
+		Set<String> names = groups.keySet();
+		Set<Group> groups = new HashSet();
+		for(String name : names)
+			groups.add(getGroup(name));
+		return groups;
+	}
+	
+	public Set<String> getUsersAsString() {
+		return users.keySet();
+	}
+	
+	public Set<String> getGroupsAsString() {
+		return groups.keySet();
+	}
+	
+	public void add(Calculable calculable) {
+		if(calculable instanceof User)
+			users.put(calculable.getName(), (User) calculable);
+		else if(calculable instanceof Group)
+			groups.put(calculable.getName(), (Group) calculable);
+		else
+			System.err.println("Calculable not instance of User or Group!");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getAllCachedGroups() {
-		return c.getKeys("groups");
+		return new ArrayList(getGroupsAsString());
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getAllCachedPlayers() {
-		return c.getKeys("players");
+		return new ArrayList(getUsersAsString());
 	}
-
-	@Override
-	public String getDefaultGroup() {
-		return c.getString("default", "default");
-	}
-
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroupNodes(String group) {
-		group = caseCheck(group);
-		
-		List<String> groupNodes = c.getStringList("groups." + group, null);
-		return groupNodes;
+		if(getGroup(group) == null) {
+			Group gr = new Group(group, null, null, this);
+			add(gr);
+			gr.calculateEffectivePermissions();
+		}
+		return new ArrayList(getGroup(group).getPermissionsAsString());
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroups(String player) {
-		player = caseCheck(player);
-		
-		List<String> playerGroups = c.getStringList("players." + player, null);
-		if (playerGroups == null || playerGroups.size() == 0) {
-			return getDefaultArrayList();
+		if(getUser(player) == null) {
+			User us = new User(player, getDefaultArrayList(), null, this);
+			add(us);
+			us.calculateEffectivePermissions();
 		}
-		return playerGroups;
+		return new ArrayList(getUser(player).getGroupsAsString());
 	}
-
-	@Override
-	public void reload() {
-		c.load();
-		setupPlayers();
-	}
-
+	
+	public abstract void load();
+	
+	public abstract void save();
+	
 	@Override
 	public void setGroups(String player, List<String> groups) {
-		player = caseCheck(player);
-		
-		c.setProperty("players." + player, groups);
-		if(groups.size() == 0) {
-			c.removeProperty("players." + player);
-		Debugger.getDebugger().log(player+" removed from "+world.getName()+".yml");
-		}
-		c.save();
-		super.setGroups(player, groups);
+		User us = getUser(player);
+		Set<String> usgr = us.getGroupsAsString();
+		usgr.clear();
+		usgr.addAll(groups);
+		us.calculateEffectivePermissions();
+		save();
 	}
 
 	@Override
 	public void setNodes(String group, List<String> nodes) {
-		group = caseCheck(group);
-		
-		c.setProperty("groups." + group, nodes);
-		if(nodes.size() == 0) {
-			c.removeProperty("groups." + group);
-			Debugger.getDebugger().log(group+" removed from "+world.getName()+".yml");
-		}
-		c.save();
-		super.setNodes(group, nodes);
+		Group gr = getGroup(group);
+		Set<Permission> pr = gr.getPermissions();
+		pr.clear();
+		pr.addAll(Permission.loadFromString(nodes));
+		gr.calculateEffectivePermissions();
+		save();
 	}
 
 }

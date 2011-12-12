@@ -3,7 +3,7 @@ package de.bananaco.permissions.util;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.bananaco.permissions.set.WorldPermissionSet;
+import de.bananaco.permissions.worlds.WorldPermissions;
 
 public abstract class Calculable extends GroupCarrier {
 	
@@ -12,8 +12,8 @@ public abstract class Calculable extends GroupCarrier {
 	String name;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Calculable(String name, Set<String> groups, Set<Permission> permissions, WorldPermissionSet parent) {
-		super(parent, groups, permissions);
+	public Calculable(String name, Set<String> groups, Set<Permission> permissions, WorldPermissions parent) {
+		super(groups, permissions, parent);
 		this.name = name;
 		this.effectivePermissions = new HashSet();
 	}
@@ -25,6 +25,7 @@ public abstract class Calculable extends GroupCarrier {
 		effectivePermissions.clear();
 		effectivePermissions.addAll(getPermissions());
 		for(Group group : getGroups()) {
+			group.calculateEffectivePermissions();
 			effectivePermissions.addAll(group.getEffectivePermissions());
 		}
 	}

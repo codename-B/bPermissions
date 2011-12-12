@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
-import com.ubempire.binfo.PlayerInfo;
 
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
-public class InfoReader implements PlayerInfo {
+public class InfoReader {
 
 	private WorldPermissionsManager wpm;
 

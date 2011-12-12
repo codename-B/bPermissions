@@ -15,12 +15,6 @@ public enum WorldPermissionSet {
 			return null;
 		} else if (type.equals("yaml")) {
 			return WorldPermissionSet.YAML;
-		} else if (type.equals("bml")) {
-			return WorldPermissionSet.BML;
-		} else if (type.equals("sql")) {
-			return WorldPermissionSet.SQL;
-		} else if (type.equals("json")) {
-			return WorldPermissionSet.JSON;
 		}
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;
@@ -37,13 +31,7 @@ public enum WorldPermissionSet {
 			System.err.println("[bPermissions] Something horrible went wrong!");
 			return null;
 		} else if (type.equals("yaml")) {
-			return new WorldPermissions(world, permissions);
-		} else if (type.equals("bml")) {
-			return new NewWorldPermissions(world, permissions);
-		} else if (type.equals("sql")) {
-			return new SQLWorldPermissions(world, permissions);
-		} else if (type.equals("json")) {
-			return new JSONWorldPermissions(world, permissions);
+			return new YamlPermissionSet(world, permissions);
 		}
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;

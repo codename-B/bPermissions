@@ -3,14 +3,14 @@ package de.bananaco.permissions.util;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.bananaco.permissions.set.WorldPermissionSet;
+import de.bananaco.permissions.worlds.WorldPermissions;
 
 public abstract class GroupCarrier extends PermissionCarrier {
 	
-	private final WorldPermissionSet parent;
+	private final WorldPermissions parent;
 	private final Set<String> groups;
 	
-	protected GroupCarrier(WorldPermissionSet parent, Set<String> groups, Set<Permission> permissions) {
+	protected GroupCarrier(Set<String> groups, Set<Permission> permissions, WorldPermissions parent) {
 		super(permissions);
 		this.parent = parent;
 		this.groups = groups;
