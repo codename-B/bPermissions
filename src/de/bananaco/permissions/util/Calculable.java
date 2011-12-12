@@ -23,11 +23,11 @@ public abstract class Calculable extends GroupCarrier {
 	 */
 	public void calculateEffectivePermissions() {
 		effectivePermissions.clear();
-		effectivePermissions.addAll(getPermissions());
 		for (Group group : getGroups()) {
 			group.calculateEffectivePermissions();
 			effectivePermissions.addAll(group.getEffectivePermissions());
 		}
+		effectivePermissions.addAll(getPermissions());
 	}
 
 	/**
