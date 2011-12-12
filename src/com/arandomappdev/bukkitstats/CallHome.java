@@ -36,10 +36,11 @@ import java.net.URLEncoder;
 import java.util.UUID;
 
 public class CallHome {
+
+	private static final File file = new File("plugins/stats/config.yml");
 	private static final YamlConfiguration config = YamlConfiguration
 			.loadConfiguration(file);
-	private static final File file = new File("plugins/stats/config.yml");
-
+	
 	public static void load(Plugin plugin) {
 		if (!verifyConfig()) {
 			return;
