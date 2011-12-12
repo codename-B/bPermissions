@@ -118,6 +118,22 @@ public abstract class PermissionClass implements PermissionSet {
 		}
 		setGroups(player, playerGroups);
 	}
+	
+	@Override
+	public final void addGroupToGroup(String main, String group) {
+		main = caseCheck(main);
+		group = caseCheck(group);
+
+		List<String> groupGroups = getGroupGroups(main);
+		if (!groupGroups.contains(group)) {
+			groupGroups.add(group);
+			log("Group:" + group + " added to player:" + main + " in world:"
+					+ world.getName());
+		} else {
+			return;
+		}
+		setGroupGroups(main, groupGroups);
+	}
 
 	@Override
 	public final void addNode(String node, String group) {
@@ -192,6 +208,22 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		setGroups(player, playerGroups);
+	}
+	
+	@Override
+	public final void removeGroupFromGroup(String main, String group) {
+		main = caseCheck(main);
+		group = caseCheck(group);
+
+		List<String> groupGroups = getGroups(main);
+		if (groupGroups.contains(group)) {
+			groupGroups.remove(group);
+			log("Group:" + group + " removed from player:" + main
+					+ " in world:" + world.getName());
+		} else {
+			return;
+		}
+		setGroupGroups(main, groupGroups);
 	}
 
 	@Override

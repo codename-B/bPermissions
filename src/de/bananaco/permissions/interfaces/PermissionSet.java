@@ -192,9 +192,13 @@ public interface PermissionSet {
 	 */
 	public boolean hasGroup(String player, String group);
 
-	void setGroupGroups(String group, List<String> groups);
+	public void setGroupGroups(String group, List<String> groups);
 
-	void setPlayerNodes(String player, List<String> nodes);
+	public void setPlayerNodes(String player, List<String> nodes);
 
-	List<String> getGroupGroups(String group);
+	public List<String> getGroupGroups(String group);
+
+	public void addGroupToGroup(String main, String group);
+
+	public void removeGroupFromGroup(String player, String group);
 }

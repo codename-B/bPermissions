@@ -38,6 +38,9 @@ public class PermissionsExec {
 			return false;
 		}
 		if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addGroup)) {
+			/*
+			 * ADDGROUP
+			 */
 			String player = args[3];
 			String group = args[2];
 			player = checkPlayer(player);
@@ -46,8 +49,23 @@ public class PermissionsExec {
 			p.addGroup(player, group);
 			sender.sendMessage("Added group:" + group + " to player:" + player);
 			return true;
-		} else if (args.length >= 4
+		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addGroupToGroup)) {
+			/*
+			 * ADDGROUPTOGROUP
+			 */
+			String main = args[3];
+			String group = args[2];
+
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			p.addGroupToGroup(main, group);
+			sender.sendMessage("Added group:" + group + " to group:" + main);
+			return true;
+		}
+		else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.setGroup)) {
+			/*
+			 * SETGROUP
+			 */
 			String player = args[3];
 			String group = args[2];
 			player = checkPlayer(player);
@@ -58,6 +76,9 @@ public class PermissionsExec {
 			return true;
 		} else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.removeGroup)) {
+			/*
+			 * REMOVEGROUP
+			 */
 			String player = args[3];
 			String group = args[2];
 			player = checkPlayer(player);
@@ -66,6 +87,19 @@ public class PermissionsExec {
 			p.removeGroup(player, group);
 			sender.sendMessage("Removed group:" + group + " from player:"
 					+ player);
+			return true;
+		} else if (args.length >= 4
+				&& args[1].equalsIgnoreCase(plugin.removeGroupFromGroup)) {
+			/*
+			 * REMOVEGROUPGROUP
+			 */
+			String main = args[3];
+			String group = args[2];
+
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			p.removeGroupFromGroup(main, group);
+			sender.sendMessage("Removed group:" + group + " from group:"
+					+ main);
 			return true;
 		} else if (args.length >= 3
 				&& args[1].equalsIgnoreCase(plugin.listGroup)) {
