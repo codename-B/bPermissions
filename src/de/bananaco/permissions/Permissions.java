@@ -86,7 +86,6 @@ public class Permissions extends JavaPlugin {
 	public String listPlayerNode;
 	public String localCommand;
 	public LocalCommands localExec;
-	public String lock;
 
 	public Map<String, String> mirror;
 
@@ -108,10 +107,6 @@ public class Permissions extends JavaPlugin {
 	public String setGroup;
 	
 	public boolean suggestSimilarCommands;
-
-	public String unlock;
-
-	public boolean useIpLock;
 	
 	public static boolean idiotVariable = false;
 
@@ -352,14 +347,20 @@ public class Permissions extends JavaPlugin {
 		demotePlayer = c.getString("commands.demote-player", "demote");
 
 		addGroup = c.getString("commands.add-group", "addgroup");
+		addGroupToGroup = c.getString("commands.add-group-to-group", "addgroupgroup");
 		setGroup = c.getString("commands.set-group", "setgroup");
 		removeGroup = c.getString("commands.remove-group", "rmgroup");
+		removeGroupFromGroup = c.getString("commands.remove-group-from-group", "rmgroupgroup");
 		listGroup = c.getString("commands.list-group", "lsgroup");
+		listGroupGroup = c.getString("commands.list-group-group", "lsgroupgroup");
 		inGroup = c.getString("commands.in-group", "ingroup");
 
 		addNode = c.getString("commands.add-node", "addnode");
+		addPlayerNode = c.getString("commands.add-player-node", "addplnode");
 		removeNode = c.getString("commands.remove-node", "rmnode");
+		removePlayerNode = c.getString("commands.remove-player-node", "rmplnode");
 		listNode = c.getString("commands.list-node", "lsnode");
+		listPlayerNode = c.getString("commands.list-player-node", "lsplnode");
 
 		idiotVariable = c.getBoolean("lowercase-all", false);
 		
@@ -376,7 +377,6 @@ public class Permissions extends JavaPlugin {
 		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", true);
 
 		c.setProperty("cache-values", cacheValues);
-		// c.setProperty("use-bml", bml);
 		
 		c.setProperty("permission-type",
 					c.getString("permission-type", "yaml"));
@@ -385,6 +385,7 @@ public class Permissions extends JavaPlugin {
 		
 		c.removeProperty("use-bml");
 		c.removeProperty("override-player");
+		c.removeProperty("cache-values");
 
 		c.setProperty("suggest-similar-commands", suggestSimilarCommands);
 
@@ -411,10 +412,6 @@ public class Permissions extends JavaPlugin {
 		c.setProperty("commands.add-player-node", addPlayerNode);
 		c.setProperty("commands.remove-player-node", removePlayerNode);
 		c.setProperty("commands.list-player-node", listPlayerNode);
-		
-		c.setProperty("commands.unlock", unlock);
-		c.setProperty("commands.lock", lock);
-		c.setProperty("use-iplock", useIpLock);
 
 		c.removeProperty("format-chat");
 

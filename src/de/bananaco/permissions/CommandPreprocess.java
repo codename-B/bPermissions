@@ -35,13 +35,17 @@ public class CommandPreprocess extends PlayerListener {
 				|| (command.equalsIgnoreCase(permissions.inGroup))
 				|| (command.equalsIgnoreCase(permissions.addNode))
 				|| (command.equalsIgnoreCase(permissions.removeNode))
-				|| (command.equalsIgnoreCase(permissions.listNode))) {
+				|| (command.equalsIgnoreCase(permissions.listNode))
+				|| (command.equalsIgnoreCase(permissions.listGroupGroup))
+				|| (command.equalsIgnoreCase(permissions.listPlayerNode))
+				|| (command.equalsIgnoreCase(permissions.addGroupToGroup))
+				|| (command.equalsIgnoreCase(permissions.removeGroupFromGroup))
+				|| (command.equalsIgnoreCase(permissions.addPlayerNode))
+				|| (command.equalsIgnoreCase(permissions.removePlayerNode))) {
 			event.setCancelled(true);
 			player.chat("/permissions global " + message);
 		} else if ((command.equalsIgnoreCase(permissions.promotePlayer))
-				|| (command.equalsIgnoreCase(permissions.demotePlayer))
-				|| (command.equalsIgnoreCase(permissions.lock))
-				|| (command.equalsIgnoreCase(permissions.unlock))) {
+				|| (command.equalsIgnoreCase(permissions.demotePlayer))) {
 			event.setCancelled(true);
 			player.chat("/permissions " + message);
 		}
@@ -69,7 +73,13 @@ class ExtraCommandPreprocess extends ServerListener {
 				|| (command.equalsIgnoreCase(permissions.inGroup))
 				|| (command.equalsIgnoreCase(permissions.addNode))
 				|| (command.equalsIgnoreCase(permissions.removeNode))
-				|| (command.equalsIgnoreCase(permissions.listNode))) {
+				|| (command.equalsIgnoreCase(permissions.listNode))
+				|| (command.equalsIgnoreCase(permissions.listGroupGroup))
+				|| (command.equalsIgnoreCase(permissions.listPlayerNode))
+				|| (command.equalsIgnoreCase(permissions.addGroupToGroup))
+				|| (command.equalsIgnoreCase(permissions.removeGroupFromGroup))
+				|| (command.equalsIgnoreCase(permissions.addPlayerNode))
+				|| (command.equalsIgnoreCase(permissions.removePlayerNode))) {
 			event.setCommand("permissions global " + message);
 		} else if ((command.equalsIgnoreCase(permissions.promotePlayer))
 				|| (command.equalsIgnoreCase(permissions.demotePlayer))) {
