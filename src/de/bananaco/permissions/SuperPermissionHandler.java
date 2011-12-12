@@ -38,7 +38,7 @@ public class SuperPermissionHandler {
 	
 	public static synchronized void setupPlayer(Player p, Set<Permission> nodes) {
 		long start = System.currentTimeMillis();
-		unsetupPlayer(p, plugin);
+		unsetupPlayer(p);
 		PermissionAttachment att = p.addAttachment(plugin);
 		
 		for(Permission node : nodes)
@@ -50,7 +50,7 @@ public class SuperPermissionHandler {
 				"Setup player:" + p.getName() + " took " + finish + "ms");
 	}
 
-	public static synchronized void unsetupPlayer(Player p, JavaPlugin plugin) {
+	public static synchronized void unsetupPlayer(Player p) {
 		Set<PermissionAttachmentInfo> pAtt = p.getEffectivePermissions();
 		if (pAtt != null) {
 			for (PermissionAttachmentInfo pInfo : pAtt) {
