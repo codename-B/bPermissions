@@ -183,6 +183,7 @@ public abstract class WorldPermissions extends PermissionClass {
 		grgr.addAll(groups);
 		gr.calculateEffectivePermissions();
 		save();
+		gr.clearValues();
 	}
 
 	@Override
@@ -193,6 +194,7 @@ public abstract class WorldPermissions extends PermissionClass {
 		gr.addAll(groups);
 		us.calculateEffectivePermissions();
 		save();
+		us.clearValues();
 	}
 
 	@Override
@@ -203,6 +205,7 @@ public abstract class WorldPermissions extends PermissionClass {
 		pr.addAll(Permission.loadFromString(nodes));
 		gr.calculateEffectivePermissions();
 		save();
+		gr.clearValues();
 	}
 
 	@Override
@@ -213,5 +216,6 @@ public abstract class WorldPermissions extends PermissionClass {
 		pr.addAll(Permission.loadFromString(nodes));
 		us.calculateEffectivePermissions();
 		save();
+		us.clearValues();
 	}
 }
