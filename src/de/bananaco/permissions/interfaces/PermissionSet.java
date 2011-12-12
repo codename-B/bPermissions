@@ -29,7 +29,7 @@ public interface PermissionSet {
 	/**
 	 * Add a node
 	 * 
-	 * @param node
+	 * @param groups
 	 * @param group
 	 */
 	public void addNode(String node, String group);
@@ -231,4 +231,8 @@ public interface PermissionSet {
 	 * Sets up the online players in that world
 	 */
 	public void setupPlayers();
+
+	public void addPlayerNode(String node, String player);
+	
+	public void removePlayerNode(String node, String player);
 }

@@ -132,6 +132,9 @@ public class PermissionsExec {
 			sender.sendMessage(list);
 			return true;
 		} else if (args.length >= 3 && args[1].equalsIgnoreCase(plugin.inGroup)) {
+			/*
+			 * INGROUP
+			 */
 			String group = args[2];
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);
@@ -143,6 +146,9 @@ public class PermissionsExec {
 			sender.sendMessage(list);
 			return true;
 		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addNode)) {
+			/*
+			 * ADDNODE
+			 */
 			String node = args[2];
 			String group = args[3];
 
@@ -151,8 +157,24 @@ public class PermissionsExec {
 			sender.sendMessage("Added node:" + node + " to group:" + group
 					+ " in world:" + world);
 			return true;
+		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addPlayerNode)) {
+			/*
+			 * ADDPLAYERNODE
+			 */
+			String node = args[2];
+			String player = args[3];
+			player = checkPlayer(player);
+			
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			p.addPlayerNode(node, player);
+			sender.sendMessage("Added node:" + node + " to player:" + player
+					+ " in world:" + world);
+			return true;
 		} else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.removeNode)) {
+			/*
+			 * REMOVENODE
+			 */
 			String node = args[2];
 			String group = args[3];
 
@@ -161,8 +183,25 @@ public class PermissionsExec {
 			sender.sendMessage("Removed node:" + node + " from group:" + group
 					+ " in world:" + world);
 			return true;
+		}  else if (args.length >= 4
+				&& args[1].equalsIgnoreCase(plugin.removePlayerNode)) {
+			/*
+			 * REMOVEPLAYERNODE
+			 */
+			String node = args[2];
+			String player = args[3];
+			player = checkPlayer(player);
+			
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			p.removePlayerNode(node, player);
+			sender.sendMessage("Removed node:" + node + " from player:" + player
+					+ " in world:" + world);
+			return true;
 		} else if (args.length >= 3
 				&& args[1].equalsIgnoreCase(plugin.listNode)) {
+			/*
+			 * LISTNODE
+			 */
 			String group = args[2];
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);
@@ -170,6 +209,21 @@ public class PermissionsExec {
 			String list = Arrays.toString(groupNodes.toArray())
 					.replace("[", "").replace("]", "");
 			sender.sendMessage(group + " in world:" + world
+					+ " has these nodes:");
+			sender.sendMessage(list);
+			return true;
+		} else if (args.length >= 3
+				&& args[1].equalsIgnoreCase(plugin.listPlayerNode)) {
+			/*
+			 * LISTPLAYERNODE
+			 */
+			String player = args[2];
+
+			PermissionSet p = plugin.pm.getPermissionSet(w);
+			List<String> playerNodes = p.getPlayerNodes(player);
+			String list = Arrays.toString(playerNodes.toArray())
+					.replace("[", "").replace("]", "");
+			sender.sendMessage(player + " in world:" + world
 					+ " has these nodes:");
 			sender.sendMessage(list);
 			return true;

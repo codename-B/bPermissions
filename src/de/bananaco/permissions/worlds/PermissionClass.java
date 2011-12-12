@@ -130,7 +130,6 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void addNode(String node, String group) {
-		node = caseCheck(node);
 		group = caseCheck(group);
 
 		List<String> groupNodes = getGroupNodes(group);
@@ -150,6 +149,29 @@ public abstract class PermissionClass implements PermissionSet {
 					+ " for world:" + world.getName());
 		}
 		setNodes(group, groupNodes);
+	}
+	
+	@Override
+	public final void addPlayerNode(String node, String player) {
+		player = caseCheck(player);
+
+		List<String> playerNodes = getPlayerNodes(player);
+		if (playerNodes == null) {
+			log("the group:" + player + " does not exist for world:"
+					+ world.getName());
+			return;
+		}
+		if (!playerNodes.contains(node)) {
+			playerNodes.add(node);
+			log("added node:" + node + " to group:" + player + " for world:"
+					+ world.getName());
+		} else {
+			playerNodes.remove(node);
+			playerNodes.add(node);
+			log("overriding node:" + node + " to group:" + player
+					+ " for world:" + world.getName());
+		}
+		setPlayerNodes(player, playerNodes);
 	}
 
 	public String caseCheck(String input) {
@@ -261,7 +283,6 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void removeNode(String node, String group) {
-		node = caseCheck(node);
 		group = caseCheck(group);
 
 		List<String> groupNodes = getGroupNodes(group);
@@ -278,6 +299,26 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		setNodes(group, groupNodes);
+	}
+	
+	@Override
+	public final void removePlayerNode(String node, String player) {
+		player = caseCheck(player);
+
+		List<String> playerNodes = getPlayerNodes(player);
+		if (playerNodes == null) {
+			log("the player:" + player + " does not exist for world:"
+					+ world.getName());
+			return;
+		}
+		if (playerNodes.contains(node)) {
+			playerNodes.remove(node);
+			log("removed node:" + node + " from player:" + player + " for world:"
+					+ world.getName());
+		} else {
+			return;
+		}
+		setPlayerNodes(player, playerNodes);
 	}
 
 	private List<String> sanitise(List<String> input) {
