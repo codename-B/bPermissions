@@ -191,4 +191,10 @@ public interface PermissionSet {
 	 * @return boolean
 	 */
 	public boolean hasGroup(String player, String group);
+
+	void setGroupGroups(String group, List<String> groups);
+
+	void setPlayerNodes(String player, List<String> nodes);
+
+	List<String> getGroupGroups(String group);
 }

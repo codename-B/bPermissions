@@ -160,32 +160,6 @@ public abstract class PermissionClass implements PermissionSet {
 	}
 
 	@Override
-	public final List<String> getPlayerNodes(String player) {
-		List<String> playerGroups = getGroups(player);
-		List<String> playerNodes = new ArrayList<String>();
-		for (String group : playerGroups) {
-			if (group.startsWith("p:")) {
-				String node = group.substring(2);
-				playerNodes.add(node);
-			} else {
-				for (String node : getGroupNodes(group)) {
-					if (isRangePermission(node)) {
-						List<String> rNodes = getRangePermissions(node);
-						for (String nd : rNodes) {
-							if (playerNodes.contains(nd))
-								playerNodes.remove(nd);
-							playerNodes.add(nd);
-						}
-					} else if (playerNodes.contains(node))
-						playerNodes.remove(node);
-					playerNodes.add(node);
-				}
-			}
-		}
-		return playerNodes;
-	}
-
-	@Override
 	public final World getWorld() {
 		return world;
 	}

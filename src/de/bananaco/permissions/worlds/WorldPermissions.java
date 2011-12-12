@@ -93,6 +93,17 @@ public abstract class WorldPermissions extends PermissionClass {
 	public List<String> getAllCachedPlayers() {
 		return new ArrayList(getUsersAsString());
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<String> getPlayerNodes(String player) {
+		if(getUser(player) == null) {
+			User us = new User(player, null, null, this);
+			add(us);
+			us.calculateEffectivePermissions();
+		}
+		return new ArrayList(getUser(player).getPermissionsAsString());
+	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -115,6 +126,17 @@ public abstract class WorldPermissions extends PermissionClass {
 		}
 		return new ArrayList(getUser(player).getGroupsAsString());
 	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<String> getGroupGroups(String group) {
+		if(getGroup(group) == null) {
+			Group gr = new Group(group, null, null, this);
+			add(gr);
+			gr.calculateEffectivePermissions();
+		}
+		return new ArrayList(getGroup(group).getGroupsAsString());
+	}
 	
 	public abstract void load();
 	
@@ -123,9 +145,9 @@ public abstract class WorldPermissions extends PermissionClass {
 	@Override
 	public void setGroups(String player, List<String> groups) {
 		User us = getUser(player);
-		Set<String> usgr = us.getGroupsAsString();
-		usgr.clear();
-		usgr.addAll(groups);
+		Set<String> gr = us.getGroupsAsString();
+		gr.clear();
+		gr.addAll(groups);
 		us.calculateEffectivePermissions();
 		save();
 	}
@@ -136,6 +158,26 @@ public abstract class WorldPermissions extends PermissionClass {
 		Set<Permission> pr = gr.getPermissions();
 		pr.clear();
 		pr.addAll(Permission.loadFromString(nodes));
+		gr.calculateEffectivePermissions();
+		save();
+	}
+	
+	@Override
+	public void setPlayerNodes(String player, List<String> nodes) {
+		User us = getUser(player);
+		Set<Permission> pr = us.getPermissions();
+		pr.clear();
+		pr.addAll(Permission.loadFromString(nodes));
+		us.calculateEffectivePermissions();
+		save();
+	}
+	
+	@Override
+	public void setGroupGroups(String group, List<String> groups) {
+		Group gr = getGroup(group);
+		Set<String> grgr = gr.getGroupsAsString();
+		grgr.clear();
+		grgr.addAll(groups);
 		gr.calculateEffectivePermissions();
 		save();
 	}
