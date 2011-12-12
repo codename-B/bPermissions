@@ -15,11 +15,12 @@ public class BackupPermissions extends File {
 	public BackupPermissions(String arg0) {
 		super(arg0);
 	}
-	
+
 	public ZipOutputStream getZipOutputStream() {
 		ZipOutputStream ze = null;
 		try {
-		ze = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(this)));
+			ze = new ZipOutputStream(new BufferedOutputStream(
+					new FileOutputStream(this)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -15,35 +15,37 @@ import de.bananaco.permissions.util.Permission;
 public class SuperPermissionHandler {
 
 	private static JavaPlugin plugin;
-	
+
 	private static Map<String, String> players = new HashMap<String, String>();
-	
+
 	public static void setPlugin(JavaPlugin pl) {
 		plugin = pl;
 	}
-	
+
 	public static synchronized void setupPlayerIfChangedWorlds(Player p) {
-		if(players.containsKey(p.getName())) {
+		if (players.containsKey(p.getName())) {
 			String world = players.get(p.getName());
-			if(world.equals(p.getWorld().getName()))
+			if (world.equals(p.getWorld().getName()))
 				return;
 		}
 		setupPlayer(p);
 	}
-	
+
 	public static synchronized void setupPlayer(Player p) {
-		Set<Permission> nodes = Permissions.getWorldPermissionsManager().getPermissionSet(p.getWorld()).getPlayerPermissions(p.getName());
+		Set<Permission> nodes = Permissions.getWorldPermissionsManager()
+				.getPermissionSet(p.getWorld())
+				.getPlayerPermissions(p.getName());
 		setupPlayer(p, nodes);
 	}
-	
+
 	public static synchronized void setupPlayer(Player p, Set<Permission> nodes) {
 		long start = System.currentTimeMillis();
 		unsetupPlayer(p);
 		PermissionAttachment att = p.addAttachment(plugin);
-		
-		for(Permission node : nodes)
+
+		for (Permission node : nodes)
 			att.setPermission(node.name(), node.isTrue());
-				
+
 		players.put(p.getName(), p.getWorld().getName());
 		long finish = System.currentTimeMillis() - start;
 		Debugger.getDebugger().log(

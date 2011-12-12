@@ -118,7 +118,7 @@ public abstract class PermissionClass implements PermissionSet {
 		}
 		setGroups(player, playerGroups);
 	}
-	
+
 	@Override
 	public final void addGroupToGroup(String main, String group) {
 		main = caseCheck(main);
@@ -153,8 +153,8 @@ public abstract class PermissionClass implements PermissionSet {
 		} else {
 			groupNodes.remove(node);
 			groupNodes.add(node);
-			log("overriding node:" + node + " to group:" + group + " for world:"
-					+ world.getName());
+			log("overriding node:" + node + " to group:" + group
+					+ " for world:" + world.getName());
 		}
 		setNodes(group, groupNodes);
 	}
@@ -186,7 +186,7 @@ public abstract class PermissionClass implements PermissionSet {
 	 * @param input
 	 */
 	public final void log(Object input) {
-		//Debugger.getDebugger().log(String.valueOf(input));
+		// Debugger.getDebugger().log(String.valueOf(input));
 	}
 
 	@Override
@@ -209,7 +209,7 @@ public abstract class PermissionClass implements PermissionSet {
 		}
 		setGroups(player, playerGroups);
 	}
-	
+
 	@Override
 	public final void removeGroupFromGroup(String main, String group) {
 		main = caseCheck(main);
@@ -290,9 +290,9 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		log(parse(groups) + " set to player:" + player);
-		//MCMA.getDebugger().log(getWorld().getName());
+		// MCMA.getDebugger().log(getWorld().getName());
 		setupPlayer(player);
-		//Permissions.getInfoReader().clear();
+		// Permissions.getInfoReader().clear();
 	}
 
 	@Override
@@ -306,9 +306,9 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		log(parse(nodes) + " set to group:" + group);
-		//MCMA.getDebugger().log(getWorld().getName());
+		// MCMA.getDebugger().log(getWorld().getName());
 		setupPlayers();
-		//Permissions.getInfoReader().clear();
+		// Permissions.getInfoReader().clear();
 	}
 
 	@Override
@@ -322,7 +322,7 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void setupPlayer(Player player) {
-		//SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player));
+		// SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player));
 	}
 
 	@Override
@@ -361,9 +361,8 @@ public abstract class PermissionClass implements PermissionSet {
 			}
 		}
 		long finish = System.currentTimeMillis() - start;
-		log(
-				players.size() + " players found in group " + group
-						+ ". Search took " + finish + "ms.");
+		log(players.size() + " players found in group " + group
+				+ ". Search took " + finish + "ms.");
 		return players;
 	}
 

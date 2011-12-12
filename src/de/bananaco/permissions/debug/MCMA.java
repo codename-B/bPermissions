@@ -4,7 +4,7 @@ public class MCMA {
 
 	public static MCMA debug = null;
 	public static boolean bug = false;
-	
+
 	public static MCMA getDebugger() {
 		if (debug == null)
 			debug = new MCMA();
@@ -17,8 +17,7 @@ public class MCMA {
 
 	public void log(String world) {
 		if (bug)
-			System.out.println("[MCMA:reload:"+world+"]");
+			System.out.println("[MCMA:reload:" + world + "]");
 	}
-
 
 }

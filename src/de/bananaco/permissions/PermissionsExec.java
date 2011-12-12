@@ -49,7 +49,8 @@ public class PermissionsExec {
 			p.addGroup(player, group);
 			sender.sendMessage("Added group:" + group + " to player:" + player);
 			return true;
-		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addGroupToGroup)) {
+		} else if (args.length >= 4
+				&& args[1].equalsIgnoreCase(plugin.addGroupToGroup)) {
 			/*
 			 * ADDGROUPTOGROUP
 			 */
@@ -60,8 +61,7 @@ public class PermissionsExec {
 			p.addGroupToGroup(main, group);
 			sender.sendMessage("Added group:" + group + " to group:" + main);
 			return true;
-		}
-		else if (args.length >= 4
+		} else if (args.length >= 4
 				&& args[1].equalsIgnoreCase(plugin.setGroup)) {
 			/*
 			 * SETGROUP
@@ -98,10 +98,9 @@ public class PermissionsExec {
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);
 			p.removeGroupFromGroup(main, group);
-			sender.sendMessage("Removed group:" + group + " from group:"
-					+ main);
+			sender.sendMessage("Removed group:" + group + " from group:" + main);
 			return true;
-		}  else if (args.length >= 3
+		} else if (args.length >= 3
 				&& args[1].equalsIgnoreCase(plugin.listGroup)) {
 			/*
 			 * LISTGROUP
@@ -132,15 +131,15 @@ public class PermissionsExec {
 					+ " has these groups:");
 			sender.sendMessage(list);
 			return true;
-		} else if (args.length >= 3
-				&& args[1].equalsIgnoreCase(plugin.inGroup)) {
+		} else if (args.length >= 3 && args[1].equalsIgnoreCase(plugin.inGroup)) {
 			String group = args[2];
 
 			PermissionSet p = plugin.pm.getPermissionSet(w);
 			List<String> players = p.getAllCachedPlayersWithGroup(group);
-			String list = Arrays.toString(players.toArray())
-					.replace("[", "").replace("]", "");
-			sender.sendMessage(players.size()+" players found in group:"+group+" for world:"+world);
+			String list = Arrays.toString(players.toArray()).replace("[", "")
+					.replace("]", "");
+			sender.sendMessage(players.size() + " players found in group:"
+					+ group + " for world:" + world);
 			sender.sendMessage(list);
 			return true;
 		} else if (args.length >= 4 && args[1].equalsIgnoreCase(plugin.addNode)) {

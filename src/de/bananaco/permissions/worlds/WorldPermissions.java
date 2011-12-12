@@ -20,7 +20,7 @@ public abstract class WorldPermissions extends PermissionClass {
 	private final World world;
 	private final Map<String, User> users;
 	private final Map<String, Group> groups;
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public WorldPermissions(World world, Permissions plugin) {
 		super(world, plugin);
@@ -28,60 +28,60 @@ public abstract class WorldPermissions extends PermissionClass {
 		this.users = new HashMap();
 		this.groups = new HashMap();
 	}
-	
+
 	public String getWorldName() {
-		if(world == null)
+		if (world == null)
 			return "world";
 		return world.getName();
 	}
-	
+
 	public int hashCode() {
 		return world.hashCode();
 	}
-	
+
 	public User getUser(String name) {
 		return users.get(name);
 	}
-	
+
 	public Group getGroup(String name) {
 		return groups.get(name);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Set<User> getUsers() {
 		Set<String> names = users.keySet();
 		Set<User> users = new HashSet();
-		for(String name : names)
+		for (String name : names)
 			users.add(getUser(name));
 		return users;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Set<Group> getGroups() {
 		Set<String> names = groups.keySet();
 		Set<Group> groups = new HashSet();
-		for(String name : names)
+		for (String name : names)
 			groups.add(getGroup(name));
 		return groups;
 	}
-	
+
 	public Set<String> getUsersAsString() {
 		return users.keySet();
 	}
-	
+
 	public Set<String> getGroupsAsString() {
 		return groups.keySet();
 	}
-	
+
 	public void add(Calculable calculable) {
-		if(calculable instanceof User)
+		if (calculable instanceof User)
 			users.put(calculable.getName(), (User) calculable);
-		else if(calculable instanceof Group)
+		else if (calculable instanceof Group)
 			groups.put(calculable.getName(), (Group) calculable);
 		else
 			System.err.println("Calculable not instance of User or Group!");
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getAllCachedGroups() {
@@ -97,28 +97,28 @@ public abstract class WorldPermissions extends PermissionClass {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getPlayerNodes(String player) {
-		if(getUser(player) == null) {
+		if (getUser(player) == null) {
 			User us = new User(player, null, null, this);
 			add(us);
 			us.calculateEffectivePermissions();
 		}
 		return new ArrayList(getUser(player).getPermissionsAsString());
 	}
-	
+
 	@Override
 	public Set<Permission> getPlayerPermissions(String player) {
-		if(getUser(player) == null) {
+		if (getUser(player) == null) {
 			User us = new User(player, null, null, this);
 			add(us);
 			us.calculateEffectivePermissions();
 		}
 		return getUser(player).getEffectivePermissions();
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroupNodes(String group) {
-		if(getGroup(group) == null) {
+		if (getGroup(group) == null) {
 			Group gr = new Group(group, null, null, this);
 			add(gr);
 			gr.calculateEffectivePermissions();
@@ -129,7 +129,7 @@ public abstract class WorldPermissions extends PermissionClass {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroups(String player) {
-		if(getUser(player) == null) {
+		if (getUser(player) == null) {
 			User us = new User(player, getDefaultArrayList(), null, this);
 			add(us);
 			us.calculateEffectivePermissions();
@@ -140,18 +140,18 @@ public abstract class WorldPermissions extends PermissionClass {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroupGroups(String group) {
-		if(getGroup(group) == null) {
+		if (getGroup(group) == null) {
 			Group gr = new Group(group, null, null, this);
 			add(gr);
 			gr.calculateEffectivePermissions();
 		}
 		return new ArrayList(getGroup(group).getGroupsAsString());
 	}
-	
+
 	public abstract void load();
-	
+
 	public abstract void save();
-	
+
 	@Override
 	public void setGroups(String player, List<String> groups) {
 		User us = getUser(player);
@@ -171,7 +171,7 @@ public abstract class WorldPermissions extends PermissionClass {
 		gr.calculateEffectivePermissions();
 		save();
 	}
-	
+
 	@Override
 	public void setPlayerNodes(String player, List<String> nodes) {
 		User us = getUser(player);
@@ -181,7 +181,7 @@ public abstract class WorldPermissions extends PermissionClass {
 		us.calculateEffectivePermissions();
 		save();
 	}
-	
+
 	@Override
 	public void setGroupGroups(String group, List<String> groups) {
 		Group gr = getGroup(group);
@@ -192,4 +192,9 @@ public abstract class WorldPermissions extends PermissionClass {
 		save();
 	}
 
+	@Override
+	public WorldPermissions getWorldPermissions() {
+		return this;
+
+	}
 }

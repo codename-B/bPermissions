@@ -43,7 +43,7 @@ public class Permissions extends JavaPlugin {
 
 	private static WorldPermissionsManager perm;
 	private static String sworldCommand;
-	
+
 	private static Set<String> worldCommands = new HashSet<String>();
 
 	public static Set<String> getCommands() {
@@ -53,15 +53,19 @@ public class Permissions extends JavaPlugin {
 	public static InfoReader getInfoReader() {
 		return info;
 	}
+
 	public static Set<String> getListCommands() {
 		return listCommands;
 	}
+
 	public static String getWorldCommand() {
 		return sworldCommand;
 	}
+
 	public static Set<String> getWorldCommands() {
 		return worldCommands;
 	}
+
 	public static WorldPermissionsManager getWorldPermissionsManager() {
 		return Permissions.perm;
 	}
@@ -78,7 +82,7 @@ public class Permissions extends JavaPlugin {
 	public GlobalCommands globalExec;
 	public String hostname = "localhost";
 	public ImportManager im;
-	
+
 	public String listGroup;
 	public String listGroupGroup;
 	public String inGroup;
@@ -105,9 +109,9 @@ public class Permissions extends JavaPlugin {
 	public String removeNode;
 	public String removePlayerNode;
 	public String setGroup;
-	
+
 	public boolean suggestSimilarCommands;
-	
+
 	public static boolean idiotVariable = false;
 
 	public String username = "minecraft";
@@ -117,7 +121,7 @@ public class Permissions extends JavaPlugin {
 	public WorldCommands worldExec;
 
 	public WorldPermissionSet wps;
-	
+
 	private BackupPermissionsCommand bpc;
 
 	/**
@@ -140,7 +144,7 @@ public class Permissions extends JavaPlugin {
 					+ " tutorial\" in-game for help");
 			return true;
 		}
-		
+
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("reload")) {
 				if (sender.hasPermission("bPermissions.admin")
@@ -148,7 +152,7 @@ public class Permissions extends JavaPlugin {
 						|| !(sender instanceof Player)) {
 					for (PermissionSet ps : pm.getPermissionSets())
 						ps.reload();
-							
+
 					sender.sendMessage("Permissions reloaded.");
 					return true;
 				} else {
@@ -167,28 +171,31 @@ public class Permissions extends JavaPlugin {
 			sender.sendMessage("Are you sure you're doing that right?");
 			return true;
 		}
-		if(args.length > 1) {
-			if(args[0].equalsIgnoreCase("haspermission")) {
-				if(args.length == 2) {
+		if (args.length > 1) {
+			if (args[0].equalsIgnoreCase("haspermission")) {
+				if (args.length == 2) {
 					boolean perm = sender.hasPermission(args[1]);
-					sender.sendMessage(ChatColor.AQUA+args[1]+ChatColor.GREEN+":"+ChatColor.AQUA+perm);
+					sender.sendMessage(ChatColor.AQUA + args[1]
+							+ ChatColor.GREEN + ":" + ChatColor.AQUA + perm);
 					return true;
 				} else {
 					Player player = getServer().getPlayer(args[1]);
 					boolean perm = false;
-					if(player == null) {
+					if (player == null) {
 						perm = false;
-						//perm = HasPermission.has(args[1], getServer().getWorlds().get(0).getName(), args[2]);
+						// perm = HasPermission.has(args[1],
+						// getServer().getWorlds().get(0).getName(), args[2]);
 					} else {
 						perm = sender.hasPermission(args[2]);
 					}
-						PermissionClass.isRangePermission(args[2]);
-						sender.sendMessage(ChatColor.AQUA+args[2]+ChatColor.GREEN+":"+ChatColor.AQUA+perm);
-						return true;	
-					}
+					PermissionClass.isRangePermission(args[2]);
+					sender.sendMessage(ChatColor.AQUA + args[2]
+							+ ChatColor.GREEN + ":" + ChatColor.AQUA + perm);
+					return true;
 				}
+			}
 		}
-		
+
 		if (args.length > 0) {
 			if (args.length == 1) {
 				if (args[0].equals("helpme")) {
@@ -196,7 +203,7 @@ public class Permissions extends JavaPlugin {
 					sender.sendMessage("Attempted to setup default groups - please view your worldname.yml files");
 					return true;
 				}
-				if(args[0].equals("backup")) {
+				if (args[0].equals("backup")) {
 					bpc.backup();
 					sender.sendMessage("Permissions files backed up, share this zip with codename_B if you have issues.");
 					return true;
@@ -256,16 +263,16 @@ public class Permissions extends JavaPlugin {
 	}
 
 	@Override
-	public void onEnable() {		
-        
+	public void onEnable() {
+
 		com.arandomappdev.bukkitstats.CallHome.load(this);
 		registerPermissions();
-		
-        Help.load(this);
+
+		Help.load(this);
 		SuperPermissionHandler.setPlugin(this);
-		
+
 		bpc = new BackupPermissionsCommand(this);
-		
+
 		mirror = new HashMap<String, String>();
 
 		im = new ImportManager(this);
@@ -290,21 +297,20 @@ public class Permissions extends JavaPlugin {
 				new CommandPreprocess(this), Priority.Lowest, this);
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN,
 				pl, Priority.Low, this);
-		
+
 		// NEW THINGS
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_TELEPORT, pl, Priority.Monitor, this);
-		getServer().getPluginManager().registerEvent(
-				Event.Type.PLAYER_RESPAWN, pl, Priority.Monitor, this);
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN,
+				pl, Priority.Monitor, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_CHANGED_WORLD, pl, Priority.Monitor, this);
-		
+
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT, pl, Priority.Normal, this);
 		getServer().getPluginManager().registerEvent(
 				Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Normal, this);
 
-		
 		log("Enabled");
 	}
 
@@ -347,29 +353,33 @@ public class Permissions extends JavaPlugin {
 		demotePlayer = c.getString("commands.demote-player", "demote");
 
 		addGroup = c.getString("commands.add-group", "addgroup");
-		addGroupToGroup = c.getString("commands.add-group-to-group", "addgroupgroup");
+		addGroupToGroup = c.getString("commands.add-group-to-group",
+				"addgroupgroup");
 		setGroup = c.getString("commands.set-group", "setgroup");
 		removeGroup = c.getString("commands.remove-group", "rmgroup");
-		removeGroupFromGroup = c.getString("commands.remove-group-from-group", "rmgroupgroup");
+		removeGroupFromGroup = c.getString("commands.remove-group-from-group",
+				"rmgroupgroup");
 		listGroup = c.getString("commands.list-group", "lsgroup");
-		listGroupGroup = c.getString("commands.list-group-group", "lsgroupgroup");
+		listGroupGroup = c.getString("commands.list-group-group",
+				"lsgroupgroup");
 		inGroup = c.getString("commands.in-group", "ingroup");
 
 		addNode = c.getString("commands.add-node", "addnode");
 		addPlayerNode = c.getString("commands.add-player-node", "addplnode");
 		removeNode = c.getString("commands.remove-node", "rmnode");
-		removePlayerNode = c.getString("commands.remove-player-node", "rmplnode");
+		removePlayerNode = c.getString("commands.remove-player-node",
+				"rmplnode");
 		listNode = c.getString("commands.list-node", "lsnode");
 		listPlayerNode = c.getString("commands.list-player-node", "lsplnode");
 
 		idiotVariable = c.getBoolean("lowercase-all", false);
-		
+
 		c.setProperty("lowercase-all", idiotVariable);
-		
+
 		boolean debug = c.getBoolean("enable-debug", true);
 		Debugger.setDebugging(debug);
 		c.setProperty("enable-debug", debug);
-		
+
 		boolean mcma = c.getBoolean("enable-mcma", false);
 		MCMA.setDebugging(debug);
 		c.setProperty("enable-mcma", mcma);
@@ -377,12 +387,10 @@ public class Permissions extends JavaPlugin {
 		suggestSimilarCommands = c.getBoolean("suggest-similar-commands", true);
 
 		c.setProperty("cache-values", cacheValues);
-		
-		c.setProperty("permission-type",
-					c.getString("permission-type", "yaml"));
-			wps = WorldPermissionSet.getSet(c.getString("permission-type"));
-		
-		
+
+		c.setProperty("permission-type", c.getString("permission-type", "yaml"));
+		wps = WorldPermissionSet.getSet(c.getString("permission-type"));
+
 		c.removeProperty("use-bml");
 		c.removeProperty("override-player");
 		c.removeProperty("cache-values");
@@ -416,7 +424,7 @@ public class Permissions extends JavaPlugin {
 		c.removeProperty("format-chat");
 
 		c.save();
-		
+
 		sworldCommand = this.worldCommand;
 
 		worldCommands.add(this.globalCommand);
@@ -428,7 +436,7 @@ public class Permissions extends JavaPlugin {
 		commands.add(this.removeGroup);
 		commands.add(this.addGroupToGroup);
 		commands.add(this.removeGroupFromGroup);
-		
+
 		commands.add(this.addNode);
 		commands.add(this.removeNode);
 		commands.add(this.addPlayerNode);
