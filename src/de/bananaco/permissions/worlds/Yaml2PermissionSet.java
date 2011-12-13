@@ -122,10 +122,12 @@ public class Yaml2PermissionSet extends WorldPermissions {
 			ufile.createNewFile();
 			gfile.createNewFile();
 		}
+		String def = getDefaultGroup();
+		
 		uconfig = new YamlConfiguration();
 		gconfig = new YamlConfiguration();
 		
-		gconfig.set("default", getDefaultGroup());
+		gconfig.set("default", def);
 
 		Set<User> usr = getUsers();
 		// Sort them :D

@@ -45,26 +45,25 @@ public class ForNoobs {
 		String adminGroup = "admin";
 
 		ArrayList<String> admins = new ArrayList<String>();
+		
+		List<String> def = new ArrayList<String>();
+		List<String> mod = new ArrayList<String>();
+		List<String> adm = new ArrayList<String>();
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				new DataInputStream(new FileInputStream("ops.txt"))));
 		String line = "";
 		while ((line = br.readLine()) != null)
 			admins.add(line);
 		// Basic default setup
-		ps.addNode("prefix.0.&" + ChatColor.YELLOW.getCode() + "default",
-				defaultGroup);
-		ps.addNode("suffix.0.&" + ChatColor.GREEN.getCode() + "imnew",
-				defaultGroup);
+		def.add("prefix.0.&" + ChatColor.YELLOW.getCode() + "default");
+		def.add("suffix.0.&" + ChatColor.GREEN.getCode() + "imnew");
 		// Basic moderator setup
-		ps.addNode("prefix.10.&" + ChatColor.DARK_RED.getCode() + "moderator",
-				moderatorGroup);
-		ps.addNode("suffix.10.&" + ChatColor.LIGHT_PURPLE.getCode() + "ihelp",
-				moderatorGroup);
+		mod.add("prefix.10.&" + ChatColor.DARK_RED.getCode() + "moderator");
+		mod.add("suffix.10.&" + ChatColor.LIGHT_PURPLE.getCode() + "ihelp");
 		// Basic admin setup
-		ps.addNode("prefix.100.&" + ChatColor.RED.getCode() + "admin",
-				adminGroup);
-		ps.addNode("suffix.100.&" + ChatColor.DARK_PURPLE.getCode()
-				+ "over9000", adminGroup);
+		adm.add("prefix.100.&" + ChatColor.RED.getCode() + "admin");
+		adm.add("suffix.100.&" + ChatColor.DARK_PURPLE.getCode() + "over9000");
 		// Add the online admins
 		for (String player : admins) {
 			String name = PlayerCase.correctCase(player);
@@ -82,10 +81,6 @@ public class ForNoobs {
 		// Add the example mod
 		ps.addGroup("Derpy", defaultGroup);
 		ps.addGroup("Derpy", moderatorGroup);
-
-		List<String> def = new ArrayList<String>();
-		List<String> mod = new ArrayList<String>();
-		List<String> adm = new ArrayList<String>();
 
 		// Add the permissions to the admins
 		for (String permission : getPermissions()) {

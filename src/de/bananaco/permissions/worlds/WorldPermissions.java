@@ -10,6 +10,7 @@ import java.util.Set;
 import org.bukkit.World;
 
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.util.Calculable;
 import de.bananaco.permissions.util.Group;
 import de.bananaco.permissions.util.Permission;
@@ -184,6 +185,9 @@ public abstract class WorldPermissions extends PermissionClass {
 		us.calculateEffectivePermissions();
 		save();
 		us.clearValues();
+		log(parse(groups) + " set to player:" + player);
+		MCMA.getDebugger().log(getWorld().getName());
+		setupPlayer(player);
 	}
 
 	@Override
@@ -195,6 +199,9 @@ public abstract class WorldPermissions extends PermissionClass {
 		gr.calculateEffectivePermissions();
 		save();
 		gr.clearValues();
+		log(parse(nodes) + " set to group:" + group);
+		MCMA.getDebugger().log(getWorld().getName());
+		setupPlayers();
 	}
 
 	@Override

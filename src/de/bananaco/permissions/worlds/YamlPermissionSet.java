@@ -113,9 +113,11 @@ public class YamlPermissionSet extends WorldPermissions {
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
+		String def = getDefaultGroup();
+		
 		config = new YamlConfiguration();
 
-		config.set("default", getDefaultGroup());
+		config.set("default", def);
 		
 		Set<User> usr = getUsers();
 		// Sort them :D

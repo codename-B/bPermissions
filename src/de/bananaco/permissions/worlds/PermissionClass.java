@@ -361,37 +361,6 @@ public abstract class PermissionClass implements PermissionSet {
 	}
 
 	@Override
-	public void setGroups(String player, List<String> groups) {
-		player = caseCheck(player);
-
-		List<String> sanity = sanitise(groups);
-		if (sanity.size() < groups.size()) {
-			log("Duplicates detected!");
-			setGroups(player, sanity);
-			return;
-		}
-		log(parse(groups) + " set to player:" + player);
-		MCMA.getDebugger().log(getWorld().getName());
-		setupPlayer(player);
-
-	}
-
-	@Override
-	public void setNodes(String group, List<String> nodes) {
-		group = caseCheck(group);
-
-		List<String> sanity = sanitise(nodes);
-		if (sanity.size() < nodes.size()) {
-			log("Duplicates detected!");
-			setNodes(group, sanity);
-			return;
-		}
-		log(parse(nodes) + " set to group:" + group);
-		MCMA.getDebugger().log(getWorld().getName());
-		setupPlayers();
-	}
-
-	@Override
 	public final void setup() {
 		if (!setup) {
 			log("Setting up config for world:" + world.getName());
