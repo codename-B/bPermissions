@@ -22,8 +22,8 @@ public class Yaml2PermissionSet extends WorldPermissions {
 
 	private static final String USERS = "users";
 	
-	private YamlConfiguration uconfig;
-	private YamlConfiguration gconfig;
+	private YamlConfiguration uconfig = new YamlConfiguration();
+	private YamlConfiguration gconfig = new YamlConfiguration();
 	
 	private final File ufile = new File("plugins/bPermissions/" + getWorldName()
 			+ "/users.yml");

@@ -82,8 +82,7 @@ public class WorldPermissionsManager {
 	 */
 	public PermissionSet getPermissionSet(String world) {
 		if (!this.engaged) {
-			System.err
-					.println("[bPermissions] WorldPermissionsManager not engaged!");
+			System.err.println("[bPermissions] WorldPermissionsManager not engaged!");
 			return null;
 		}
 		if (jp.mirror.containsKey(world) && jp.mirror.get(world) != null) {
@@ -100,6 +99,7 @@ public class WorldPermissionsManager {
 			PermissionSet p = jp.wps.get(w, jp);
 			ps.put(world, p);
 			log("Created PermissionSet for world:" + world);
+			p.getWorldPermissions().load();
 			return p;
 		}
 	}
