@@ -2,6 +2,8 @@ package de.bananaco.permissions.worlds;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -121,8 +123,18 @@ public class Yaml2PermissionSet extends WorldPermissions {
 			gfile.createNewFile();
 		}
 
-		Set<User> users = getUsers();
-
+		Set<User> usr = getUsers();
+		// Sort them :D
+		List<User> users = new ArrayList<User>(usr);
+		Collections.sort(users,
+                new Comparator<User>()
+                {
+                    public int compare(User f1, User f2)
+                    {
+                        return f1.getName().compareTo(f2.getName());
+                    }        
+                });
+		
 		for (User user : users) {
 			String name = user.getName();
 			uconfig.set(USERS + "." + name + "." + PERMISSIONS, new ArrayList(
@@ -132,8 +144,18 @@ public class Yaml2PermissionSet extends WorldPermissions {
 			
 		}
 
-		Set<Group> groups = getGroups();
-
+		Set<Group> grp = getGroups();
+		// Sort them :D
+		List<Group> groups = new ArrayList<Group>(grp);
+		Collections.sort(groups,
+                new Comparator<Group>()
+                {
+                    public int compare(Group f1, Group f2)
+                    {
+                        return f1.getName().compareTo(f2.getName());
+                    }        
+                });
+		
 		for (Group group : groups) {
 			String name = group.getName();
 			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, new ArrayList(

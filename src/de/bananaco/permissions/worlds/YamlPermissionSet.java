@@ -2,6 +2,8 @@ package de.bananaco.permissions.worlds;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +19,8 @@ public class YamlPermissionSet extends WorldPermissions {
 
 	private static final String GROUPS = "groups";
 	private static final String PERMISSIONS = "permissions";
-
 	private static final String USERS = "users";
+	
 	private YamlConfiguration config;
 	private final File file = new File("plugins/bPermissions/" + getWorldName()
 			+ ".yml");
@@ -112,8 +114,18 @@ public class YamlPermissionSet extends WorldPermissions {
 			file.createNewFile();
 		}
 
-		Set<User> users = getUsers();
-
+		Set<User> usr = getUsers();
+		// Sort them :D
+		List<User> users = new ArrayList<User>(usr);
+		Collections.sort(users,
+                new Comparator<User>()
+                {
+                    public int compare(User f1, User f2)
+                    {
+                        return f1.getName().compareTo(f2.getName());
+                    }        
+                });
+		
 		for (User user : users) {
 			String name = user.getName();
 			config.set(USERS + "." + name + "." + PERMISSIONS, new ArrayList(
@@ -123,8 +135,18 @@ public class YamlPermissionSet extends WorldPermissions {
 			
 		}
 
-		Set<Group> groups = getGroups();
-
+		Set<Group> grp = getGroups();
+		// Sort them :D
+		List<Group> groups = new ArrayList<Group>(grp);
+		Collections.sort(groups,
+                new Comparator<Group>()
+                {
+                    public int compare(Group f1, Group f2)
+                    {
+                        return f1.getName().compareTo(f2.getName());
+                    }        
+                });
+		
 		for (Group group : groups) {
 			String name = group.getName();
 			config.set(GROUPS + "." + name + "." + PERMISSIONS, new ArrayList(
