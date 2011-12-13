@@ -1,11 +1,9 @@
 package de.bananaco.permissions.worlds;
 
-import java.util.Set;
-
+import java.util.Map;
 import org.bukkit.entity.Player;
 
 import de.bananaco.permissions.Permissions;
-import de.bananaco.permissions.util.Permission;
 import de.bananaco.permissions.util.User;
 
 public class HasPermission {
@@ -18,27 +16,19 @@ public class HasPermission {
 		node = node.toLowerCase();
 		WorldPermissions wp = Permissions.getWorldPermissionsManager().getPermissionSet(world).getWorldPermissions();
 		User user = wp.getUser(player);
-		Set<Permission> perms = user.getEffectivePermissions();
+		Map<String, Boolean> perms = user.getMappedPermissions();
 		
-		if(perms.contains(node))
-			return get(perms, node);
+		if(perms.containsKey(node))
+			return perms.get(node);
 		
 		String permission = node;
 		int index = permission.lastIndexOf('.');
 		while (index >= 0) {
 			permission = permission.substring(0, index);
 			String wildcard = permission + ".*";
-			if(perms.contains(wildcard))
-				return get(perms, wildcard);
+			if(perms.containsKey(wildcard))
+				return perms.get(wildcard);
 			index = permission.lastIndexOf('.');
-		}
-		return false;
-	}
-	
-	private static boolean get(Set<Permission> perms, String node) {
-		for(Permission perm : perms) {
-			if(perm.nameLowerCase().equals(node))
-				return perm.isTrue();
 		}
 		return false;
 	}

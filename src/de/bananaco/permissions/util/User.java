@@ -6,7 +6,7 @@ import java.util.Set;
 
 import de.bananaco.permissions.worlds.WorldPermissions;
 
-public class User extends Calculable {
+public class User extends MapCalculable {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public User(String name, List<String> groups, Set<Permission> permissions,
