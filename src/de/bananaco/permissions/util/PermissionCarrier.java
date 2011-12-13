@@ -2,7 +2,14 @@ package de.bananaco.permissions.util;
 
 import java.util.HashSet;
 import java.util.Set;
-
+/**
+ * This class is any object which carries Permissions.
+ * 
+ * Permissions are stored in a Set<Permission> where Permission is a custom Permission object
+ * containing a String and a Boolean rather than the more heavyweight Bukkit object.
+ * 
+ * Optimisation ftw.
+ */
 public abstract class PermissionCarrier extends MetaData {
 
 	private final Set<Permission> permissions;

@@ -4,7 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.bananaco.permissions.worlds.WorldPermissions;
-
+/**
+ * This class is any object which carries groups.
+ * The group references are stored by String, rather than directly
+ * as this allows for full loading of all groups before the calculation
+ * done by getEffectivePermissions() in Calculable without the recursive nightmare that would ensue.
+ */
 public abstract class GroupCarrier extends PermissionCarrier {
 
 	private final Set<String> groups;

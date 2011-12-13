@@ -231,8 +231,16 @@ public interface PermissionSet {
 	 * Sets up the online players in that world
 	 */
 	public void setupPlayers();
-
+	/**
+	 * Add a per-player permission node to the named player
+	 * @param node
+	 * @param player
+	 */
 	public void addPlayerNode(String node, String player);
-	
+	/**
+	 * Remove a per-player permission node from the named player
+	 * @param node
+	 * @param player
+	 */
 	public void removePlayerNode(String node, String player);
 }

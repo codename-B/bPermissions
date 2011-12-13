@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import de.bananaco.permissions.worlds.WorldPermissions;
-
+/**
+ * User extends MapCalculable to make permission checks in the HasPermission class considerably faster.
+ * A slight increase in memory usage for a dramatic increase in speed is definately a worthwhile trade-off.
+ */
 public class User extends MapCalculable {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

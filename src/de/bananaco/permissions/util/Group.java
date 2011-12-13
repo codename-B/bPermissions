@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import de.bananaco.permissions.worlds.WorldPermissions;
-
+/**
+ * The Group object extends Calculable which allows recursive inheritance of unlimited depth.
+ * This is the new bPermissions, and it is awesome.
+ */
 public class Group extends Calculable {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
