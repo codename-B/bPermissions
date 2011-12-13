@@ -47,7 +47,10 @@ public class WorldPermissionsManager {
 		for (World world : jp.getServer().getWorlds()) {
 			PermissionSet p = null;
 			p = getPermissionSet(world);
+			if(p != null)
 			p.setup();
+			else
+			System.err.println(world.getName()+" has a null PermissionSet!");
 
 			/*
 			 * String wName = world.getName(); if
