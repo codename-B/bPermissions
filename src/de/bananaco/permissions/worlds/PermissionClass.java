@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.SuperPermissionHandler;
 import de.bananaco.permissions.debug.Debugger;
-import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.interfaces.PermissionSet;
 /**
  * The main api implementation (implements most of PermissionSet)
@@ -326,19 +325,6 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		setPlayerNodes(player, playerNodes);
-	}
-
-	private List<String> sanitise(List<String> input) {
-		Set<String> san = new HashSet<String>();
-		List<String> output = new ArrayList<String>();
-		for (String in : input) {
-			if (!san.contains(in)) {
-				san.add(in);
-				output.add(in);
-			}
-		}
-		san.clear();
-		return output;
 	}
 
 	@Override

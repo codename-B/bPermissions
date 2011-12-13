@@ -174,6 +174,9 @@ public abstract class WorldPermissions extends PermissionClass {
 		gr.calculateEffectivePermissions();
 		save();
 		gr.clearValues();
+		log(parse(groups) + " set to group:" + group);
+		MCMA.getDebugger().log(getWorld().getName());
+		setupPlayers();
 	}
 
 	@Override
@@ -213,5 +216,8 @@ public abstract class WorldPermissions extends PermissionClass {
 		us.calculateEffectivePermissions();
 		save();
 		us.clearValues();
+		log(parse(nodes) + " set to player:" + player);
+		MCMA.getDebugger().log(getWorld().getName());
+		setupPlayer(player);
 	}
 }
