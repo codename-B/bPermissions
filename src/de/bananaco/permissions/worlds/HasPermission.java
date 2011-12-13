@@ -7,7 +7,7 @@ import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.util.User;
 /**
  * Used for checking offline player permissions
- * And also for anyone that doesn't want to use the SuperPerms api for checking permissions!
+ * And also for anyone that doesn't want to use the SuperPerms api for checking permissions
  */
 public class HasPermission {
 	
