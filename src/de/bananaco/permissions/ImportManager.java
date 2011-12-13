@@ -101,8 +101,10 @@ public class ImportManager {
 					
 					if(p != null)
 						user.getPermissions().addAll(Permission.loadFromString(p));
-					if(i != null)
+					if(i != null) {
+						user.getGroupsAsString().clear();
 						user.getGroupsAsString().addAll(i);
+					}
 					} catch (Exception e) {
 						System.err.println("Error importing user: "+player);
 					}

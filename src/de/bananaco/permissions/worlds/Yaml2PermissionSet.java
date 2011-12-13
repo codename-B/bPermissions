@@ -145,7 +145,6 @@ public class Yaml2PermissionSet extends WorldPermissions {
 					user.getPermissionsAsString()));
 			uconfig.set(USERS + "." + name + "." + GROUPS,
 					new ArrayList(user.getGroupsAsString()));
-			
 		}
 
 		Set<Group> grp = getGroups();

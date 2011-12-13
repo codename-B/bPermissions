@@ -83,22 +83,12 @@ public abstract class WorldPermissions extends PermissionClass {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroupGroups(String group) {
-		if (getGroup(group) == null) {
-			Group gr = new Group(group, null, null, this);
-			add(gr);
-			gr.calculateEffectivePermissions();
-		}
 		return new ArrayList(getGroup(group).getGroupsAsString());
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroupNodes(String group) {
-		if (getGroup(group) == null) {
-			Group gr = new Group(group, null, null, this);
-			add(gr);
-			gr.calculateEffectivePermissions();
-		}
 		return new ArrayList(getGroup(group).getPermissionsAsString());
 	}
 
@@ -114,11 +104,6 @@ public abstract class WorldPermissions extends PermissionClass {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getGroups(String player) {
-		if (getUser(player) == null) {
-			User us = new User(player, getDefaultArrayList(), null, this);
-			add(us);
-			us.calculateEffectivePermissions();
-		}
 		return new ArrayList(getUser(player).getGroupsAsString());
 	}
 
@@ -129,27 +114,17 @@ public abstract class WorldPermissions extends PermissionClass {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<String> getPlayerNodes(String player) {
-		if (getUser(player) == null) {
-			User us = new User(player, null, null, this);
-			add(us);
-			us.calculateEffectivePermissions();
-		}
 		return new ArrayList(getUser(player).getPermissionsAsString());
 	}
 
 	@Override
 	public Set<Permission> getPlayerPermissions(String player) {
-		if (getUser(player) == null) {
-			User us = new User(player, null, null, this);
-			add(us);
-			us.calculateEffectivePermissions();
-		}
 		return getUser(player).getEffectivePermissions();
 	}
 
 	public User getUser(String name) {
 		if (!users.containsKey(name)) {
-			User us = new User(name, null, null, this);
+			User us = new User(name, getDefaultArrayList(), null, this);
 			add(us);
 			us.calculateEffectivePermissions();
 		}
