@@ -68,6 +68,11 @@ public abstract class WorldPermissions extends PermissionClass {
 	}
 
 	public Group getGroup(String name) {
+		if (!groups.containsKey(name)) {
+			Group gr = new Group(name, null, null, this);
+			add(gr);
+			gr.calculateEffectivePermissions();
+		}
 		return groups.get(name);
 	}
 
@@ -139,6 +144,11 @@ public abstract class WorldPermissions extends PermissionClass {
 	}
 
 	public User getUser(String name) {
+		if (!users.containsKey(name)) {
+			User us = new User(name, null, null, this);
+			add(us);
+			us.calculateEffectivePermissions();
+		}
 		return users.get(name);
 	}
 

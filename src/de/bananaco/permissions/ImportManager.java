@@ -2,12 +2,19 @@ package de.bananaco.permissions;
 
 import java.io.File;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import de.bananaco.permissions.oldschool.Configuration;
 
 import de.bananaco.permissions.interfaces.PermissionSet;
+import de.bananaco.permissions.util.Group;
+import de.bananaco.permissions.util.Permission;
+import de.bananaco.permissions.util.User;
+import de.bananaco.permissions.worlds.WorldPermissions;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
 public class ImportManager {
@@ -54,35 +61,69 @@ public class ImportManager {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void importPermissions3() {
 
 		WorldPermissionsManager wpm = Permissions.getWorldPermissionsManager();
 		for (World world : plugin.getServer().getWorlds()) {
 			PermissionSet ps = wpm.getPermissionSet(world);
+			WorldPermissions wp = ps.getWorldPermissions();
+			
 			File users = new File("plugins/Permissions/" + world.getName()
 					+ "/users.yml");
 			File groups = new File("plugins/Permissions/" + world.getName()
 					+ "/groups.yml");
-			Configuration uConfig = new Configuration(users);
-			Configuration gConfig = new Configuration(groups);
-			uConfig.load();
-			gConfig.load();
-			List<String> usersList = uConfig.getKeys("users");
-			List<String> groupsList = gConfig.getKeys("groups");
+			
+			YamlConfiguration uConfig = new YamlConfiguration();
+			YamlConfiguration gConfig = new YamlConfiguration();
+			try {
+			uConfig.load(users);
+			gConfig.load(groups);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
+			ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
+			
+			Set<String> usersList = null;
+			if(usConfig != null)
+				usersList = usConfig.getKeys(false);
+			Set<String> groupsList = null;
+			if(grConfig != null)
+				groupsList = grConfig.getKeys(false);
+			
 			if (usersList != null)
 				for (String player : usersList) {
-					for (String group : uConfig.getStringList("users." + player
-							+ ".groups", null)) {
-						ps.addGroup(player, group);
+					User user = wp.getUser(player);
+					try {
+					List<String> p = uConfig.getList("users."+player+".permissions");
+					List<String> i = uConfig.getList("users."+player+".groups");
+					
+					if(p != null)
+						user.getPermissions().addAll(Permission.loadFromString(p));
+					if(i != null)
+						user.getGroupsAsString().addAll(i);
+					} catch (Exception e) {
+						System.err.println("Error importing user: "+player);
 					}
 				}
+			
 			if (groupsList != null)
 				for (String group : groupsList) {
-					for (String node : gConfig.getStringList("groups." + group
-							+ ".permissions", null)) {
-						ps.addNode(node, group);
+					Group gr = wp.getGroup(group);
+					try {
+					List<String> p = gConfig.getStringList("groups."+group+".permissions");
+					List<String> i = gConfig.getStringList("groups."+group+".inheritance");
+					
+					if(p != null)
+						gr.getPermissions().addAll(Permission.loadFromString(p));
+					if(i != null)
+						gr.getGroupsAsString().addAll(i);
+					} catch (Exception e) {
+						System.err.println("Error importing group: "+group);
 					}
 				}
+			wp.save();
 		}
 	}
 

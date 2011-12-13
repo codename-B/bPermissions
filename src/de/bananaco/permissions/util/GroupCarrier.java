@@ -10,10 +10,13 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	private final Set<String> groups;
 	private final WorldPermissions parent;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected GroupCarrier(Set<String> groups, Set<Permission> permissions,
 			WorldPermissions parent) {
 		super(permissions);
 		this.parent = parent;
+		if(groups == null)
+			groups = new HashSet();
 		this.groups = groups;
 	}
 

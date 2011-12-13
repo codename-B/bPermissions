@@ -7,7 +7,7 @@ import de.bananaco.permissions.interfaces.PermissionSet;
 
 public enum WorldPermissionSet {
 
-	BML("bml"), JSON("json"), SQL("sql"), YAML("yaml");
+	YAML("yaml"), YAML2("yaml2");
 
 	public static WorldPermissionSet getSet(String type) {
 		if (type == null) {
@@ -16,6 +16,9 @@ public enum WorldPermissionSet {
 		} else if (type.equals("yaml")) {
 			return WorldPermissionSet.YAML;
 		}
+		else if (type.equals("yaml2")) {
+				return WorldPermissionSet.YAML2;
+			}
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;
 	}
@@ -32,6 +35,8 @@ public enum WorldPermissionSet {
 			return null;
 		} else if (type.equals("yaml")) {
 			return new YamlPermissionSet(world, permissions);
+		} else if (type.equals("yaml2")) {
+			return new Yaml2PermissionSet(world, permissions);
 		}
 		System.err.println("[bPermissions] What happened Jim?");
 		return null;
