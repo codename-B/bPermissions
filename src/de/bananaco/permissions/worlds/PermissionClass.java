@@ -14,8 +14,15 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import de.bananaco.permissions.Permissions;
+import de.bananaco.permissions.SuperPermissionHandler;
+import de.bananaco.permissions.debug.Debugger;
+import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.interfaces.PermissionSet;
-
+/**
+ * The main api implementation (implements most of PermissionSet)
+ * 
+ * The main legwork besides this is done in WorldPermissions
+ */
 public abstract class PermissionClass implements PermissionSet {
 	private static Pattern p = Pattern.compile("\\[[0-9]*-[0-9]*\\]");
 	public static List<String> getRangePermissions(String input) {
@@ -235,7 +242,7 @@ public abstract class PermissionClass implements PermissionSet {
 	 * @param input
 	 */
 	public final void log(Object input) {
-		// Debugger.getDebugger().log(String.valueOf(input));
+		Debugger.getDebugger().log(String.valueOf(input));
 	}
 
 	public final String parse(List<String> rList) {
@@ -364,9 +371,9 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		log(parse(groups) + " set to player:" + player);
-		// MCMA.getDebugger().log(getWorld().getName());
+		MCMA.getDebugger().log(getWorld().getName());
 		setupPlayer(player);
-		// Permissions.getInfoReader().clear();
+
 	}
 
 	@Override
@@ -380,9 +387,8 @@ public abstract class PermissionClass implements PermissionSet {
 			return;
 		}
 		log(parse(nodes) + " set to group:" + group);
-		// MCMA.getDebugger().log(getWorld().getName());
+		MCMA.getDebugger().log(getWorld().getName());
 		setupPlayers();
-		// Permissions.getInfoReader().clear();
 	}
 
 	@Override
@@ -396,7 +402,7 @@ public abstract class PermissionClass implements PermissionSet {
 
 	@Override
 	public final void setupPlayer(Player player) {
-		// SuperPermissionHandler.setupPlayer(player, getPlayerNodes(player));
+		SuperPermissionHandler.setupPlayer(player);
 	}
 
 	@Override
@@ -409,9 +415,9 @@ public abstract class PermissionClass implements PermissionSet {
 	@Override
 	public final void setupPlayers() {
 		long start = System.currentTimeMillis();
-		for (Player player : world.getPlayers()) {
+		for (Player player : world.getPlayers())
 			setupPlayer(player);
-		}
+		
 		long finish = System.currentTimeMillis() - start;
 		log("Setup players for world:" + getWorld().getName() + " took "
 				+ finish + "ms.");

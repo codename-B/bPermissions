@@ -8,7 +8,11 @@ import org.bukkit.World;
 
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.interfaces.PermissionSet;
-
+/**
+ * This really hasn't changed much since about 1.8
+ * 
+ * The basic WorldPermissionsManager. It handles mirroring, and loading of PermissionSets.
+ */
 public class WorldPermissionsManager {
 	private boolean engaged = false;
 	/**

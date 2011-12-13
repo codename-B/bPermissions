@@ -14,7 +14,11 @@ import de.bananaco.permissions.util.Calculable;
 import de.bananaco.permissions.util.Group;
 import de.bananaco.permissions.util.Permission;
 import de.bananaco.permissions.util.User;
-
+/**
+ * Here's the main legwork done, literally all you have to do now
+ * to make a way of storing permissions is provide a way to serialize and a way to
+ * deserialize permissions.
+ */
 public abstract class WorldPermissions extends PermissionClass {
 
 	private final Map<String, Group> groups;
