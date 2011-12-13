@@ -21,6 +21,7 @@ public class Yaml2PermissionSet extends WorldPermissions {
 	private static final String PERMISSIONS = "permissions";
 
 	private static final String USERS = "users";
+	
 	private YamlConfiguration uconfig;
 	private YamlConfiguration gconfig;
 	
@@ -35,7 +36,9 @@ public class Yaml2PermissionSet extends WorldPermissions {
 
 	@Override
 	public String getDefaultGroup() {
+		if(gconfig != null)
 		return gconfig.getString("default", "default");
+		return "default";
 	}
 
 	public void load() {

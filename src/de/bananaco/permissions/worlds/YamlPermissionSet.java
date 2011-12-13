@@ -31,7 +31,9 @@ public class YamlPermissionSet extends WorldPermissions {
 
 	@Override
 	public String getDefaultGroup() {
+		if(config != null)
 		return config.getString("default", "default");
+		return "default";
 	}
 
 	public void load() {
