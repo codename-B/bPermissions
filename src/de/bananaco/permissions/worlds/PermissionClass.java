@@ -174,7 +174,7 @@ public abstract class PermissionClass implements PermissionSet {
 		setPlayerNodes(player, playerNodes);
 	}
 
-	public String caseCheck(String input) {
+	public static String caseCheck(String input) {
 		String output = input;
 		if (Permissions.idiotVariable)
 			output = output.toLowerCase();

@@ -29,7 +29,7 @@ public class Permission {
 	}
 
 	public int hashCode() {
-		return name.hashCode();
+		return nameLowerCase().hashCode();
 	}
 
 	public boolean isTrue() {
@@ -38,6 +38,10 @@ public class Permission {
 
 	public String name() {
 		return name;
+	}
+	
+	public String nameLowerCase() {
+		return name.toLowerCase();
 	}
 
 	public String toString() {

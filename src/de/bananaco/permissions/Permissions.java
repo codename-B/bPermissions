@@ -319,6 +319,7 @@ public class Permissions extends JavaPlugin {
 		pm = new WorldPermissionsManager(this);
 		perm = pm;
 		info = new InfoReader();
+		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
 	}
 
 	private void registerPermissions() {
