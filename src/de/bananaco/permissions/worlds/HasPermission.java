@@ -5,7 +5,10 @@ import org.bukkit.entity.Player;
 
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.util.User;
-
+/**
+ * Used for checking offline player permissions
+ * And also for anyone that doesn't want to use the SuperPerms api for checking permissions
+ */
 public class HasPermission {
 	
 	public static boolean has(Player player, String node) {
@@ -30,6 +33,8 @@ public class HasPermission {
 				return perms.get(wildcard);
 			index = permission.lastIndexOf('.');
 		}
+		if(perms.containsKey("*"))
+			return perms.get("*");
 		return false;
 	}
 
