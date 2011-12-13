@@ -155,7 +155,7 @@ public class YamlPermissionSet extends WorldPermissions {
 			config.set(GROUPS + "." + name + "." + GROUPS,
 					new ArrayList(group.getGroupsAsString()));
 		}
-
+		config.set("default", getDefaultGroup());
 		config.save(file);
 	}
 

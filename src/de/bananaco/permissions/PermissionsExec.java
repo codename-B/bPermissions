@@ -24,8 +24,6 @@ public class PermissionsExec {
 	}
 
 	public boolean exec(CommandSender sender, String[] args, String world) {
-		if(args.length<2)
-			return false;
 		String perm = "bPermissions.admin." + args[1];
 		if (sender instanceof Player) {
 			if (!(sender.hasPermission(perm) || sender

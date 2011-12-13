@@ -165,7 +165,8 @@ public class Yaml2PermissionSet extends WorldPermissions {
 			gconfig.set(GROUPS + "." + name + "." + GROUPS,
 					new ArrayList(group.getGroupsAsString()));
 		}
-
+		
+		gconfig.set("default", getDefaultGroup());
 		uconfig.save(ufile);
 		gconfig.save(gfile);
 	}

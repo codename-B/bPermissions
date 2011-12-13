@@ -239,7 +239,7 @@ public class Permissions extends JavaPlugin {
 					}
 				}
 			}
-			if(args.length>3)
+			if(args.length>=3)
 			if (args[0].equalsIgnoreCase(this.globalCommand))
 				return this.globalExec.onCommand(sender, command, label, args);
 			else if (args[0].equalsIgnoreCase(this.worldCommand))
