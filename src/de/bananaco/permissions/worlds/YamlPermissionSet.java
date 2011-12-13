@@ -115,6 +115,8 @@ public class YamlPermissionSet extends WorldPermissions {
 		}
 		config = new YamlConfiguration();
 
+		config.set("default", getDefaultGroup());
+		
 		Set<User> usr = getUsers();
 		// Sort them :D
 		List<User> users = new ArrayList<User>(usr);
@@ -155,7 +157,7 @@ public class YamlPermissionSet extends WorldPermissions {
 			config.set(GROUPS + "." + name + "." + GROUPS,
 					new ArrayList(group.getGroupsAsString()));
 		}
-		config.set("default", getDefaultGroup());
+
 		config.save(file);
 	}
 

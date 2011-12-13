@@ -124,6 +124,8 @@ public class Yaml2PermissionSet extends WorldPermissions {
 		}
 		uconfig = new YamlConfiguration();
 		gconfig = new YamlConfiguration();
+		
+		gconfig.set("default", getDefaultGroup());
 
 		Set<User> usr = getUsers();
 		// Sort them :D
@@ -166,7 +168,6 @@ public class Yaml2PermissionSet extends WorldPermissions {
 					new ArrayList(group.getGroupsAsString()));
 		}
 		
-		gconfig.set("default", getDefaultGroup());
 		uconfig.save(ufile);
 		gconfig.save(gfile);
 	}
