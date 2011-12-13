@@ -122,6 +122,8 @@ public class Yaml2PermissionSet extends WorldPermissions {
 			ufile.createNewFile();
 			gfile.createNewFile();
 		}
+		uconfig = new YamlConfiguration();
+		gconfig = new YamlConfiguration();
 
 		Set<User> usr = getUsers();
 		// Sort them :D
@@ -157,6 +159,7 @@ public class Yaml2PermissionSet extends WorldPermissions {
                 });
 		
 		for (Group group : groups) {
+			System.out.println(group.getName()+" saving");
 			String name = group.getName();
 			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, new ArrayList(
 					group.getPermissionsAsString()));
