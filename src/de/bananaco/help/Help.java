@@ -24,7 +24,7 @@ public class Help {
 				br.write(help);
 				br.close();
 				System.out.println("[Help] Help file for " + name
-						+ " saved to " + helpFile.getName());
+						+ " saved in " + helpFile.getName());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
