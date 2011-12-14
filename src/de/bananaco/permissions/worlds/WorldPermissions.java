@@ -40,6 +40,7 @@ public abstract class WorldPermissions extends PermissionClass {
 		users.clear();
 		load();
 		save();
+		setupPlayers();
 	}
 
 	/**
