@@ -39,7 +39,7 @@ public class MapCalculable extends Calculable {
 		super.calculateEffectivePermissions();
 		permissions.clear();
 		for(Permission perm : getEffectivePermissions()) {
-			permissions.put(perm.name(), perm.isTrue());
+			permissions.put(perm.nameLowerCase(), perm.isTrue());
 		}
 	}
 	

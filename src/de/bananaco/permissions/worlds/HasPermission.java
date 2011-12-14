@@ -10,11 +10,27 @@ import de.bananaco.permissions.util.User;
  * And also for anyone that doesn't want to use the SuperPerms api for checking permissions!
  */
 public class HasPermission {
-	
+	/**
+	 * Returns an accurate permission
+	 * Based on the player world
+	 * and how bPermissions wants to handle
+	 * permission nodes
+	 * @param player
+	 * @param node
+	 * @return boolean
+	 */
 	public static boolean has(Player player, String node) {
 		return has(player.getName(), player.getWorld().getName(), node);
 	}
-	
+	/**
+	 * Returns an accurate permission
+	 * Based on the player world
+	 * and how bPermissions wants to handle
+	 * permission nodes
+	 * @param player
+	 * @param node
+	 * @return boolean
+	 */	
 	public static boolean has(String player, String world, String node) {
 		node = node.toLowerCase();
 		WorldPermissions wp = Permissions.getWorldPermissionsManager().getPermissionSet(world).getWorldPermissions();
