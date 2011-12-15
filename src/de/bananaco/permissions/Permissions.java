@@ -72,19 +72,17 @@ public class Permissions extends JavaPlugin {
 	public static WorldPermissionsManager getWorldPermissionsManager() {
 		return Permissions.perm;
 	}
-	public String addGroup;
-	public String addGroupToGroup;
-	public String addNode;
-	public String addPlayerNode;
-	private BackupPermissionsCommand bpc;
-	public Configuration c;
-	public boolean cacheValues;
-	public String database = "bPermissions";
-	public String demotePlayer;
-	public String globalCommand;
-	public GlobalCommands globalExec;
+	public String addGroup = "null";
+	public String addGroupToGroup = "null";
+	public String addNode = "null";
+	public String addPlayerNode = "null";
+	private BackupPermissionsCommand bpc = null;
+	public Configuration c = null;
+	public boolean cacheValues = true;
+	public String demotePlayer = "null";
+	public String globalCommand = "null";
+	public GlobalCommands globalExec = null;
 
-	public String hostname = "localhost";
 	public ImportManager im;
 	public String inGroup;
 	public String listGroup;
@@ -98,13 +96,10 @@ public class Permissions extends JavaPlugin {
 
 	public Map<String, String> mirror;
 
-	public String password = "minecraft";
-
 	public PermissionsExec permissionsExec;
 
 	public WorldPermissionsManager pm;
 
-	public String port = "3306";
 	public String promotePlayer;
 
 	public String removeGroup;
@@ -115,7 +110,7 @@ public class Permissions extends JavaPlugin {
 
 	public String setGroup;
 
-	public boolean suggestSimilarCommands;
+	public boolean suggestSimilarCommands = true;
 
 	public String username = "minecraft";
 
