@@ -14,6 +14,7 @@ import de.bananaco.permissions.debug.MCMA;
 import de.bananaco.permissions.util.Calculable;
 import de.bananaco.permissions.util.Group;
 import de.bananaco.permissions.util.Permission;
+import de.bananaco.permissions.util.RecursiveGroupException;
 import de.bananaco.permissions.util.User;
 /**
  * Here's the main legwork done, literally all you have to do now
@@ -77,7 +78,11 @@ public abstract class WorldPermissions extends PermissionClass {
 		if (!groups.containsKey(name)) {
 			Group gr = new Group(name, null, null, this);
 			add(gr);
-			gr.calculateEffectivePermissions();
+			try {
+				gr.calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				System.err.println(e.getMessage());
+			}
 		}
 		return groups.get(name);
 	}
@@ -128,7 +133,11 @@ public abstract class WorldPermissions extends PermissionClass {
 		if (!users.containsKey(name)) {
 			User us = new User(name, getDefaultArrayList(), null, this);
 			add(us);
-			us.calculateEffectivePermissions();
+			try {
+				us.calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				System.err.println(e.getMessage());
+			}
 		}
 		return users.get(name);
 	}
@@ -172,7 +181,11 @@ public abstract class WorldPermissions extends PermissionClass {
 		Set<String> grgr = gr.getGroupsAsString();
 		grgr.clear();
 		grgr.addAll(groups);
-		gr.calculateEffectivePermissions();
+		try {
+			gr.calculateEffectivePermissions();
+		} catch (RecursiveGroupException e) {
+			System.err.println(e.getMessage());
+		}
 		save();
 		gr.clearValues();
 		log(parse(groups) + " set to group:" + group);
@@ -186,7 +199,11 @@ public abstract class WorldPermissions extends PermissionClass {
 		Set<String> gr = us.getGroupsAsString();
 		gr.clear();
 		gr.addAll(groups);
-		us.calculateEffectivePermissions();
+		try {
+			us.calculateEffectivePermissions();
+		} catch (RecursiveGroupException e) {
+			System.err.println(e.getMessage());
+		}
 		save();
 		us.clearValues();
 		log(parse(groups) + " set to player:" + player);
@@ -200,7 +217,11 @@ public abstract class WorldPermissions extends PermissionClass {
 		Set<Permission> pr = gr.getPermissions();
 		pr.clear();
 		pr.addAll(Permission.loadFromString(nodes));
-		gr.calculateEffectivePermissions();
+		try {
+			gr.calculateEffectivePermissions();
+		} catch (RecursiveGroupException e) {
+			System.err.println(e.getMessage());
+		}
 		save();
 		gr.clearValues();
 		log(parse(nodes) + " set to group:" + group);
@@ -214,7 +235,11 @@ public abstract class WorldPermissions extends PermissionClass {
 		Set<Permission> pr = us.getPermissions();
 		pr.clear();
 		pr.addAll(Permission.loadFromString(nodes));
-		us.calculateEffectivePermissions();
+		try {
+			us.calculateEffectivePermissions();
+		} catch (RecursiveGroupException e) {
+			System.err.println(e.getMessage());
+		}
 		save();
 		us.clearValues();
 		log(parse(nodes) + " set to player:" + player);

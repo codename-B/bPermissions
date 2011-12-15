@@ -35,7 +35,7 @@ public class MapCalculable extends Calculable {
 	}
 	
 	@Override
-	public void calculateEffectivePermissions() {
+	public void calculateEffectivePermissions() throws RecursiveGroupException {
 		super.calculateEffectivePermissions();
 		permissions.clear();
 		for(Permission perm : getEffectivePermissions()) {

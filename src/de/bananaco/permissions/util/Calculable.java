@@ -46,8 +46,10 @@ public abstract class Calculable extends GroupCarrier {
 
 	/**
 	 * Used to calculate the total permissions gained by the object
+	 * @throws RecursiveGroupException 
 	 */
-	public void calculateEffectivePermissions() {
+	public void calculateEffectivePermissions() throws RecursiveGroupException {
+		try {
 		effectivePermissions.clear();
 		for (Group group : getGroups()) {
 			group.calculateEffectivePermissions();
@@ -63,6 +65,9 @@ public abstract class Calculable extends GroupCarrier {
 			effectivePermissions.add(perm);
 		}
 		//print();
+		} catch (StackOverflowError e) {
+			throw new RecursiveGroupException(this);
+		}
 	}
 
 	/**

@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import de.bananaco.permissions.Permissions;
 import de.bananaco.permissions.util.Group;
 import de.bananaco.permissions.util.Permission;
+import de.bananaco.permissions.util.RecursiveGroupException;
 import de.bananaco.permissions.util.User;
 
 public class YamlPermissionSet extends WorldPermissions {
@@ -91,11 +92,19 @@ public class YamlPermissionSet extends WorldPermissions {
 		}
 
 		for (User user : getUsers()) {
+			try {
 			user.calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				System.err.println(e.getMessage());
+			}
 		}
 
 		for (Group group : getGroups()) {
+			try {
 			group.calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				System.err.println(e.getMessage());
+			}
 		}
 
 	}
