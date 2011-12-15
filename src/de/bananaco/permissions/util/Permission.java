@@ -38,11 +38,6 @@ public class Permission {
 		this.isTrue = isTrue;
 	}
 
-	@Override
-	public int hashCode() {
-		return nameLowerCase().hashCode();
-	}
-
 	/**
 	 * Returns if the permission is true of false
 	 * @return boolean
@@ -70,5 +65,15 @@ public class Permission {
 	@Override
 	public String toString() {
 		return name + ":" + isTrue;
+	}
+	
+	@Override
+	public int hashCode() {
+		return nameLowerCase().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		return object.hashCode() == this.hashCode();
 	}
 }
