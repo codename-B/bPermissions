@@ -125,7 +125,6 @@ public class Yaml2PermissionSet extends WorldPermissions {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void saveUnsafe() throws Exception {
 
 		if (!ufile.exists()) {
@@ -154,10 +153,8 @@ public class Yaml2PermissionSet extends WorldPermissions {
 		
 		for (User user : users) {
 			String name = user.getName();
-			uconfig.set(USERS + "." + name + "." + PERMISSIONS, new ArrayList(
-					user.getPermissionsAsString()));
-			uconfig.set(USERS + "." + name + "." + GROUPS,
-					new ArrayList(user.getGroupsAsString()));
+			uconfig.set(USERS + "." + name + "." + PERMISSIONS, user.serialisePermissions());
+			uconfig.set(USERS + "." + name + "." + GROUPS, user.serialiseGroups());
 		}
 
 		Set<Group> grp = getGroups();
@@ -174,10 +171,8 @@ public class Yaml2PermissionSet extends WorldPermissions {
 		
 		for (Group group : groups) {
 			String name = group.getName();
-			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, new ArrayList(
-					group.getPermissionsAsString()));
-			gconfig.set(GROUPS + "." + name + "." + GROUPS,
-					new ArrayList(group.getGroupsAsString()));
+			gconfig.set(GROUPS + "." + name + "." + PERMISSIONS, group.serialisePermissions());
+			gconfig.set(GROUPS + "." + name + "." + GROUPS, group.serialiseGroups());
 		}
 		
 		uconfig.save(ufile);

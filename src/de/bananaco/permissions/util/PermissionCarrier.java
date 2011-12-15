@@ -1,6 +1,10 @@
 package de.bananaco.permissions.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 /**
  * This class is any object which carries Permissions.
@@ -46,6 +50,24 @@ public abstract class PermissionCarrier extends MetaData {
 				permissions.add("^" + permission.name());
 		}
 		return permissions;
+	}
+	
+	/**
+	 * Used to make saving prettier
+	 * 
+	 * @return
+	 */
+	public List<String> serialisePermissions() {
+		List<String> groups = new ArrayList<String>(getPermissionsAsString());
+		Collections.sort(groups,
+                new Comparator<String>()
+                {
+                    public int compare(String f1, String f2)
+                    {
+                        return f1.compareTo(f2);
+                    }        
+                });
+		return groups;
 	}
 
 }
