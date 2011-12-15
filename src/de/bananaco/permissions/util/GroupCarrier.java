@@ -69,7 +69,14 @@ public abstract class GroupCarrier extends PermissionCarrier {
                 {
                     public int compare(String f1, String f2)
                     {
-                        return f1.compareTo(f2);
+                    	int i = (f1.length()>f2.length()) ? f2.length() : f1.length();
+                    	for(int n=0; n<i-1; n++) {
+                    		String a = f1.substring(n, n+1);
+                    		String b = f2.substring(n, n+1);
+                    		if(a.compareTo(b) != 0)
+                    			return a.compareTo(b);
+                    	}
+                    	return 0;
                     }        
                 });
 		return groups;
