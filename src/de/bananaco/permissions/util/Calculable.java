@@ -28,8 +28,7 @@ public abstract class Calculable extends GroupCarrier {
 	/**
 	 * Debugging code: used to print the total effective Permissions of a group at a specified point in time
 	 */
-	@SuppressWarnings("unused")
-	private void print() {
+	protected void print() {
 		String[] perms = new String[effectivePermissions.size()];
 		int i=0;
 		for(Permission perm : effectivePermissions) {

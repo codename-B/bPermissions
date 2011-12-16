@@ -34,8 +34,9 @@ public class SuperPermissionHandler {
 		unsetupPlayer(p);
 		PermissionAttachment att = p.addAttachment(plugin);
 
-		for (Permission node : nodes)
+		for (Permission node : nodes) {
 			att.setPermission(node.name(), node.isTrue());
+		}
 
 		att.setPermission("world."+p.getWorld().getName(), true);
 				

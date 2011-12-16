@@ -27,8 +27,6 @@ import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.fornoobs.PermissionsCommandSuggestions;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.interfaces.PermissionSet;
-import de.bananaco.permissions.worlds.PermissionClass;
-
 import de.bananaco.permissions.worlds.HasPermission;
 import de.bananaco.permissions.worlds.WorldPermissionSet;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
@@ -182,9 +180,8 @@ public class Permissions extends JavaPlugin {
 						perm = HasPermission.has(args[1],
 						getServer().getWorlds().get(0).getName(), args[2]);
 					} else {
-						perm = sender.hasPermission(args[2]);
+						perm = player.hasPermission(args[2]);
 					}
-					PermissionClass.isRangePermission(args[2]);
 					sender.sendMessage(ChatColor.AQUA + args[2]
 							+ ChatColor.GREEN + ":" + ChatColor.AQUA + perm);
 					return true;
