@@ -39,9 +39,13 @@ public abstract class WorldPermissions extends PermissionClass {
 	public void reload() {
 		groups.clear();
 		users.clear();
-		load();
+		if(load()) {
 		save();
 		setupPlayers();
+		} else {
+		System.err.println("ERROR LOADING PERMISSIONS");
+		System.err.println("PLEASE CHECK YOUR FILES");
+		}
 	}
 
 	/**
@@ -171,9 +175,9 @@ public abstract class WorldPermissions extends PermissionClass {
 		return world.hashCode();
 	}
 
-	public abstract void load();
+	public abstract boolean load();
 
-	public abstract void save();
+	public abstract boolean save();
 
 	@Override
 	public void setGroupGroups(String group, List<String> groups) {

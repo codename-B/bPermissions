@@ -37,11 +37,13 @@ public class YamlPermissionSet extends WorldPermissions {
 		return "default";
 	}
 
-	public void load() {
+	public boolean load() {
 		try {
 			loadUnsafe();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -109,11 +111,13 @@ public class YamlPermissionSet extends WorldPermissions {
 
 	}
 
-	public void save() {
+	public boolean save() {
 		try {
 			saveUnsafe();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
