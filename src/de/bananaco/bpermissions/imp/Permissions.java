@@ -5,8 +5,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.bananaco.permissions.api.World;
-import de.bananaco.permissions.api.WorldManager;
+import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
 
 public class Permissions extends JavaPlugin {
 

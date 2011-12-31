@@ -1,4 +1,4 @@
-package de.bananaco.permissions.api.util;
+package de.bananaco.bpermissions.api.util;
 
 public enum CalculableType {
 

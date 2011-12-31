@@ -1,4 +1,4 @@
-package de.bananaco.permissions.api;
+package de.bananaco.bpermissions.api;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -1,12 +1,12 @@
-package de.bananaco.permissions.api;
+package de.bananaco.bpermissions.api;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.bananaco.permissions.api.util.Calculable;
-import de.bananaco.permissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.Calculable;
+import de.bananaco.bpermissions.api.util.CalculableType;
 /**
  * This is the class to extend for new implementations
  * of bPermissions.

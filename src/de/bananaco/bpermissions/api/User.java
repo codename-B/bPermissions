@@ -1,4 +1,4 @@
-package de.bananaco.permissions.api;
+package de.bananaco.bpermissions.api;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.bananaco.permissions.api.util.CalculableType;
-import de.bananaco.permissions.api.util.MapCalculable;
-import de.bananaco.permissions.api.util.Permission;
+import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.MapCalculable;
+import de.bananaco.bpermissions.api.util.Permission;
 
 /**
  * User extends MapCalculable to make permission checks in the HasPermission class considerably faster.

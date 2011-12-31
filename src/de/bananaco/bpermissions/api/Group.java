@@ -1,12 +1,12 @@
-package de.bananaco.permissions.api;
+package de.bananaco.bpermissions.api;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.bananaco.permissions.api.util.Calculable;
-import de.bananaco.permissions.api.util.CalculableType;
-import de.bananaco.permissions.api.util.Permission;
+import de.bananaco.bpermissions.api.util.Calculable;
+import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.Permission;
 
 /**
  * The Group object extends Calculable which allows recursive inheritance of unlimited depth.

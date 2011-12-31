@@ -1,12 +1,12 @@
-package de.bananaco.permissions.api.util;
+package de.bananaco.bpermissions.api.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.bananaco.permissions.api.Group;
-import de.bananaco.permissions.api.WorldManager;
+import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.WorldManager;
 /**
  * This class is any object which carries groups.
  * The group references are stored by String, rather than directly

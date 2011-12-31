@@ -1,10 +1,10 @@
-package de.bananaco.permissions.api.util;
+package de.bananaco.bpermissions.api.util;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.bananaco.permissions.api.Group;
+import de.bananaco.bpermissions.api.Group;
 
 /**
  * This class contains the main calculations for

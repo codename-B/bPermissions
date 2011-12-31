@@ -9,14 +9,14 @@ import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import de.bananaco.permissions.api.Group;
-import de.bananaco.permissions.api.User;
-import de.bananaco.permissions.api.World;
-import de.bananaco.permissions.api.util.Calculable;
-import de.bananaco.permissions.api.util.CalculableType;
-import de.bananaco.permissions.api.util.MetaData;
-import de.bananaco.permissions.api.util.Permission;
-import de.bananaco.permissions.api.util.RecursiveGroupException;
+import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.User;
+import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.util.Calculable;
+import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.MetaData;
+import de.bananaco.bpermissions.api.util.Permission;
+import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 
 public class YamlWorld extends World {
 
