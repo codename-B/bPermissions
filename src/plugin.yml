@@ -2,7 +2,7 @@ name: bPermissions
 version: 2.3.0a
 author: codename_B
 website: http://tetragaming.com/codename_B/
-main: de.bananaco.permissions.Permissions
+main: de.bananaco.permissions.imp.Permissions
 load: startup
 commands:
   permissions:
