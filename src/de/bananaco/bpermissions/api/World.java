@@ -178,6 +178,9 @@ public abstract class World {
 	
 	@Override
 	public boolean equals(Object o) {
+		if(o == null)
+			return false;
+		
 		return o.hashCode() == hashCode();
 	}
 	

@@ -2,6 +2,8 @@ package de.bananaco.bpermissions.imp;
 
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldListener;
 
@@ -18,16 +20,23 @@ import de.bananaco.bpermissions.api.WorldManager;
 public class WorldLoader extends WorldListener {
 
 	WorldManager wm = WorldManager.getInstance();
-	
 	Map<String, String> mirrors;
 	
 	protected WorldLoader(Map<String, String> mirrors) {
 		this.mirrors = mirrors;
+		for(World world : Bukkit.getServer().getWorlds()) {
+			createWorld(world);
+		}
 	}
 	
 	@Override
 	public void onWorldInit(WorldInitEvent event) {
-		String world = event.getWorld().getName();
+		createWorld(event.getWorld());
+	}
+	
+	public void createWorld(World w) {
+		System.out.println(Permissions.blankFormat("Loading world: "+w.getName()));
+		String world = w.getName();
 		/*
 		 * If the mirror exists and the world to be mirrored to is loaded
 		 */
@@ -37,7 +46,7 @@ public class WorldLoader extends WorldListener {
 		 * Otherwise, create a new world
 		 */
 		else
-		wm.createWorld(world, new YamlWorld(event.getWorld().getName()));
+		wm.createWorld(world, new YamlWorld(world));
 	}
 
 }

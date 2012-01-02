@@ -116,13 +116,7 @@ public class Permissions extends JavaPlugin {
 					sendMessage(sender, "Currently selected "+calc.getType().getName()+": "+calc.getName());
 				}
 			} else if(args.length == 1) {
-				if(calc == null) {
-					sendMessage(sender, "Nothing is selected!");
-				} else if (calc.getType() != type) {
-					sendMessage(sender, "Please select a "+type.getName()+", you currently have a "+opposite.getName()+" selected.");
-				} else {
-					cmd.setCalculable(type, args[0]);
-				}
+				cmd.setCalculable(type, args[0]);
 			} else if(args.length == 2) {
 				if(calc == null) {
 					sendMessage(sender, "Nothing is selected!");
@@ -136,9 +130,9 @@ public class Permissions extends JavaPlugin {
 					} else if(action.equalsIgnoreCase("rmgroup")) {
 						cmd.removeGroup(value);
 					} else if(action.equalsIgnoreCase("list")) {
-						if(value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group")) {
+						if(value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
 							cmd.listGroups();
-						} else if(value.equalsIgnoreCase("permissions") || value.equalsIgnoreCase("permission")) {
+						} else if(value.equalsIgnoreCase("permissions") || value.equalsIgnoreCase("permission") || value.equalsIgnoreCase("p")) {
 							cmd.listPermissions();
 						}
 					} else if(action.equalsIgnoreCase("addperm")) {

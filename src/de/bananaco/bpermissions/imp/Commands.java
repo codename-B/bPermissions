@@ -40,7 +40,7 @@ public class Commands {
 			calc = null;
 		
 		this.world = world;
-		sender.sendMessage(format(world.getName()+" selected."));
+		sender.sendMessage(format("Set selected world to "+world.getName()));
 	}
 	
 	public World getWorld() {
@@ -79,7 +79,7 @@ public class Commands {
 		List<String> groups = calc.serialiseGroups();
 		String[] gr = groups.toArray(new String[groups.size()]);
 		String mgr = Arrays.toString(gr);
-		sender.sendMessage(format("The "+calc.getType().getName()+" has these groups:"));
+		sender.sendMessage(format("The "+calc.getType().getName()+" "+calc.getName()+" has these groups:"));
 		sender.sendMessage(mgr);
 	}
 	
@@ -98,7 +98,7 @@ public class Commands {
 		List<String> permissions = calc.serialisePermissions();
 		String[] pr = permissions.toArray(new String[permissions.size()]);
 		String mpr = Arrays.toString(pr);
-		sender.sendMessage(format("The "+calc.getType().getName()+" has these permissions:"));
+		sender.sendMessage(format("The "+calc.getType().getName()+" "+calc.getName()+" has these permissions:"));
 		sender.sendMessage(mpr);
 	}
 	
@@ -126,6 +126,12 @@ public class Commands {
 	 * Remind the user to save when changes are finished!
 	 */
 	public void save() {
+		// If the world does not exist
+		if(world == null) {
+			sender.sendMessage(format("Please select a loaded world!"));
+			return;
+		}
+		// Otherwise do your thang
 		try {
 		world.save();
 		calc.calculateEffectivePermissions();
