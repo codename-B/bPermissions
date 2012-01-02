@@ -18,11 +18,11 @@ import de.bananaco.bpermissions.api.util.MetaData;
 import de.bananaco.bpermissions.api.util.Permission;
 import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 /**
- * Here is the main YamlWorld class
- * This loads from the default users.yml and groups.yml on first
- * creation. Isn't it pretty?
+ * This creates and propagates the default users.yml and groups.yml
+ * 
+ * This will be filled on the command /permissions helpme (yes, we brought it back)
  */
-public class YamlWorld extends World {
+public class DefaultWorld extends World {
 
 	private static final String GROUPS = "groups";
 	private static final String PERMISSIONS = "permissions";
@@ -32,38 +32,11 @@ public class YamlWorld extends World {
 	private YamlConfiguration uconfig = new YamlConfiguration();;
 	private YamlConfiguration gconfig = new YamlConfiguration();;
 	
-	private final File ufile = new File("plugins/bPermissions/" + getName()
-			+ "/users.yml");
-	private final File gfile = new File("plugins/bPermissions/" + getName()
-			+ "/groups.yml");
-	
-	private final File dufile = new File("plugins/bPermissions/users.yml");
-	private final File dgfile = new File("plugins/bPermissions/groups.yml");
+	private final File ufile = new File("plugins/bPermissions/users.yml");
+	private final File gfile = new File("plugins/bPermissions/groups.yml");
 
-	public YamlWorld(String world) {
+	public DefaultWorld(String world) {
 		super(world);
-	}
-	
-	/**
-	 * Internal method - used to read defaults from "global" users.yml and
-	 * groups.yml if the files are created for the first time.
-	 * 
-	 * @return boolean
-	 */
-	private boolean readDefaults() {
-		try {
-			if (!dufile.exists()) {
-				if (dufile.getParentFile() != null)
-					dufile.getParentFile().mkdirs();
-				dufile.createNewFile();
-				dgfile.createNewFile();
-			}
-			uconfig.load(dufile);
-			gconfig.load(dgfile);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
 	}
 
 	@Override
@@ -90,13 +63,6 @@ public class YamlWorld extends World {
 				ufile.getParentFile().mkdirs();
 			ufile.createNewFile();
 			gfile.createNewFile();
-			// Let people know if something goes wrong with reading the defaults
-			if (!readDefaults()) {
-				System.err
-						.println("Error reading default users.yml and groups.yml");
-				System.err
-						.println("Please report this to codename_B immediately");
-			}
 		} else {
 			uconfig.load(ufile);
 			gconfig.load(gfile);

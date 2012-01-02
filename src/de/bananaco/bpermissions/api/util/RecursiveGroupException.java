@@ -11,4 +11,8 @@ public class RecursiveGroupException extends Exception {
 		super("Recursive groups detected for "+c.getName());
 	}
 
+	public RecursiveGroupException(CalculableMeta c) {
+		super("Recursive groups detected for "+c.hashCode());
+	}
+
 }

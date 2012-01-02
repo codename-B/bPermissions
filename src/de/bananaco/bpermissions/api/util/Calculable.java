@@ -13,7 +13,7 @@ import de.bananaco.bpermissions.api.Group;
  * It calculates inherited permissions all the way down the line of the object.
  * This does not include checking for infinite loops, you can break this if you want to.
  */
-public abstract class Calculable extends GroupCarrier {
+public abstract class Calculable extends CalculableMeta {
 
 	Set<Permission> effectivePermissions;
 	String name;

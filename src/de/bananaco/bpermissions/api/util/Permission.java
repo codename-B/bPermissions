@@ -19,15 +19,22 @@ public class Permission {
 	 */
 	public static Set<Permission> loadFromString(List<String> listPerms) {
 		Set<Permission> permissions = new HashSet();
-
 		if (listPerms != null)
 			for (String perm : listPerms)
-				if (perm.startsWith("^"))
-					permissions.add(new Permission(perm.replace("^", ""), false));
-				else
-					permissions.add(new Permission(perm, true));
-
+				permissions.add(loadFromString(perm));
 		return permissions;
+	}
+	
+	/**
+	 * Only use in single-set scenarios, use loadFromString(List<String>) in most cases.
+	 * @param perm
+	 * @return Permission
+	 */
+	public static Permission loadFromString(String perm) {
+		if (perm.startsWith("^"))
+			return new Permission(perm.replace("^", ""), false);
+		else
+			return new Permission(perm, true);
 	}
 	
 	private final boolean isTrue;

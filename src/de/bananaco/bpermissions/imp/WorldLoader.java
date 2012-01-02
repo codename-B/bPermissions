@@ -37,7 +37,7 @@ public class WorldLoader extends WorldListener {
 		 * Otherwise, create a new world
 		 */
 		else
-		wm.createWorld(world, new YamlWorld(event.getWorld()));
+		wm.createWorld(world, new YamlWorld(event.getWorld().getName()));
 	}
 
 }

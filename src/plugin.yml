@@ -1,5 +1,5 @@
 name: bPermissions
-version: 2.1.4b
+version: 2.3.0a
 author: codename_B
 website: http://tetragaming.com/codename_B/
 main: de.bananaco.permissions.Permissions
@@ -8,5 +8,18 @@ commands:
   permissions:
     aliases: [p, bp, perm]
     description: reloads the nodes
-    usage: |
-      Need help? Visit http://bpermissions.com
+    usage: /<command> save|reload
+  user:
+    aliases: [u, usr]
+    description: messes with users
+    usage: /<command> (see documentation)
+  group:
+    aliases: [g, grp]
+    description: messes with groups
+    usage: /<command> (see documentation)
+  world:
+    aliases: [w, wrl]
+    description: selects a world
+    usage: /<command> world
+
+
