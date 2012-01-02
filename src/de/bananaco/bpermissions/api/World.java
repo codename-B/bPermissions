@@ -7,6 +7,7 @@ import java.util.Set;
 
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 /**
  * This is the class to extend for new implementations
  * of bPermissions.
@@ -83,6 +84,12 @@ public abstract class World {
 			add(new User(name, null, null, getName()));
 			// Don't forget to add the default group!
 			users.get(name).addGroup(getDefaultGroup());
+			// And calculate the effective Permissions!
+			try {
+			users.get(name).calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+			System.err.println(e.getMessage());
+			}
 			return users.get(name);
 		} else if (type == CalculableType.GROUP) {
 			if(!groups.containsKey(name))
