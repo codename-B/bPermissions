@@ -4,7 +4,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
+/**
+ * This is the api that will be accessed
+ * by plugins utilising the new bPermissions API
+ * (isn't it pretty?)
+ * 
+ * Basically, this passes you an instance of the World object, which
+ * contains instances of User and Group, which you then do what you want
+ * with, you can add new permissions, or groups, to both users and groups.
+ * 
+ * Just look into the comments if you get stuck, it's pretty easy, I even
+ * added .getUser and .getGroup for those people of you who are super lazy :P
+ * 
+ * The main classes to look at if you're curious about the internals of User and Group
+ * would be the Calculable class
+ */
 public class WorldManager {
 	
 	public static WorldManager instance = null;
@@ -18,7 +32,7 @@ public class WorldManager {
 	Map<String, World> worlds = new HashMap<String, World>();
 	
 	protected WorldManager() {
-		// TODO globals?
+
 	}
 	
 	public World getWorld(String name) {

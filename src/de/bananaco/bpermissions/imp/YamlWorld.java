@@ -25,18 +25,44 @@ public class YamlWorld extends World {
 	private static final String META = "meta";
 	private static final String USERS = "users";
 	
-	private YamlConfiguration uconfig = new YamlConfiguration();
-	private YamlConfiguration gconfig = new YamlConfiguration();
+	private YamlConfiguration uconfig = new YamlConfiguration();;
+	private YamlConfiguration gconfig = new YamlConfiguration();;
 	
 	private final File ufile = new File("plugins/bPermissions/" + getName()
 			+ "/users.yml");
 	private final File gfile = new File("plugins/bPermissions/" + getName()
 			+ "/groups.yml");
+	
+	private final File dufile = new File("plugins/bPermissions/users.yml");
+	private final File dgfile = new File("plugins/bPermissions/groups.yml");
 
 	public YamlWorld(org.bukkit.World world) {
 		super(world.getName());
 	}
+	
+	/**
+	 * Internal method - used to read defaults from "global" users.yml and
+	 * groups.yml if the files are created for the first time.
+	 * 
+	 * @return boolean
+	 */
+	private boolean readDefaults() {
+		try {
+			if (!dufile.exists()) {
+				if (dufile.getParentFile() != null)
+					dufile.getParentFile().mkdirs();
+				dufile.createNewFile();
+				dgfile.createNewFile();
+			}
+			uconfig.load(dufile);
+			gconfig.load(dgfile);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
+	@Override
 	public String getDefaultGroup() {
 		if(gconfig != null)
 		return gconfig.getString("default", "default");
@@ -45,6 +71,7 @@ public class YamlWorld extends World {
 
 	public boolean load() {
 		try {
+			clear();
 			loadUnsafe();
 			return true;
 		} catch (Exception e) {
@@ -54,19 +81,25 @@ public class YamlWorld extends World {
 	}
 
 	private void loadUnsafe() throws Exception {
-
 		if (!ufile.exists()) {
 			if (ufile.getParentFile() != null)
 				ufile.getParentFile().mkdirs();
 			ufile.createNewFile();
 			gfile.createNewFile();
+			// Let people know if something goes wrong with reading the defaults
+			if (!readDefaults()) {
+				System.err
+						.println("Error reading default users.yml and groups.yml");
+				System.err
+						.println("Please report this to codename_B immediately");
+			}
+		} else {
+			uconfig.load(ufile);
+			gconfig.load(gfile);
 		}
-		uconfig = new YamlConfiguration();
-		gconfig = new YamlConfiguration();
-		
-		uconfig.load(ufile);
-		gconfig.load(gfile);
-
+		/*
+		 * Load the users
+		 */
 		ConfigurationSection usersConfig = uconfig
 				.getConfigurationSection(USERS);
 		if (usersConfig != null) {
@@ -79,20 +112,23 @@ public class YamlWorld extends World {
 				List<String> nGroup = usersConfig.getStringList(name + "."
 						+ GROUPS);
 				Set<Permission> perms = Permission.loadFromString(nPerm);
-				// Create the new user 
+				// Create the new user
 				User user = new User(name, nGroup, perms, getName());
 				// MetaData
-				ConfigurationSection meta = usersConfig.getConfigurationSection(name + "." + META);
+				ConfigurationSection meta = usersConfig
+						.getConfigurationSection(name + "." + META);
 				Set<String> keys = meta.getKeys(false);
-				if(keys != null && keys.size() > 0)
-					for(String key : keys)
+				if (keys != null && keys.size() > 0)
+					for (String key : keys)
 						user.setValue(key, meta.getString(key));
 				// Upload to API
 				add(user);
 			}
 
 		}
-
+		/*
+		 * Load the groups
+		 */
 		ConfigurationSection groupsConfig = gconfig
 				.getConfigurationSection(GROUPS);
 		if (groupsConfig != null) {
@@ -108,10 +144,11 @@ public class YamlWorld extends World {
 				// Create the new group
 				Group group = new Group(name, nGroup, perms, getName());
 				// MetaData
-				ConfigurationSection meta = groupsConfig.getConfigurationSection(name + "." + META);
+				ConfigurationSection meta = groupsConfig
+						.getConfigurationSection(name + "." + META);
 				Set<String> keys = meta.getKeys(false);
-				if(keys != null && keys.size() > 0)
-					for(String key : keys)
+				if (keys != null && keys.size() > 0)
+					for (String key : keys)
 						group.setValue(key, meta.getString(key));
 				// Upload to API
 				add(group);
@@ -120,15 +157,7 @@ public class YamlWorld extends World {
 
 		for (Calculable user : getAll(CalculableType.USER)) {
 			try {
-			user.calculateEffectivePermissions();
-			} catch (RecursiveGroupException e) {
-				System.err.println(e.getMessage());
-			}
-		}
-
-		for (Calculable group : getAll(CalculableType.GROUP)) {
-			try {
-			group.calculateEffectivePermissions();
+				user.calculateEffectivePermissions();
 			} catch (RecursiveGroupException e) {
 				System.err.println(e.getMessage());
 			}

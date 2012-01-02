@@ -81,6 +81,8 @@ public abstract class World {
 		if(type == CalculableType.USER) {
 			if(!users.containsKey(name))
 			add(new User(name, null, null, getName()));
+			// Don't forget to add the default group!
+			users.get(name).addGroup(getDefaultGroup());
 			return users.get(name);
 		} else if (type == CalculableType.GROUP) {
 			if(!groups.containsKey(name))
@@ -145,6 +147,15 @@ public abstract class World {
 	}
 	
 	/**
+	 * Used to clear the Maps containing User and Group object
+	 * (useful for doing a clean load)
+	 */
+	public void clear() {
+		groups.clear();
+		users.clear();
+	}
+	
+	/**
 	 * Shows if the world is THIS world
 	 * @param world
 	 * @return boolean
@@ -162,5 +173,7 @@ public abstract class World {
 	public boolean equals(Object o) {
 		return o.hashCode() == hashCode();
 	}
+	
+	public abstract String getDefaultGroup();
 
 }

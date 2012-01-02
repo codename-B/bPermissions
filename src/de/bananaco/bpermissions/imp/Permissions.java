@@ -1,8 +1,14 @@
 package de.bananaco.bpermissions.imp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bananaco.bpermissions.api.World;
@@ -11,6 +17,8 @@ import de.bananaco.bpermissions.api.WorldManager;
 public class Permissions extends JavaPlugin {
 
 	private WorldManager wm = WorldManager.getInstance();
+	private final Map<String, String> mirrors = new HashMap<String, String>();
+	private Listener loader = new WorldLoader(mirrors);
 	
 	@Override
 	public void onDisable() {
@@ -19,10 +27,11 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
 		System.out.println(format("Enabled"));
 	}
 	
-	public String format(String message) {
+	public static String format(String message) {
 		return "[bPermissions] "+message;
 	}
 	
@@ -34,6 +43,8 @@ public class Permissions extends JavaPlugin {
 		sender.sendMessage(format(message));
 	}
 
+	// TODO proper commands
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
