@@ -20,6 +20,7 @@ import de.bananaco.bpermissions.api.util.CalculableType;
 public class Permissions extends JavaPlugin {
 
 	private final Map<String, String> mirrors = new HashMap<String, String>();
+	private final Mirrors mrs = new Mirrors(mirrors);
 	private Listener loader = new WorldLoader(mirrors);
 	private Map<CommandSender, Commands> commands = new HashMap<CommandSender, Commands>();
 	private WorldManager wm = WorldManager.getInstance();
@@ -31,6 +32,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		mrs.load();
 		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
 		System.out.println(blankFormat("Enabled"));
 	}
