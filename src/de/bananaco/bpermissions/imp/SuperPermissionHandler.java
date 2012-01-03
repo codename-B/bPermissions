@@ -1,6 +1,9 @@
 package de.bananaco.bpermissions.imp;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerListener;
+import org.bukkit.World;
 
 import de.bananaco.bpermissions.api.World;
 /**
@@ -12,7 +15,11 @@ import de.bananaco.bpermissions.api.World;
  * What's wrong with a PermissionProvider interface where we can
  * register a single PermissionProvider?!
  */
-public class SuperPermissionHandler {
+public class SuperPermissionHandler extends PlayerListener {
+	
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent e)
+	{
+		setupPlayer(e.getPlayer(), e.getPlayer().getLocation().getWorld());
 	
 	/**
 	 * Set up the Player via the specified World object
