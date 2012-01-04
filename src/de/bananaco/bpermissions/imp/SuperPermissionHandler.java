@@ -71,10 +71,13 @@ public class SuperPermissionHandler extends PlayerListener {
 		PermissionAttachment att;
 		// Does the player have an attachment that we've assigned already?
 		// Then we add a new one or grab the existing one
-		if(attachments.containsKey(player))
+		if(attachments.containsKey(player)) {
 			att = attachments.get(player);
-		else
+		}
+		else {
 			att = player.addAttachment(plugin);
+			attachments.put(player, att);
+		}
 		// Grab the pre-calculated effectivePermissions from the User object
 		Map<String, Boolean> perms = world.getUser(player.getName()).getMappedPermissions();
 		// Then whack it onto the player
