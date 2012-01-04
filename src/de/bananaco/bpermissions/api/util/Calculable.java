@@ -99,7 +99,7 @@ public abstract class Calculable extends CalculableMeta {
 	
 	@Override
 	public int hashCode() {
-		return getName().hashCode();
+		return getNameLowerCase().hashCode();
 	}
 	
 	/**

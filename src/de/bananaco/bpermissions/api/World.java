@@ -80,7 +80,7 @@ public abstract class World {
 		name = name.toLowerCase();
 		// And now we check
 		if(type == CalculableType.USER) {
-			if(!users.containsKey(name))
+			if(!users.containsKey(name)) {
 			add(new User(name, null, null, getName()));
 			// Don't forget to add the default group!
 			users.get(name).addGroup(getDefaultGroup());
@@ -90,10 +90,12 @@ public abstract class World {
 			} catch (RecursiveGroupException e) {
 			System.err.println(e.getMessage());
 			}
+			}
 			return users.get(name);
 		} else if (type == CalculableType.GROUP) {
-			if(!groups.containsKey(name))
+			if(!groups.containsKey(name)) {
 			add(new Group(name, null, null, getName()));
+			}
 			return groups.get(name);
 		}
 		return null;

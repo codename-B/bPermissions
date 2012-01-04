@@ -35,8 +35,8 @@ public class DefaultWorld extends World {
 	private final File ufile = new File("plugins/bPermissions/users.yml");
 	private final File gfile = new File("plugins/bPermissions/groups.yml");
 
-	public DefaultWorld(String world) {
-		super(world);
+	public DefaultWorld() {
+		super("default");
 	}
 
 	@Override

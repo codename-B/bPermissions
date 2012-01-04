@@ -33,14 +33,7 @@ public class User extends MapCalculable {
 	
 	public boolean hasPermission(String node) {
 		node = node.toLowerCase();
-		
-		if(cache.containsKey(node))
-			return cache.get(node);
-		
 		boolean allowed = internalHasPermission(node);
-		
-		cache.put(node, allowed);
-		
 		return allowed;
 	}
 	

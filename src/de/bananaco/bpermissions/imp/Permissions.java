@@ -24,6 +24,8 @@ public class Permissions extends JavaPlugin {
 	private Listener loader = new WorldLoader(mirrors);
 	private Map<CommandSender, Commands> commands = new HashMap<CommandSender, Commands>();
 	private WorldManager wm = WorldManager.getInstance();
+	private DefaultWorld world = new DefaultWorld();
+	private SuperPermissionHandler handler;
 	
 	@Override
 	public void onDisable() {
@@ -32,8 +34,19 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		// Instantiate our SuperPermissionHandler
+		handler = new SuperPermissionHandler(this);
+		// Load the world mirroring setup
 		mrs.load();
+		// Load the default users.yml and groups.yml
+		world.load();
+		// Register world loading
 		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
+		// Register player login
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, handler, Priority.Lowest, this);
+		// Register world changing
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, handler, Priority.Normal, this);
+		// And print a nice little message ;)
 		System.out.println(blankFormat("Enabled"));
 	}
 	
@@ -59,8 +72,6 @@ public class Permissions extends JavaPlugin {
 		sender.sendMessage(format(message));
 	}
 
-	// TODO proper commands
-	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {

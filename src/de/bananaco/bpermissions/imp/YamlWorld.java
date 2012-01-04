@@ -98,6 +98,9 @@ public class YamlWorld extends World {
 						.println("Please report this to codename_B immediately");
 			}
 		} else {
+			uconfig = new YamlConfiguration();
+			gconfig = new YamlConfiguration();
+
 			uconfig.load(ufile);
 			gconfig.load(gfile);
 		}
@@ -121,14 +124,15 @@ public class YamlWorld extends World {
 				// MetaData
 				ConfigurationSection meta = usersConfig
 						.getConfigurationSection(name + "." + META);
+				if(meta != null) {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
 						user.setValue(key, meta.getString(key));
+				}
 				// Upload to API
 				add(user);
 			}
-
 		}
 		/*
 		 * Load the groups
@@ -144,18 +148,22 @@ public class YamlWorld extends World {
 						+ PERMISSIONS);
 				List<String> nGroup = groupsConfig.getStringList(name + "."
 						+ GROUPS);
+				
 				Set<Permission> perms = Permission.loadFromString(nPerm);
 				// Create the new group
 				Group group = new Group(name, nGroup, perms, getName());
 				// MetaData
 				ConfigurationSection meta = groupsConfig
 						.getConfigurationSection(name + "." + META);
+				if(meta != null) {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
 						group.setValue(key, meta.getString(key));
+				}
 				// Upload to API
 				add(group);
+							
 			}
 		}
 
