@@ -8,7 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionDefault;
+
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 /**
@@ -57,6 +60,11 @@ public class SuperPermissionHandler extends PlayerListener {
 
 	protected SuperPermissionHandler(Permissions plugin) {
 		this.plugin = plugin;
+		// This next bit is simply to make bPermissions.* work with superperms, since I now have my bulk adding, I will concede to this
+		Map<String, Boolean> children = new HashMap<String, Boolean>();
+		children.put("bPermissions.admin", true);
+		Permission permission = new Permission("bPermissions.*", PermissionDefault.OP, children);
+		plugin.getServer().getPluginManager().addPermission(permission);
 	}
 
 	/**
