@@ -33,6 +33,7 @@ public class SuperPermissionHandler extends PlayerListener {
 	static {
 		try {
 			permissions = PermissionAttachment.class.getDeclaredField("permissions");
+			permissions.setAccessible(true);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
