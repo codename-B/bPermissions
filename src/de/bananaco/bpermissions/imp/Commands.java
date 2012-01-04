@@ -75,6 +75,12 @@ public class Commands {
 		sender.sendMessage(format("Removed "+group+" from "+calc.getName()));
 	}
 	
+	public void setGroup(String group) {
+		calc.getGroupsAsString().clear();
+		calc.addGroup(group);
+		sender.sendMessage(format("Set "+calc.getName()+"'s group to "+group));
+	}
+	
 	public void listGroups() {
 		List<String> groups = calc.serialiseGroups();
 		String[] gr = groups.toArray(new String[groups.size()]);
