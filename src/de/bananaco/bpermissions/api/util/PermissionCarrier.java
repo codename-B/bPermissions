@@ -38,8 +38,9 @@ public abstract class PermissionCarrier extends WorldCarrier {
 	 * @param permission
 	 */
 	public void removePermission(String permission) {
-		permission = permission.toLowerCase();
-		permissions.remove(permission);
+		for(Permission p : permissions)
+			if(p.name().equalsIgnoreCase(permission))
+				permissions.remove(p);
 	}
 
 	/**

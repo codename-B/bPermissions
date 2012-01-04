@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldListener;
 
@@ -19,11 +20,13 @@ import de.bananaco.bpermissions.api.WorldManager;
  */
 public class WorldLoader extends WorldListener {
 
-	WorldManager wm = WorldManager.getInstance();
-	Map<String, String> mirrors;
+	private WorldManager wm = WorldManager.getInstance();
+	private Map<String, String> mirrors;
+	private Permissions permissions;
 	
-	protected WorldLoader(Map<String, String> mirrors) {
+	protected WorldLoader(Permissions permissions, Map<String, String> mirrors) {
 		this.mirrors = mirrors;
+		this.permissions = permissions;
 		for(World world : Bukkit.getServer().getWorlds()) {
 			createWorld(world);
 		}
@@ -47,6 +50,9 @@ public class WorldLoader extends WorldListener {
 		 */
 		else
 		wm.createWorld(world, new YamlWorld(world));
+		// And set up players already in that world (for use with /reload)
+		for(Player player : w.getPlayers())
+			permissions.handler.setupPlayer(player, wm.getWorld(world));
 	}
 
 }

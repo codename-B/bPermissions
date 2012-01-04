@@ -9,8 +9,6 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.Plugin;
-
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 /**
@@ -26,7 +24,7 @@ public class SuperPermissionHandler extends PlayerListener {
 
 	private WorldManager wm = WorldManager.getInstance();
 	private Map<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
-	private Plugin plugin;
+	private Permissions plugin;
 
 	private static Field permissions;
 
@@ -57,7 +55,7 @@ public class SuperPermissionHandler extends PlayerListener {
 		att.getPermissible().recalculatePermissions();
 	}
 
-	protected SuperPermissionHandler(Plugin plugin) {
+	protected SuperPermissionHandler(Permissions plugin) {
 		this.plugin = plugin;
 	}
 
@@ -67,7 +65,7 @@ public class SuperPermissionHandler extends PlayerListener {
 	 * @param player
 	 * @param world
 	 */
-	private void setupPlayer(Player player, World world) {
+	public void setupPlayer(Player player, World world) {
 		PermissionAttachment att;
 		// Does the player have an attachment that we've assigned already?
 		// Then we add a new one or grab the existing one

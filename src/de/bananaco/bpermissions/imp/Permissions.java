@@ -18,14 +18,15 @@ import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
 public class Permissions extends JavaPlugin {
-
+	
 	private final Map<String, String> mirrors = new HashMap<String, String>();
 	private final Mirrors mrs = new Mirrors(mirrors);
-	private Listener loader = new WorldLoader(mirrors);
-	private Map<CommandSender, Commands> commands = new HashMap<CommandSender, Commands>();
-	private WorldManager wm = WorldManager.getInstance();
-	private DefaultWorld world = new DefaultWorld();
-	private SuperPermissionHandler handler;
+	
+	public SuperPermissionHandler handler;
+	private Listener loader;
+	private Map<CommandSender, Commands> commands;
+	private WorldManager wm;
+	private DefaultWorld world;
 	
 	@Override
 	public void onDisable() {
@@ -34,8 +35,12 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// Instantiate our SuperPermissionHandler
+		// Only happens after onEnable(), prevent NPE's
 		handler = new SuperPermissionHandler(this);
+		loader = new WorldLoader(this, mirrors);
+		commands = new HashMap<CommandSender, Commands>();
+		wm = WorldManager.getInstance();
+		world = new DefaultWorld();
 		// Load the world mirroring setup
 		mrs.load();
 		// Load the default users.yml and groups.yml
