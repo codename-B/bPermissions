@@ -38,9 +38,12 @@ public abstract class PermissionCarrier extends WorldCarrier {
 	 * @param permission
 	 */
 	public void removePermission(String permission) {
+		Permission removal = null;
 		for(Permission p : permissions)
 			if(p.name().equalsIgnoreCase(permission))
-				permissions.remove(p);
+				removal = p;
+		if(removal != null)
+			permissions.remove(removal);
 	}
 
 	/**

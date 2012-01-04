@@ -148,9 +148,10 @@ public class Permissions extends JavaPlugin {
 					} else if(action.equalsIgnoreCase("rmgroup")) {
 						cmd.removeGroup(value);
 					} else if(action.equalsIgnoreCase("list")) {
+						value = value.toLowerCase();
 						if(value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
 							cmd.listGroups();
-						} else if(value.equalsIgnoreCase("permissions") || value.equalsIgnoreCase("permission") || value.equalsIgnoreCase("p")) {
+						} else if(value.startsWith("perm") || value.equalsIgnoreCase("p")) {
 							cmd.listPermissions();
 						}
 					} else if(action.equalsIgnoreCase("addperm")) {
