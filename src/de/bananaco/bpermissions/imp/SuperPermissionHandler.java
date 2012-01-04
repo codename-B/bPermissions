@@ -48,9 +48,12 @@ public class SuperPermissionHandler extends PlayerListener {
 	public static void setPermissions(PermissionAttachment att, Map<String, Boolean> perm) throws IllegalArgumentException, IllegalAccessException {
 		// Grab a reference to the original object
 		Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(att);
+		// Clear the map (faster than removing the attachment and recalculating)
+		orig.clear();
 		// Then whack our map into there
 		orig.putAll(perm);
 		// That's all folks!
+		att.getPermissible().recalculatePermissions();
 	}
 
 	protected SuperPermissionHandler(Plugin plugin) {
@@ -64,11 +67,13 @@ public class SuperPermissionHandler extends PlayerListener {
 	 * @param world
 	 */
 	public void setupPlayer(Player player, World world) {
+		PermissionAttachment att;
 		// Does the player have an attachment that we've assigned already?
+		// Then we add a new one or grab the existing one
 		if(attachments.containsKey(player))
-			player.removeAttachment(attachments.get(player));
-		// Then we add a new one
-		PermissionAttachment att = player.addAttachment(plugin);
+		att = attachments.get(player);
+		else
+		att = player.addAttachment(plugin);
 		// Grab the pre-calculated effectivePermissions from the User object
 		Map<String, Boolean> perms = world.getUser(player.getName()).getMappedPermissions();
 		// Then whack it onto the player
@@ -80,8 +85,6 @@ public class SuperPermissionHandler extends PlayerListener {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		// And store it so we can remove it again later
-		attachments.put(player, att);
 	}
 
 	@Override
