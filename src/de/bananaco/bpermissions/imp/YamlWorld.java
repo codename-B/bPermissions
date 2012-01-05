@@ -40,8 +40,11 @@ public class YamlWorld extends World {
 	private final File dufile = new File("plugins/bPermissions/users.yml");
 	private final File dgfile = new File("plugins/bPermissions/groups.yml");
 
-	public YamlWorld(String world) {
+	private final Permissions permissions;
+	
+	public YamlWorld(String world, Permissions permissions) {
 		super(world);
+		this.permissions = permissions;
 	}
 	
 	/**
@@ -77,6 +80,7 @@ public class YamlWorld extends World {
 		try {
 			clear();
 			loadUnsafe();
+			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

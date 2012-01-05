@@ -167,7 +167,7 @@ public class Permissions extends JavaPlugin {
 						sendMessage(sender, "Please consult the command documentation!");
 					}
 				}
-			} else if(args.length == 3 && args[0].equalsIgnoreCase("value")) {
+			} else if(args.length == 3 && args[0].equalsIgnoreCase("meta")) {
 				if(calc == null) {
 					sendMessage(sender, "Nothing is selected!");
 				} else if (calc.getType() != type) {

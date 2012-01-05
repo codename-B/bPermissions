@@ -3,7 +3,6 @@ version: 2.3.0a
 author: codename_B
 website: http://tetragaming.com/codename_B/
 main: de.bananaco.bpermissions.imp.Permissions
-load: startup
 commands:
   permissions:
     aliases: [p, bp, perm]
