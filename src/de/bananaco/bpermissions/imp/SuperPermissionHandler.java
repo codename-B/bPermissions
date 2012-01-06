@@ -95,6 +95,10 @@ public class SuperPermissionHandler extends PlayerListener {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		// And beep
+		try {
+		java.awt.Toolkit.getDefaultToolkit().beep();
+		} catch (Exception e) {}
 	}
 
 	@Override
