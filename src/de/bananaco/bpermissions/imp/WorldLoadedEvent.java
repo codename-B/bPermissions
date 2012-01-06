@@ -13,7 +13,7 @@ public class WorldLoadedEvent extends Event {
 	private final World world;
 	
 	protected WorldLoadedEvent(World world) {
-		super(Event.Type.CUSTOM_EVENT);
+		super("WorldLoadedEvent");
 		this.world = world;
 	}
 	
