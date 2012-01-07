@@ -87,10 +87,12 @@ public class DefaultWorld extends World {
 				// MetaData
 				ConfigurationSection meta = usersConfig
 						.getConfigurationSection(name + "." + META);
+				if(meta != null) {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
 						user.setValue(key, meta.getString(key));
+				}
 				// Upload to API
 				add(user);
 			}
@@ -116,10 +118,12 @@ public class DefaultWorld extends World {
 				// MetaData
 				ConfigurationSection meta = groupsConfig
 						.getConfigurationSection(name + "." + META);
+				if(meta != null) {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
 						group.setValue(key, meta.getString(key));
+				}
 				// Upload to API
 				add(group);
 			}

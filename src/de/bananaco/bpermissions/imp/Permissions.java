@@ -30,6 +30,8 @@ public class Permissions extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		for(World world : wm.getAllWorlds())
+			world.save();
 		System.out.println(blankFormat("Disabled"));
 	}
 
