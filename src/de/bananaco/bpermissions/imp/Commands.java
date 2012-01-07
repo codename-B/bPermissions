@@ -125,7 +125,7 @@ public class Commands {
 	
 	public void showValue(String key) {
 		String value = calc.getValue(key);
-		sender.sendMessage(format("The "+calc.getType().getName()+" - "+key+": "+value));
+		sender.sendMessage(format("Meta for "+calc.getType().getName()+" "+calc.getName()+" - "+key+": "+value));
 	}
 	
 	/**

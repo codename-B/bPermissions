@@ -235,7 +235,7 @@ public class YamlWorld extends World {
 			Map<String, String> meta = group.getMeta();
 			if(meta.size() > 0)
 				for(String key : meta.keySet())
-					gconfig.set(USERS + "." + name + "." + META + "." + key, meta.get(key));
+					gconfig.set(GROUPS + "." + name + "." + META + "." + key, meta.get(key));
 		}
 		
 		uconfig.save(ufile);
