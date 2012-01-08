@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import de.bananaco.bpermissions.api.WorldManager;
+
 public class Mirrors {
 	
 	private final Map<String, String> mirrors;
@@ -35,7 +37,7 @@ public class Mirrors {
 			Set<String> keys = config.getKeys(false);
 			if(keys != null && keys.size() > 0) {
 				for(String key : keys) 
-					mirrors.put(key, config.getString(key));
+					mirrors.put(key.toLowerCase(), config.getString(key).toLowerCase());
 			}
 			else {
 				config.set("example_world_nether","example_world");
@@ -45,6 +47,7 @@ public class Mirrors {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		WorldManager.getInstance().setMirrors(mirrors);
 	}
 
 }

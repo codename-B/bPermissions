@@ -25,10 +25,22 @@ public class WorldManager {
 	
 	private World defaultWorld = null;
 	
+	private Map<String, String> mirrors = new HashMap<String, String>();
+	
+	Map<String, World> worlds = new HashMap<String, World>();
+	
+	protected WorldManager() {
+
+	}
+	
 	public static WorldManager getInstance() {
 		if(instance == null)
 			instance = new WorldManager();
 		return instance;
+	}
+	
+	public void setMirrors(Map<String, String> mirrors) {
+		this.mirrors = mirrors;
 	}
 	
 	public void setDefaultWorld(World world) {
@@ -39,22 +51,27 @@ public class WorldManager {
 		return defaultWorld;
 	}
 	
-	Map<String, World> worlds = new HashMap<String, World>();
-	
-	protected WorldManager() {
-
-	}
-	
 	public World getWorld(String name) {
 		if(name == null)
 			return getDefaultWorld();
 		
 		name = name.toLowerCase();
+		
+		if(mirrors.containsKey(name))
+			name = mirrors.get(name);
+		
 		return worlds.get(name);
 	}
 	
 	public boolean containsWorld(String name) {
+		if(name == null)
+			return false;
+		
 		name = name.toLowerCase();
+		
+		if(mirrors.containsKey(name))
+			name = mirrors.get(name);
+		
 		return worlds.containsKey(name);
 	}
 	
