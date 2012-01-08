@@ -146,6 +146,7 @@ public class Permissions extends JavaPlugin {
 					sendMessage(sender, "That track ("+name+") does not exist");
 				}
 			}
+			return true;
 		}
 
 		if (!allowed) {
