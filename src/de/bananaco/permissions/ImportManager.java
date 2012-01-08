@@ -34,7 +34,7 @@ public class ImportManager {
 			ConfigurationSection users = pConfig.getConfigurationSection("players");
 			ConfigurationSection groups = pConfig.getConfigurationSection("groups");
 			// Load users
-			if(users.getKeys(false) != null && users.getKeys(false).size() > 0) {
+			if(users != null && users.getKeys(false) != null && users.getKeys(false).size() > 0) {
 				Set<String> u = users.getKeys(false);
 				for(String usr : u) {
 					List<String> g = users.getStringList(usr);
@@ -45,7 +45,7 @@ public class ImportManager {
 				}
 			}
 			// Load groups
-			if(groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
+			if(groups != null && groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
 				Set<String> g = groups.getKeys(false);
 				for(String grp : g) {
 					List<String> p = groups.getStringList(grp);
