@@ -40,6 +40,8 @@ public class ImportManager {
 					List<String> g = users.getStringList(usr);
 					// Clear the groups in their list firstly
 					wd.getUser(usr).getGroupsAsString().clear();
+					// Another NPE Fix
+					if(g != null && g.size() > 0)
 					for(String group : g)
 						wd.getUser(usr).addGroup(group);
 				}
@@ -49,8 +51,9 @@ public class ImportManager {
 				Set<String> g = groups.getKeys(false);
 				for(String grp : g) {
 					List<String> p = groups.getStringList(grp);
-					for(String perm : p)
-						wd.getGroup(grp).getPermissions().add(Permission.loadFromString(perm));
+					if(p != null && p.size() > 0)
+						for(String perm : p)
+							wd.getGroup(grp).getPermissions().add(Permission.loadFromString(perm));
 				}
 			}
 
