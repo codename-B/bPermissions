@@ -35,8 +35,11 @@ public class DefaultWorld extends World {
 	private final File ufile = new File("plugins/bPermissions/users.yml");
 	private final File gfile = new File("plugins/bPermissions/groups.yml");
 
-	public DefaultWorld() {
-		super("default");
+	protected final Permissions permissions;
+	
+	public DefaultWorld(Permissions permissions) {
+		super(null);
+		this.permissions = permissions;
 	}
 
 	@Override
@@ -153,7 +156,8 @@ public class DefaultWorld extends World {
 	private void saveUnsafe() throws Exception {
 
 		if (!ufile.exists()) {
-			ufile.getParentFile().mkdirs();
+			if (ufile.getParentFile() != null)
+				ufile.getParentFile().mkdirs();
 			ufile.createNewFile();
 			gfile.createNewFile();
 		}
@@ -193,7 +197,7 @@ public class DefaultWorld extends World {
 			Map<String, String> meta = group.getMeta();
 			if(meta.size() > 0)
 				for(String key : meta.keySet())
-					gconfig.set(USERS + "." + name + "." + META + "." + key, meta.get(key));
+					gconfig.set(GROUPS + "." + name + "." + META + "." + key, meta.get(key));
 		}
 		
 		uconfig.save(ufile);

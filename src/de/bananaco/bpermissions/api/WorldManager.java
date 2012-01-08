@@ -23,10 +23,20 @@ public class WorldManager {
 	
 	public static WorldManager instance = null;
 	
+	private World defaultWorld = null;
+	
 	public static WorldManager getInstance() {
 		if(instance == null)
 			instance = new WorldManager();
 		return instance;
+	}
+	
+	public void setDefaultWorld(World world) {
+		defaultWorld = world;
+	}
+	
+	public World getDefaultWorld() {
+		return defaultWorld;
 	}
 	
 	Map<String, World> worlds = new HashMap<String, World>();
@@ -36,6 +46,9 @@ public class WorldManager {
 	}
 	
 	public World getWorld(String name) {
+		if(name == null)
+			return getDefaultWorld();
+		
 		name = name.toLowerCase();
 		return worlds.get(name);
 	}

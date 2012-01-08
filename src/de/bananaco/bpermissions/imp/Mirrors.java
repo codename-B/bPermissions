@@ -33,10 +33,15 @@ public class Mirrors {
 			}
 			config.load(file);
 			Set<String> keys = config.getKeys(false);
-			if(keys != null && keys.size() > 0) 
+			if(keys != null && keys.size() > 0) {
 				for(String key : keys) 
 					mirrors.put(key, config.getString(key));
-						
+			}
+			else {
+				config.set("example_world_nether","example_world");
+				config.set("example_world_end","example_world");
+				config.save(file);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
