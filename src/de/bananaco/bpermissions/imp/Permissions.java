@@ -16,6 +16,7 @@ import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.permissions.interfaces.PromotionTrack;
 
 public class Permissions extends JavaPlugin {
 	
@@ -197,6 +198,36 @@ public class Permissions extends JavaPlugin {
 			}
 			return true;
 		}
+		/*
+		 * Promote/Demote shizzledizzle
+		 */
+		if(args.length > 0) {
+			if(command.getName().equalsIgnoreCase("promote")) {
+				PromotionTrack track = config.getPromotionTrack();
+				String player = args[0];
+				String name = "default";
+				String world = null;
+				if(args.length > 1)
+					name = args[1];
+				if(args.length > 2)
+					name = args[2];
+				track.promote(player, name, world);
+				sendMessage(sender, "Promoted along the track: "+name);
+			}
+			else if(command.getName().equalsIgnoreCase("demote")) {
+				PromotionTrack track = config.getPromotionTrack();
+				String player = args[0];
+				String name = "default";
+				String world = null;
+				if(args.length > 1)
+					name = args[1];
+				if(args.length > 2)
+					name = args[2];
+				track.demote(player, name, world);
+				sendMessage(sender, "Demoted along the track: "+name);
+			}
+		}
+		
 		/*
 		 * And now your standard "permissions" command
 		 */
