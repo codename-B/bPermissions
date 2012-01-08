@@ -42,11 +42,12 @@ public class SingleGroupPromotion implements PromotionTrack {
 				config.save(tracks);
 			} else {
 				Set<String> keys = config.getKeys(false);
-				for (String key : keys) {
-					List<String> groups = config.getStringList(key);
-					if (groups != null && groups.size() > 0)
-						trackmap.put(key.toLowerCase(), groups);
-				}
+				if (keys != null && keys.size() > 0)
+					for (String key : keys) {
+						List<String> groups = config.getStringList(key);
+						if (groups != null && groups.size() > 0)
+							trackmap.put(key.toLowerCase(), groups);
+					}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
