@@ -213,7 +213,7 @@ public class Permissions extends JavaPlugin {
 					world = args[2];
 				if(track.containsTrack(name)) {
 					track.promote(player, name, world);
-					sendMessage(sender, "Promoted along the track: "+name);
+					sendMessage(sender, "Promoted along the track: "+name+" in "+(world==null?" all worlds":"world: "+world));
 				} else {
 					sendMessage(sender, "That track ("+name+") does not exist");
 				}
@@ -229,7 +229,7 @@ public class Permissions extends JavaPlugin {
 					world = args[2];
 				if(track.containsTrack(name)) {
 					track.demote(player, name, world);
-					sendMessage(sender, "Demoted along the track: "+name);
+					sendMessage(sender, "Demoted along the track: "+name+" in "+(world==null?" all worlds":"world: "+world));
 				} else {
 					sendMessage(sender, "That track ("+name+") does not exist");
 				}
