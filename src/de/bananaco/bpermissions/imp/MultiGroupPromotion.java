@@ -15,7 +15,7 @@ import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.permissions.interfaces.PromotionTrack;
 
 public class MultiGroupPromotion implements PromotionTrack {
-	private final File tracks = new File("plugins/bPermisisons/tracks.yml");
+	private final File tracks = new File("plugins/bPermissions/tracks.yml");
 	private final WorldManager wm = WorldManager.getInstance();
 	private YamlConfiguration config = new YamlConfiguration();
 
