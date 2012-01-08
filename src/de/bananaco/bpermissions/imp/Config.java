@@ -36,7 +36,10 @@ public class Config {
 		// then load our PromotionTrack
 		if(trackType.equalsIgnoreCase("multi")) {
 			track = new MultiGroupPromotion();
-		} else {
+		} else if(trackType.equalsIgnoreCase("lump")) {
+			track = new LumpGroupPromotion();
+		}
+		else {
 			track = new SingleGroupPromotion();
 		}
 		// Load the track
