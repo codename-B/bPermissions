@@ -210,9 +210,13 @@ public class Permissions extends JavaPlugin {
 				if(args.length > 1)
 					name = args[1];
 				if(args.length > 2)
-					name = args[2];
-				track.promote(player, name, world);
-				sendMessage(sender, "Promoted along the track: "+name);
+					world = args[2];
+				if(track.containsTrack(name)) {
+					track.promote(player, name, world);
+					sendMessage(sender, "Promoted along the track: "+name);
+				} else {
+					sendMessage(sender, "That track ("+name+") does not exist");
+				}
 			}
 			else if(command.getName().equalsIgnoreCase("demote")) {
 				PromotionTrack track = config.getPromotionTrack();
@@ -222,9 +226,13 @@ public class Permissions extends JavaPlugin {
 				if(args.length > 1)
 					name = args[1];
 				if(args.length > 2)
-					name = args[2];
-				track.demote(player, name, world);
-				sendMessage(sender, "Demoted along the track: "+name);
+					world = args[2];
+				if(track.containsTrack(name)) {
+					track.demote(player, name, world);
+					sendMessage(sender, "Demoted along the track: "+name);
+				} else {
+					sendMessage(sender, "That track ("+name+") does not exist");
+				}
 			}
 		}
 		

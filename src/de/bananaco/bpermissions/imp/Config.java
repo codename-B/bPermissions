@@ -39,6 +39,8 @@ public class Config {
 		} else {
 			track = new SingleGroupPromotion();
 		}
+		// Load the track
+		track.load();
 		// finally save the config
 		config.save(file);
 	}
