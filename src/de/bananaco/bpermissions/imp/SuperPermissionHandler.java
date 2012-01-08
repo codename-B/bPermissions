@@ -132,10 +132,10 @@ public class SuperPermissionHandler extends PlayerListener {
 	 * @return String<raaaaaaawr>
 	 */
 	private String rawritise(String message) {
-		int length = message.length();
+		int length = message.length()-5;
 		StringBuilder sb = new StringBuilder();
 		for(int i=0; i<length; i++)
 			sb.append("a");
-		return "R"+sb.toString()+"wr!";
+		return "The '*' node won't work with superperms! Ra"+sb.toString()+"wr!";
 	}
 }
