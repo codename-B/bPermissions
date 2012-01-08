@@ -118,10 +118,8 @@ public class SuperPermissionHandler extends PlayerListener {
 	public void onPlayerChat(PlayerChatEvent event) {
 		Player player = event.getPlayer();
 		// If the player is an op and has given themselves an * node, mess with their chat
-		if(player.isOp()) {
-			if(wm.getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission("*")) {
+		if(wm.getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission("*")) {
 				event.setMessage(rawritise(event.getMessage()));
-			}
 		}
 	}
 
