@@ -67,6 +67,7 @@ public class MultiGroupPromotion implements PromotionTrack {
 						user.addGroup(groups.get(i));
 						// We've promoted successfully
 						promoted = true;
+						w.save();
 					}
 			}
 		} else {
@@ -79,6 +80,7 @@ public class MultiGroupPromotion implements PromotionTrack {
 					user.addGroup(groups.get(i));
 					// We've promoted successfully
 					promoted = true;
+					wm.getWorld(world).save();
 				}
 		}
 	}
@@ -97,6 +99,7 @@ public class MultiGroupPromotion implements PromotionTrack {
 						user.removeGroup(groups.get(i));
 						// We've demoted successfully
 						demoted = true;
+						w.save();
 					}
 			}
 		} else {
@@ -109,6 +112,7 @@ public class MultiGroupPromotion implements PromotionTrack {
 					user.removeGroup(groups.get(i));
 					// We've demoted successfully
 					demoted = true;
+					wm.getWorld(world).save();
 				}
 		}
 	}
