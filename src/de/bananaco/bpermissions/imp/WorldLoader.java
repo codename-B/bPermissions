@@ -40,20 +40,14 @@ public class WorldLoader extends WorldListener {
 	public void createWorld(World w) {
 		// TODO this is probably going to be an issue
 		System.out.println(Permissions.blankFormat("Loading world: "+w.getName()));
-		String world = w.getName();
-		/*
-		 * If the mirror exists and the world to be mirrored to is loaded
-		 */
-		if(mirrors.containsKey(world))
-		wm.createWorld(world, wm.getWorld(mirrors.get(world)));
-		/*
-		 * Otherwise, create a new world
-		 */
-		else
+		String world = w.getName().toLowerCase();
+		
+		if(!mirrors.containsKey(world)) {
 		wm.createWorld(world, new YamlWorld(world, permissions));
 		// And set up players already in that world (for use with /reload)
 		for(Player player : w.getPlayers())
 			permissions.handler.setupPlayer(player, wm.getWorld(world));
+		}
 	}
 
 }
