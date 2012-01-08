@@ -27,6 +27,7 @@ public class Permissions extends JavaPlugin {
 	private Map<CommandSender, Commands> commands;
 	private WorldManager wm;
 	private DefaultWorld world;
+	private Config config;
 	de.bananaco.permissions.Permissions oldPermissions;
 	
 	@Override
@@ -39,6 +40,7 @@ public class Permissions extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Only happens after onEnable(), prevent NPE's
+		config = new Config();
 		wm = WorldManager.getInstance();
 		oldPermissions = new de.bananaco.permissions.Permissions(this);
 		handler = new SuperPermissionHandler(this);
@@ -48,9 +50,12 @@ public class Permissions extends JavaPlugin {
 		wm.setDefaultWorld(world);
 		// Load the default users.yml and groups.yml
 		world.load();
+		// Load the default Map for Commands
 		commands = new HashMap<CommandSender, Commands>();
 		// Load the world mirroring setup
 		mrs.load();
+		// Load the config.yml
+		config.load();
 		// Register world loading
 		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
 		// Register player login

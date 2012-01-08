@@ -32,7 +32,12 @@ public class WorldManager {
 	protected WorldManager() {
 
 	}
-	
+	/**
+	 * This returns the Singleton instance of
+	 * WorldManager. This will be the same across
+	 * implementations! :D
+	 * @return WorldManager
+	 */
 	public static WorldManager getInstance() {
 		if(instance == null)
 			instance = new WorldManager();
