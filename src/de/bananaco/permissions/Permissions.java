@@ -64,10 +64,17 @@ public class Permissions {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+				if(args[1].equalsIgnoreCase("p3")) {
+					try {
+						im.importPermissions3();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 				sender.sendMessage("Import attempted, view console for results");
 				sender.sendMessage("Note: if the files do not exist, you will see a FileNotFoundException");
 				return true;
-				}
 			}
 		}
 		return false;
