@@ -90,6 +90,13 @@ public class Permissions extends JavaPlugin {
 	public void sendMessage(CommandSender sender, String message) {
 		sender.sendMessage(format(message));
 	}
+	
+	public boolean has(CommandSender sender, String perm) {
+		if(sender instanceof Player)
+			return sender.hasPermission(perm);
+		else
+		return true;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
@@ -99,6 +106,47 @@ public class Permissions extends JavaPlugin {
 		if (sender instanceof Player)
 			allowed = hasPermission((Player) sender, "bPermissions.admin")
 					|| sender.isOp();
+		
+		/*
+		 * Promote/Demote shizzledizzle
+		 */
+		if(args.length > 0 && (command.getName().equalsIgnoreCase("promote") || command.getName().equalsIgnoreCase("demote"))) {
+			// Define some global variables
+			String player = args[0];
+			String name = "default";
+			String world = null;
+			// Check for permission
+			if(!has(sender, "tracks."+name)) {
+				sendMessage(sender, "You don't have permission to use promotion tracks!");
+				return true;
+			}
+			if(command.getName().equalsIgnoreCase("promote")) {
+				PromotionTrack track = config.getPromotionTrack();
+				if(args.length > 1)
+					name = args[1];
+				if(args.length > 2)
+					world = args[2];
+				if(track.containsTrack(name)) {
+					track.promote(player, name, world);
+					sendMessage(sender, "Promoted along the track: "+name+" in "+(world==null?"all worlds":"world: "+world));
+				} else {
+					sendMessage(sender, "That track ("+name+") does not exist");
+				}
+			}
+			else if(command.getName().equalsIgnoreCase("demote")) {
+				PromotionTrack track = config.getPromotionTrack();
+				if(args.length > 1)
+					name = args[1];
+				if(args.length > 2)
+					world = args[2];
+				if(track.containsTrack(name)) {
+					track.demote(player, name, world);
+					sendMessage(sender, "Demoted along the track: "+name+" in "+(world==null?"all worlds":"world: "+world));
+				} else {
+					sendMessage(sender, "That track ("+name+") does not exist");
+				}
+			}
+		}
 
 		if (!allowed) {
 			sendMessage(sender, "You're not allowed to do that!");
@@ -197,43 +245,6 @@ public class Permissions extends JavaPlugin {
 				sendMessage(sender, "Too many arguments.");
 			}
 			return true;
-		}
-		/*
-		 * Promote/Demote shizzledizzle
-		 */
-		if(args.length > 0) {
-			if(command.getName().equalsIgnoreCase("promote")) {
-				PromotionTrack track = config.getPromotionTrack();
-				String player = args[0];
-				String name = "default";
-				String world = null;
-				if(args.length > 1)
-					name = args[1];
-				if(args.length > 2)
-					world = args[2];
-				if(track.containsTrack(name)) {
-					track.promote(player, name, world);
-					sendMessage(sender, "Promoted along the track: "+name+" in "+(world==null?" all worlds":"world: "+world));
-				} else {
-					sendMessage(sender, "That track ("+name+") does not exist");
-				}
-			}
-			else if(command.getName().equalsIgnoreCase("demote")) {
-				PromotionTrack track = config.getPromotionTrack();
-				String player = args[0];
-				String name = "default";
-				String world = null;
-				if(args.length > 1)
-					name = args[1];
-				if(args.length > 2)
-					world = args[2];
-				if(track.containsTrack(name)) {
-					track.demote(player, name, world);
-					sendMessage(sender, "Demoted along the track: "+name+" in "+(world==null?" all worlds":"world: "+world));
-				} else {
-					sendMessage(sender, "That track ("+name+") does not exist");
-				}
-			}
 		}
 		
 		/*

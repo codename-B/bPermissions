@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
@@ -42,12 +45,17 @@ public class MultiGroupPromotion implements PromotionTrack {
 				config.save(tracks);
 			} else {
 				Set<String> keys = config.getKeys(false);
+				Map<String, Boolean> children = new HashMap<String, Boolean>();
 				if (keys != null && keys.size() > 0)
 					for (String key : keys) {
+						children.put("tracks."+key.toLowerCase(), true);
 						List<String> groups = config.getStringList(key);
-						if (groups != null && groups.size() > 0)
+						if (groups != null && groups.size() > 0) {
 							trackmap.put(key.toLowerCase(), groups);
+						}
 					}
+				Permission perm = new Permission("tracks.*", PermissionDefault.OP, children);
+				Bukkit.getPluginManager().addPermission(perm);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
