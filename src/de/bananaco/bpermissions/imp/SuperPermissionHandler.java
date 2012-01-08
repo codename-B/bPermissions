@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.permissions.Permission;
@@ -112,5 +113,31 @@ public class SuperPermissionHandler extends PlayerListener {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
 	}
+	
+	@Override
+	public void onPlayerChat(PlayerChatEvent event) {
+		Player player = event.getPlayer();
+		// If the player is an op and has given themselves an * node, mess with their chat
+		if(player.isOp()) {
+			if(wm.getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission("*")) {
+				event.setMessage(rawritise(event.getMessage()));
+			}
+		}
+	}
 
+	/**
+	 * Changes a String of any length
+	 * into a String of "raaaaaaaaaawr"
+	 * with "a" being the length of the 
+	 * original String
+	 * @param message
+	 * @return String<raaaaaaawr>
+	 */
+	private String rawritise(String message) {
+		int length = message.length();
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<length; i++)
+			sb.append("a");
+		return "R"+sb.toString()+"wr!";
+	}
 }

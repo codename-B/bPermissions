@@ -55,6 +55,8 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
 		// Register player login
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, handler, Priority.Lowest, this);
+		// Register player chat
+		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, handler, Priority.Lowest, this);
 		// Register world changing
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, handler, Priority.Normal, this);
 		// And print a nice little message ;)
