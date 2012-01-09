@@ -256,10 +256,16 @@ public class Permissions extends JavaPlugin {
 				String action = args[0];
 				if(action.equalsIgnoreCase("save")) {
 					cmd.save();
+					return true;
 				} else if(action.equalsIgnoreCase("reload")) {
 					for(World world : wm.getAllWorlds())
 						world.load();
 					sendMessage(sender, "All worlds reloaded!");
+					return true;
+				} else if(action.equalsIgnoreCase("cleanup")) {
+					sendMessage(sender, "Cleaning up files!");
+					wm.cleanup();
+					return true;
 				}
 			}
 			return oldPermissions.onCommand(sender, command, label, args);

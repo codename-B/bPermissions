@@ -99,5 +99,13 @@ public class WorldManager {
 		worlds.put(name, world);
 		world.load();
 	}
+	
+	/**
+	 * Cleans up all worlds of unusted groups
+	 */
+	public void cleanup() {
+		for(World world : getAllWorlds())
+			world.cleanup();
+	}
 
 }

@@ -1,7 +1,9 @@
 package de.bananaco.bpermissions.api;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -184,6 +186,39 @@ public abstract class World {
 			return false;
 		
 		return o.hashCode() == hashCode();
+	}
+	/**
+	 * This is the implementation of the .cleanup() in WorldManager
+	 * 
+	 * Removes any empty groups and any users with just the default group
+	 */
+	protected void cleanup() {
+		List<String> removal = new ArrayList<String>();
+		// Iterate through the users
+		for(String user : users.keySet()) {
+			User u = users.get(user);
+			if(u.getPermissions().size() == 0 &&
+					(u.getGroupsAsString().size() == 0 ||
+						(u.getGroupsAsString().size() == 1 &&
+							u.getGroupsAsString().iterator().next().equals(getDefaultGroup()))))
+								removal.add(user);
+		}	
+		// Remove the user if it's been flagged
+		for(String user : removal)
+			users.remove(user);
+		removal.clear();
+		// Iterate through the groups
+		for(String group : groups.keySet()) {
+			Group g = groups.get(group);
+			if(g.getPermissions().size() == 0 &&
+					g.getGroupsAsString().size() == 0)
+						removal.add(group);
+		}
+		// Remove the group if it's been flagged
+		for(String group : removal)
+			groups.remove(group);
+		// And finally save the cleaned up files
+		save();
 	}
 	
 	public abstract String getDefaultGroup();
