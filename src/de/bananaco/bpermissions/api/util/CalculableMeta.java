@@ -23,14 +23,20 @@ public class CalculableMeta extends GroupCarrier {
 	 */
 	public void calculateEffectiveMeta() throws RecursiveGroupException {
 		try {
+		// Implement meta priorities
 		effectiveMeta.clear();
+		int lastGroup = -1;
 		for (Group group : getGroups()) {
-			group.calculateEffectiveMeta();
-			Map<String, String> meta = group.getEffectiveMeta();
-			for(String key : meta.keySet()) {
-				effectiveMeta.put(key, meta.get(key));
+			if(group.getPriority() > lastGroup) {
+				lastGroup = group.getPriority();
+				group.calculateEffectiveMeta();
+				Map<String, String> meta = group.getEffectiveMeta();
+				for(String key : meta.keySet()) {
+					effectiveMeta.put(key, meta.get(key));
+				}
 			}
 		}
+		// Obviously local priority wins every time
 		Map<String, String> meta = this.getMeta();
 		for(String key : meta.keySet()) {
 			effectiveMeta.put(key, meta.get(key));

@@ -121,5 +121,22 @@ public class MetaData {
 	public boolean getSorting() {
 		return sort;
 	}
+	
+	/**
+	 * Returns the priority of the metadata
+	 * @return priority
+	 */
+	public int getPriority() {
+		int priority = 0;
+		// Do some parsing if possible
+		try {
+			if(this.getValue("priority") != null) {
+				int p = Integer.parseInt(this.getValue("priority"));
+				priority = p;
+			}
+		} catch (Exception e) {}
+		// And return the priority (will usually be 0)
+		return priority;
+	}
 
 }

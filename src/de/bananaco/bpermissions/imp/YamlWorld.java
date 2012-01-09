@@ -132,7 +132,7 @@ public class YamlWorld extends World {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
-						user.setValue(key, meta.getString(key));
+						user.setValue(key, meta.get(key).toString());
 				}
 				// Upload to API
 				add(user);
@@ -163,7 +163,7 @@ public class YamlWorld extends World {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
-						group.setValue(key, meta.getString(key));
+						group.setValue(key, meta.get(key).toString());
 				}
 				// Upload to API
 				add(group);

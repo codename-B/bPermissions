@@ -60,7 +60,6 @@ public class ImportManager {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void importPermissions3() throws Exception {
 		for (World world : plugin.getServer().getWorlds()) {
 			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
@@ -92,8 +91,8 @@ public class ImportManager {
 				for (String player : usersList) {
 					User user = wd.getUser(player);
 					try {
-					List<String> p = uConfig.getList("users."+player+".permissions");
-					List<String> i = uConfig.getList("users."+player+".groups");
+					List<String> p = uConfig.getStringList("users."+player+".permissions");
+					List<String> i = uConfig.getStringList("users."+player+".groups");
 					
 					if(p != null)
 						user.getPermissions().addAll(Permission.loadFromString(p));
