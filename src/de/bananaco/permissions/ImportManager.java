@@ -28,15 +28,19 @@ public class ImportManager {
 			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
 			File perms = new File("plugins/bPermissions/worlds/"
 					+ world.getName() + ".yml");
+			if(perms.exists()) {
+			System.out.println("Importing world: "+world.getName());
 			YamlConfiguration pConfig = new YamlConfiguration();//new Configuration(perms);
 			pConfig.load(perms);
 			// Here we grab the different bits and bobs
 			ConfigurationSection users = pConfig.getConfigurationSection("players");
 			ConfigurationSection groups = pConfig.getConfigurationSection("groups");
+			
 			// Load users
 			if(users != null && users.getKeys(false) != null && users.getKeys(false).size() > 0) {
 				Set<String> u = users.getKeys(false);
 				for(String usr : u) {
+					System.out.println("Importing user: "+usr);
 					List<String> g = users.getStringList(usr);
 					// Clear the groups in their list firstly
 					wd.getUser(usr).getGroupsAsString().clear();
@@ -50,14 +54,18 @@ public class ImportManager {
 			if(groups != null && groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
 				Set<String> g = groups.getKeys(false);
 				for(String grp : g) {
+					System.out.println("Importing group: "+grp);
 					List<String> p = groups.getStringList(grp);
 					if(p != null && p.size() > 0)
 						for(String perm : p)
 							wd.getGroup(grp).getPermissions().add(Permission.loadFromString(perm));
 				}
 			}
-
+			}
+			// Forgot to save after importing!
+			wd.save();
 		}
+		wm.cleanup();
 	}
 	
 	public void importPermissions3() throws Exception {
@@ -69,6 +77,9 @@ public class ImportManager {
 			File groups = new File("plugins/Permissions/" + world.getName()
 					+ "/groups.yml");
 			
+			if(users.exists() && groups.exists()) {
+			System.out.println("Importing world: "+world.getName());
+
 			YamlConfiguration uConfig = new YamlConfiguration();
 			YamlConfiguration gConfig = new YamlConfiguration();
 			try {
@@ -89,6 +100,7 @@ public class ImportManager {
 			
 			if (usersList != null)
 				for (String player : usersList) {
+					System.out.println("Importing user: "+player);
 					User user = wd.getUser(player);
 					try {
 					List<String> p = uConfig.getStringList("users."+player+".permissions");
@@ -107,6 +119,7 @@ public class ImportManager {
 			
 			if (groupsList != null)
 				for (String group : groupsList) {
+					System.out.println("Importing group: "+group);
 					Group gr = wd.getGroup(group);
 					try {
 					List<String> p = gConfig.getStringList("groups."+group+".permissions");
@@ -121,7 +134,9 @@ public class ImportManager {
 					}
 				}
 			wd.save();
+			}
 		}
+		wm.cleanup();
 	}
 	
 }
