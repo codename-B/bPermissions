@@ -115,6 +115,10 @@ public class Permissions extends JavaPlugin {
 			String player = args[0];
 			String name = "default";
 			String world = null;
+			if(args.length > 1)
+				name = args[1];
+			if(args.length > 2)
+				world = args[2];
 			// Check for permission
 			if(!has(sender, "tracks."+name)) {
 				sendMessage(sender, "You don't have permission to use promotion tracks!");
@@ -122,10 +126,6 @@ public class Permissions extends JavaPlugin {
 			}
 			if(command.getName().equalsIgnoreCase("promote")) {
 				PromotionTrack track = config.getPromotionTrack();
-				if(args.length > 1)
-					name = args[1];
-				if(args.length > 2)
-					world = args[2];
 				if(track.containsTrack(name)) {
 					track.promote(player, name, world);
 					sendMessage(sender, "Promoted along the track: "+name+" in "+(world==null?"all worlds":"world: "+world));
@@ -135,10 +135,6 @@ public class Permissions extends JavaPlugin {
 			}
 			else if(command.getName().equalsIgnoreCase("demote")) {
 				PromotionTrack track = config.getPromotionTrack();
-				if(args.length > 1)
-					name = args[1];
-				if(args.length > 2)
-					world = args[2];
 				if(track.containsTrack(name)) {
 					track.demote(player, name, world);
 					sendMessage(sender, "Demoted along the track: "+name+" in "+(world==null?"all worlds":"world: "+world));
@@ -258,8 +254,14 @@ public class Permissions extends JavaPlugin {
 					cmd.save();
 					return true;
 				} else if(action.equalsIgnoreCase("reload")) {
-					for(World world : wm.getAllWorlds())
+					// Reload all changes
+					for(World world : wm.getAllWorlds()) {
 						world.load();
+					}
+					// Iterate through all players and ensure 100% that they're setup
+					for(Player player : getServer().getOnlinePlayers()) {
+						handler.setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+					}
 					sendMessage(sender, "All worlds reloaded!");
 					return true;
 				} else if(action.equalsIgnoreCase("cleanup")) {
