@@ -57,6 +57,7 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 * @param group
 	 */
 	public void addGroup(String group) {
+		group = group.toLowerCase();
 		groups.add(group);
 	}
 	
@@ -66,7 +67,19 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 * @param group
 	 */
 	public void removeGroup(String group) {
+		group = group.toLowerCase();
 		groups.remove(group);
+	}
+	
+	/**
+	 * Shows if the Object has the named group
+	 * @param group
+	 * @return boolean
+	 */
+	public boolean hasGroup(String group) {
+		if(groups.contains(group))
+			return true;
+		return false;
 	}
 	
 	/**
@@ -75,7 +88,10 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 * @return
 	 */
 	public List<String> serialiseGroups() {
-		List<String> groups = new ArrayList<String>(getGroupsAsString());
+		List<String> groups = new ArrayList<String>();
+		// Yes, we're lowercasing everything
+		for(String group : getGroupsAsString())
+			groups.add(group.toLowerCase());
 		// Aren't static's useful?
 		sort(groups);
 		return groups;
