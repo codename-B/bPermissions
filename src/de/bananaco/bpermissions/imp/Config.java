@@ -25,7 +25,8 @@ public class Config {
 	private void loadUnsafe() throws Exception {
 		// Your standard create if not exist shizzledizzle
 		if(!file.exists()) {
-			file.getParentFile().mkdirs();
+			if(file.getParentFile() != null)
+				file.getParentFile().mkdirs();
 			file.createNewFile();
 		}
 		config.load(file);
