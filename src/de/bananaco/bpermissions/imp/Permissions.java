@@ -65,8 +65,6 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, handler, Priority.Lowest, this);
 		// Register world changing
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, handler, Priority.Normal, this);
-		// Load all online players
-		handler.setupAllPlayers();
 		// And print a nice little message ;)
 		System.out.println(blankFormat("Enabled"));
 	}
