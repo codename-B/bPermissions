@@ -270,7 +270,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 					return true;
 				}
 			}
-			return oldPermissions.onCommand(sender, command, label, args);
+			return super.onCommand(sender, command, label, args);
 		}
 		return true;
 	}
