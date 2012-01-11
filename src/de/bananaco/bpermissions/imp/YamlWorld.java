@@ -81,6 +81,7 @@ public class YamlWorld extends World {
 			clear();
 			loadUnsafe();
 			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
+			permissions.handler.setupAllPlayers();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -185,6 +186,7 @@ public class YamlWorld extends World {
 	public boolean save() {
 		try {
 			saveUnsafe();
+			load();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

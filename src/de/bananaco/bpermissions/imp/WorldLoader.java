@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldListener;
 
@@ -44,9 +43,6 @@ public class WorldLoader extends WorldListener {
 		
 		if(!mirrors.containsKey(world)) {
 		wm.createWorld(world, new YamlWorld(world, permissions));
-		// And set up players already in that world (for use with /reload)
-		for(Player player : w.getPlayers())
-			permissions.handler.setupPlayer(player, wm.getWorld(world));
 		}
 	}
 

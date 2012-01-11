@@ -69,6 +69,14 @@ public class SuperPermissionHandler extends PlayerListener {
 	}
 
 	/**
+	 * A guaranteed way to setup all players in the server in one fell swoop
+	 */
+	public void setupAllPlayers() {
+		for(Player player : plugin.getServer().getOnlinePlayers())
+			setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+	}
+	
+	/**
 	 * Set up the Player via the specified World object
 	 * (note this is a bPermissions world, not a Bukkit world)
 	 * @param player

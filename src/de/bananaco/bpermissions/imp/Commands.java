@@ -140,10 +140,6 @@ public class Commands {
 		// Otherwise do your thang
 		try {
 		world.save();
-		if(calc != null) {
-		calc.calculateEffectivePermissions();
-		calc.calculateEffectiveMeta();
-		}
 		sender.sendMessage(format("Saved!"));
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

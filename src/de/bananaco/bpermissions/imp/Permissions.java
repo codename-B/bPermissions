@@ -65,6 +65,8 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, handler, Priority.Lowest, this);
 		// Register world changing
 		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, handler, Priority.Normal, this);
+		// Load all online players
+		handler.setupAllPlayers();
 		// And print a nice little message ;)
 		System.out.println(blankFormat("Enabled"));
 	}
@@ -259,9 +261,10 @@ public class Permissions extends JavaPlugin {
 						world.load();
 					}
 					// Iterate through all players and ensure 100% that they're setup
-					for(Player player : getServer().getOnlinePlayers()) {
-						handler.setupPlayer(player, wm.getWorld(player.getWorld().getName()));
-					}
+					// !! Should occur automatically now !!
+					//for(Player player : getServer().getOnlinePlayers()) {
+					//	handler.setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+					//}
 					sendMessage(sender, "All worlds reloaded!");
 					return true;
 				} else if(action.equalsIgnoreCase("cleanup")) {
