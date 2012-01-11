@@ -1,7 +1,6 @@
 package de.bananaco.permissions;
 
 import java.io.File;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,12 +15,12 @@ import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.info.InfoReader;
 import de.bananaco.permissions.worlds.WorldPermissionsManager;
 
-public class Permissions {
+public abstract class Permissions extends JavaPlugin {
 	
 	private static WorldPermissionsManager wpm = new WorldPermissionsManager();
 	private static InfoReader info = new InfoReader();
 	
-	private final JavaPlugin plugin;
+	private JavaPlugin plugin;
 	private ForNoobs noob;
 	private BackupPermissionsCommand backup;
 	private ImportManager im;
@@ -51,7 +50,7 @@ public class Permissions {
 	private WorldCommands worldExec = new WorldCommands(this);
 	private LocalCommands localExec = new LocalCommands(this);
 	
-	public Permissions(JavaPlugin plugin) {
+	public void enable(JavaPlugin plugin) {
 		backup = new BackupPermissionsCommand(plugin);
 		noob = new ForNoobs(plugin);
 		im = new ImportManager(plugin);
@@ -183,10 +182,6 @@ public class Permissions {
 					label, args);
 		
 		return false;
-	}
-
-	public Server getServer() {
-		return plugin.getServer();
 	}
 
 }

@@ -10,15 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.permissions.interfaces.PromotionTrack;
 
-public class Permissions extends JavaPlugin {
+public class Permissions extends de.bananaco.permissions.Permissions {
 	
 	private final Map<String, String> mirrors = new HashMap<String, String>();
 	private final Mirrors mrs = new Mirrors(mirrors);
@@ -43,7 +41,8 @@ public class Permissions extends JavaPlugin {
 		// Only happens after onEnable(), prevent NPE's
 		config = new Config();
 		wm = WorldManager.getInstance();
-		oldPermissions = new de.bananaco.permissions.Permissions(this);
+		oldPermissions = (de.bananaco.permissions.Permissions) this;
+		oldPermissions.enable(this);
 		handler = new SuperPermissionHandler(this);
 		loader = new WorldLoader(this, mirrors);
 		world = new DefaultWorld(this);
