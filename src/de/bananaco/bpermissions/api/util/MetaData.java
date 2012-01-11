@@ -19,9 +19,13 @@ public class MetaData {
 	
 	private final Map<String, String> values = new HashMap<String, String>();
 	
-	private final static Comparator<String> compar = new Comparator<String>()
+	private final static Comparator<Object> comparObj = new Comparator<Object>()
 	{
-		public int compare(String f1, String f2) {
+		public int compare(Object o1, Object o2) {
+			// Because we're not passing these anymore, we get them somehow
+			String f1 = o1.toString();
+			String f2 = o2.toString();
+			// Then the same as in compar
 			int i = (f1.length() > f2.length()) ? f2.length() : f1.length();
 			for (int n = 0; n < i - 1; n++) {
 				String a = f1.substring(n, n + 1);
@@ -32,14 +36,6 @@ public class MetaData {
 			return 0;
 		}
 	};
-	
-	private final static Comparator<Calculable> comparCalc = new Comparator<Calculable>()
-    {
-        public int compare(Calculable f1, Calculable f2)
-        {
-            return f1.getName().compareTo(f2.getName());
-        }        
-    };
 	
 	private static boolean sort = true;
 	
@@ -95,15 +91,8 @@ public class MetaData {
 			return;
 		if(!sort)
 			return;
-		if(data.get(0) instanceof String) {
-			List<String> d = (List<String>) data;
-			Collections.sort(d, compar);
-		} else if(data.get(0) instanceof Calculable) {
-			List<Calculable> d = (List<Calculable>) data;
-			Collections.sort(d, comparCalc);
-		} else {
-			return;
-		}
+		List<Object> d = (List<Object>) data;
+		Collections.sort(d, comparObj);
 	}
 	
 	/**

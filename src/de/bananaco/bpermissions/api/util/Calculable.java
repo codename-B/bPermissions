@@ -102,6 +102,11 @@ public abstract class Calculable extends CalculableMeta {
 		return getNameLowerCase().hashCode();
 	}
 	
+	@Override
+	public String toString() {
+		return name.toLowerCase();
+	}
+	
 	/**
 	 * Another way of checking the type
 	 * besides instanceof
