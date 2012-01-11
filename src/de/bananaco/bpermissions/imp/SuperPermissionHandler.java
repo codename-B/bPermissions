@@ -75,6 +75,20 @@ public class SuperPermissionHandler extends PlayerListener {
 	 * @param world
 	 */
 	public void setupPlayer(Player player, World world) {
+		// Some null checks, I guess?
+		if(world == null) {
+			System.err.println("Unable to setup! null world!");
+			return;
+		}
+		if(player == null) {
+			System.err.println("Unable to setup! null player!");
+			return;
+		}
+		if(world.getUser(player.getName()) == null) {
+			System.err.println("Unable to setup! null user!");
+			return;
+		}
+		
 		PermissionAttachment att;
 		// Does the player have an attachment that we've assigned already?
 		// Then we add a new one or grab the existing one
