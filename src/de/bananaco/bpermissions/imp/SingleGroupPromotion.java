@@ -70,7 +70,8 @@ public class SingleGroupPromotion implements PromotionTrack {
 				User user = w.getUser(player);
 				boolean promoted = false;
 				// If they don't have the group, set it to their group
-				for (int i = 0; i < groups.size() && !promoted; i++)
+				// ** FIX FOR SINGLE GROUP PROMOTION BUG **
+				for (int i = groups.size()-1; i >= 0 && !promoted; i++)
 					if (!user.getGroupsAsString().contains(groups.get(i))) {
 						// Clear the groups
 						user.getGroupsAsString().clear();
@@ -85,7 +86,8 @@ public class SingleGroupPromotion implements PromotionTrack {
 			User user = wm.getWorld(world).getUser(player);
 			boolean promoted = false;
 			// If they don't have the group, set it to their group
-			for (int i = 0; i < groups.size() && !promoted; i++)
+			// ** FIX FOR SINGLE GROUP PROMOTION BUG **
+			for (int i = groups.size()-1; i >= 0 && !promoted; i++)
 				if (!user.getGroupsAsString().contains(groups.get(i))) {
 					// Clear the groups
 					user.getGroupsAsString().clear();
