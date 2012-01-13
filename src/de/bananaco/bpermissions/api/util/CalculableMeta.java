@@ -50,8 +50,16 @@ public class CalculableMeta extends GroupCarrier {
 		return effectiveMeta;
 	}
 	
+	/**
+	 * Here you go MiracleM4n!
+	 * Returns the stored "effective" meta value (calculated with inheritance/priority)
+	 * @param key
+	 * @return String (or "" if no value)
+	 */
 	public String getEffectiveValue(String key) {
-		return effectiveMeta.get(key);
+		if(containsEffectiveValue(key))
+			return effectiveMeta.get(key);
+		return "";
 	}
 	
 	public boolean containsEffectiveValue(String key) {
