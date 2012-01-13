@@ -23,7 +23,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	
 	public SuperPermissionHandler handler;
 	private Listener loader;
-	private Map<CommandSender, Commands> commands;
+	private Map<String, Commands> commands;
 	private WorldManager wm;
 	private DefaultWorld world;
 	private Config config;
@@ -51,7 +51,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		// Load the default users.yml and groups.yml
 		world.load();
 		// Load the default Map for Commands
-		commands = new HashMap<CommandSender, Commands>();
+		commands = new HashMap<String, Commands>();
 		// Load the world mirroring setup
 		mrs.load();
 		// Load the config.yml
@@ -152,7 +152,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		 * Create an entry in the commands selection if one does not exist
 		 */
 		if (!commands.containsKey(sender))
-			commands.put(sender, new Commands(sender));
+			commands.put(getName(sender), new Commands(sender));
 
 		Commands cmd = commands.get(sender);
 		/*
@@ -273,6 +273,12 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 			return super.onCommand(sender, command, label, args);
 		}
 		return true;
+	}
+
+	private String getName(CommandSender sender) {
+		if(sender instanceof Player)
+			return sender.getName();
+		return "CONSOLE";
 	}
 
 }
