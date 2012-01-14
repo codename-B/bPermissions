@@ -151,7 +151,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		/*
 		 * Create an entry in the commands selection if one does not exist
 		 */
-		if (!commands.containsKey(sender))
+		if (!commands.containsKey(getName(sender)))
 			commands.put(getName(sender), new Commands(sender));
 
 		Commands cmd = commands.get(getName(sender));
