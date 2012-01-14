@@ -92,7 +92,7 @@ public class Commands {
 		List<String> groups = getCalculable().serialiseGroups();
 		String[] gr = groups.toArray(new String[groups.size()]);
 		String mgr = Arrays.toString(gr);
-		sender.sendMessage(format("The "+getCalculable().getType().getName()+" "+calc.getName()+" has these groups:"));
+		sender.sendMessage(format("The "+getCalculable().getType().getName()+" "+getCalculable().getName()+" has these groups:"));
 		sender.sendMessage(mgr);
 	}
 	
@@ -111,7 +111,7 @@ public class Commands {
 		List<String> permissions = getCalculable().serialisePermissions();
 		String[] pr = permissions.toArray(new String[permissions.size()]);
 		String mpr = Arrays.toString(pr);
-		sender.sendMessage(format("The "+getCalculable().getType().getName()+" "+calc.getName()+" has these permissions:"));
+		sender.sendMessage(format("The "+getCalculable().getType().getName()+" "+getCalculable().getName()+" has these permissions:"));
 		sender.sendMessage(mpr);
 	}
 	
