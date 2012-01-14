@@ -107,5 +107,13 @@ public class WorldManager {
 		for(World world : getAllWorlds())
 			world.cleanup();
 	}
+	
+	/**
+	 * Convenience method
+	 */
+	public void saveAll() {
+		for(World world : getAllWorlds())
+			world.save();
+	}
 
 }

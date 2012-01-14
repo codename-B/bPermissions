@@ -154,7 +154,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		if (!commands.containsKey(sender))
 			commands.put(getName(sender), new Commands(sender));
 
-		Commands cmd = commands.get(sender);
+		Commands cmd = commands.get(getName(sender));
 		/*
 		 * Selecting and displaying the currently selected world
 		 */

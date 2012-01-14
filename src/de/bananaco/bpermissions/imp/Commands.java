@@ -132,18 +132,8 @@ public class Commands {
 	 * Remind the user to save when changes are finished!
 	 */
 	public void save() {
-		// If the world does not exist
-		if(world == null) {
-			sender.sendMessage(format("Please select a loaded world!"));
-			return;
-		}
-		// Otherwise do your thang
-		try {
-		world.save();
-		sender.sendMessage(format("Saved!"));
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
+		// Now saves everything
+		WorldManager.getInstance().saveAll();
 	}
 
 }
