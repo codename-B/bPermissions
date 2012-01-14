@@ -72,12 +72,12 @@ public class SingleGroupPromotion implements PromotionTrack {
 				// If they don't have the group, set it to their group
 				// ** FIX FOR SINGLE GROUP PROMOTION BUG **
 				// ** FIX FOR SINGLE GROUP PROMOTION BUG #2**
-				for (int i = groups.size()-1; i >= 0 && !promoted; i--)
-					if (!user.getGroupsAsString().contains(groups.get(i))) {
+				for (int i = groups.size()-2; i >= 0 && !promoted; i--)
+					if (user.getGroupsAsString().contains(groups.get(i))) {
 						// Clear the groups
 						user.getGroupsAsString().clear();
 						// Add the new group
-						user.addGroup(groups.get(i));
+						user.addGroup(groups.get(i+1));
 						// We've promoted successfully
 						promoted = true;
 						w.save();
@@ -89,12 +89,12 @@ public class SingleGroupPromotion implements PromotionTrack {
 			// If they don't have the group, set it to their group
 			// ** FIX FOR SINGLE GROUP PROMOTION BUG **
 			// ** FIX FOR SINGLE GROUP PROMOTION BUG #2**
-			for (int i = groups.size()-1; i >= 0 && !promoted; i--)
-				if (!user.getGroupsAsString().contains(groups.get(i))) {
+			for (int i = groups.size()-2; i >= 0 && !promoted; i--)
+				if (user.getGroupsAsString().contains(groups.get(i))) {
 					// Clear the groups
 					user.getGroupsAsString().clear();
 					// Add the new group
-					user.addGroup(groups.get(i));
+					user.addGroup(groups.get(i+1));
 					// We've promoted successfully
 					promoted = true;
 					wm.getWorld(world).save();
@@ -110,7 +110,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 				User user = w.getUser(player);
 				boolean demoted = false;
 				// If they don't have the group, set it to their group
-				for (int i = groups.size() - 1; i >= 0 && !demoted; i--)
+				for (int i = groups.size() - 1; i >= 1 && !demoted; i--)
 					if (user.getGroupsAsString().contains(groups.get(i))) {
 						// Clear the groups
 						user.getGroupsAsString().clear();
@@ -129,7 +129,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 			User user = wm.getWorld(world).getUser(player);
 			boolean demoted = false;
 			// If they don't have the group, set it to their group
-			for (int i = groups.size() - 1; i >= 0 && !demoted; i--)
+			for (int i = groups.size() - 1; i >= 1 && !demoted; i--)
 				if (user.getGroupsAsString().contains(groups.get(i))) {
 					// Clear the groups
 					user.getGroupsAsString().clear();
