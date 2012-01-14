@@ -198,7 +198,8 @@ public abstract class World {
 		// Iterate through the users
 		for(String user : users.keySet()) {
 			User u = users.get(user);
-			if(u.getPermissions().size() == 0 &&
+			if(u.getMeta().size() == 0 &&
+					u.getPermissions().size() == 0 &&
 					(u.getGroupsAsString().size() == 0 ||
 						(u.getGroupsAsString().size() == 1 &&
 							u.getGroupsAsString().iterator().next().equals(getDefaultGroup()))))
@@ -211,7 +212,8 @@ public abstract class World {
 		// Iterate through the groups
 		for(String group : groups.keySet()) {
 			Group g = groups.get(group);
-			if(g.getPermissions().size() == 0 &&
+			if(g.getMeta().size() == 0 &&
+				g.getPermissions().size() == 0 &&
 					g.getGroupsAsString().size() == 0)
 						removal.add(group);
 		}

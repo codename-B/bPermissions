@@ -57,10 +57,14 @@ public class Commands {
 		}
 		calc = type;
 		name = c;
-		sender.sendMessage(format(calc.getName()+" selected."));
+		sender.sendMessage(format(getCalculable().getName()+" selected."));
 	}
 	
 	public Calculable getCalculable() {
+		if(name == null)
+			return null;
+		if(calc == null)
+			return null;
 		return world.get(name, calc);
 	}
 	
