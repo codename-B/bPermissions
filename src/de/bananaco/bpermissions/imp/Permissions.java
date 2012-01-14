@@ -250,6 +250,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 			if(args.length == 1) {
 				String action = args[0];
 				if(action.equalsIgnoreCase("save")) {
+					sendMessage(sender, "All worlds saved!");
 					cmd.save();
 					return true;
 				} else if(action.equalsIgnoreCase("reload")) {

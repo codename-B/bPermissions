@@ -2,6 +2,7 @@ package de.bananaco.bpermissions.api;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.util.CalculableType;
@@ -26,4 +27,30 @@ public class Group extends MapCalculable {
 		return CalculableType.GROUP;
 	}
 
+	public boolean hasPermission(String node) {
+		node = node.toLowerCase();
+		boolean allowed = internalHasPermission(node);
+		return allowed;
+	}
+	
+	private boolean internalHasPermission(String node) {
+		Map<String, Boolean> perms = getMappedPermissions();
+		
+		if(perms.containsKey(node))
+			return perms.get(node);
+		
+		String permission = node;
+		int index = permission.lastIndexOf('.');
+		while (index >= 0) {
+			permission = permission.substring(0, index);
+			String wildcard = permission + ".*";
+			if(perms.containsKey(wildcard))
+				return perms.get(wildcard);
+			index = permission.lastIndexOf('.');
+		}
+		if(perms.containsKey("*"))
+			return perms.get("*");
+		return false;
+	}
+	
 }
