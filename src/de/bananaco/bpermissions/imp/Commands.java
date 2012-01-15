@@ -72,18 +72,18 @@ public class Commands {
 	
 	public void addGroup(String group, CommandSender sender) {
 		getCalculable().addGroup(group);
-		sender.sendMessage(format("Added "+group+" to "+calc.getName()));
+		sender.sendMessage(format("Added "+group+" to "+getCalculable().getName()));
 	}
 	
 	public void removeGroup(String group, CommandSender sender) {
 		getCalculable().removeGroup(group);
-		sender.sendMessage(format("Removed "+group+" from "+calc.getName()));
+		sender.sendMessage(format("Removed "+group+" from "+getCalculable().getName()));
 	}
 	
 	public void setGroup(String group, CommandSender sender) {
 		getCalculable().getGroupsAsString().clear();
 		getCalculable().addGroup(group);
-		sender.sendMessage(format("Set "+calc.getName()+"'s group to "+group));
+		sender.sendMessage(format("Set "+getCalculable().getName()+"'s group to "+group));
 	}
 	
 	public void listGroups(CommandSender sender) {
@@ -97,12 +97,12 @@ public class Commands {
 	public void addPermission(String permission, CommandSender sender) {
 		Permission perm = Permission.loadFromString(permission);
 		getCalculable().addPermission(perm.name(), perm.isTrue());
-		sender.sendMessage(format("Added "+perm.toString()+" to "+calc.getName()));
+		sender.sendMessage(format("Added "+perm.toString()+" to "+getCalculable().getName()));
 	}
 	
 	public void removePermission(String permission, CommandSender sender) {
 		getCalculable().removePermission(permission);
-		sender.sendMessage(format("Removed "+permission+" from "+calc.getName()));
+		sender.sendMessage(format("Removed "+permission+" from "+getCalculable().getName()));
 	}
 	
 	public void listPermissions(CommandSender sender) {
@@ -126,12 +126,12 @@ public class Commands {
 	
 	public void setValue(String key, String value, CommandSender sender) {
 		getCalculable().setValue(key, value);
-		sender.sendMessage(format(key + " set to " + value + " for " + calc.getName()));
+		sender.sendMessage(format(key + " set to " + value + " for " + getCalculable().getName()));
 	}
 	
 	public void showValue(String key, CommandSender sender) {
 		String value = getCalculable().getValue(key);
-		sender.sendMessage(format("Meta for "+calc.getName()+" "+calc.getName()+" - "+key+": "+value));
+		sender.sendMessage(format("Meta for "+calc.getName()+" "+getCalculable().getName()+" - "+key+": "+value));
 	}
 	
 	/**
