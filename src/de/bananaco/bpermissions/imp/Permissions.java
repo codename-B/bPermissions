@@ -152,7 +152,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		 * Create an entry in the commands selection if one does not exist
 		 */
 		if (!commands.containsKey(getName(sender)))
-			commands.put(getName(sender), new Commands(sender));
+			commands.put(getName(sender), new Commands());
 
 		Commands cmd = commands.get(getName(sender));
 		/*
@@ -167,7 +167,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 					sendMessage(sender, "Currently selected world: " + world.getName());
 				}
 			} else if (args.length == 1) {
-				cmd.setWorld(args[0]);
+				cmd.setWorld(args[0], sender);
 			} else {
 				sendMessage(sender, "Too many arguments.");
 			}
@@ -192,7 +192,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 					sendMessage(sender, "Currently selected "+calc.getType().getName()+": "+calc.getName());
 				}
 			} else if(args.length == 1) {
-				cmd.setCalculable(type, args[0]);
+				cmd.setCalculable(type, args[0], sender);
 			} else if(args.length == 2) {
 				if(calc == null) {
 					sendMessage(sender, "Nothing is selected!");
@@ -202,28 +202,28 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 					String action = args[0];
 					String value = args[1];
 					if(action.equalsIgnoreCase("addgroup")) {
-						cmd.addGroup(value);
+						cmd.addGroup(value, sender);
 					} else if(action.equalsIgnoreCase("rmgroup")) {
-						cmd.removeGroup(value);
+						cmd.removeGroup(value, sender);
 					} else if(action.equalsIgnoreCase("setgroup")) {
-						cmd.setGroup(value);
+						cmd.setGroup(value, sender);
 					}
 					else if(action.equalsIgnoreCase("list")) {
 						value = value.toLowerCase();
 						if(value.equalsIgnoreCase("groups") || value.equalsIgnoreCase("group") || value.equalsIgnoreCase("g")) {
-							cmd.listGroups();
+							cmd.listGroups(sender);
 						} else if(value.startsWith("perm") || value.equalsIgnoreCase("p")) {
-							cmd.listPermissions();
+							cmd.listPermissions(sender);
 						}
 					} else if(action.equalsIgnoreCase("meta")) {
-						cmd.showValue(value);
+						cmd.showValue(value, sender);
 					}
 					else if(action.equalsIgnoreCase("addperm")) {
-						cmd.addPermission(value);
+						cmd.addPermission(value, sender);
 					} else if(action.equalsIgnoreCase("rmperm")) {
-						cmd.removePermission(value);
+						cmd.removePermission(value, sender);
 					} else if(action.equals("has")) {
-						cmd.hasPermission(value);
+						cmd.hasPermission(value, sender);
 					} else {
 						sendMessage(sender, "Please consult the command documentation!");
 					}
@@ -234,7 +234,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 				} else if (calc.getType() != type) {
 					sendMessage(sender, "Please select a "+type.getName()+", you currently have a "+opposite.getName()+" selected.");
 				} else {
-					cmd.setValue(args[1], args[2]);
+					cmd.setValue(args[1], args[2], sender);
 				}
 			}
 			else {

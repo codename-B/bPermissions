@@ -15,22 +15,20 @@ import de.bananaco.bpermissions.api.util.Permission;
 
 public class Commands {
 	
-	private final CommandSender sender;
 	private final WorldManager instance = WorldManager.getInstance();
 	
 	private World world = null;
 	private CalculableType calc = null;
 	private String name = null;
 	
-	protected Commands(CommandSender player) {
-		this.sender = player;
+	protected Commands() {
 	}
 	
 	protected String format(String message) {
 		return Permissions.format(message);
 	}
 	
-	public void setWorld(String w) {
+	public void setWorld(String w, CommandSender sender) {
 		World world = instance.getWorld(w);
 		// If the world does not exist
 		if(world == null) {
@@ -49,7 +47,7 @@ public class Commands {
 		return world;
 	}
 	
-	public void setCalculable(CalculableType type, String c) {
+	public void setCalculable(CalculableType type, String c, CommandSender sender) {
 		// If the world does not exist
 		if(world == null) {
 			sender.sendMessage(format("Please select a loaded world!"));
@@ -72,23 +70,23 @@ public class Commands {
 	 * Main functions go here
 	 */
 	
-	public void addGroup(String group) {
+	public void addGroup(String group, CommandSender sender) {
 		getCalculable().addGroup(group);
 		sender.sendMessage(format("Added "+group+" to "+calc.getName()));
 	}
 	
-	public void removeGroup(String group) {
+	public void removeGroup(String group, CommandSender sender) {
 		getCalculable().removeGroup(group);
 		sender.sendMessage(format("Removed "+group+" from "+calc.getName()));
 	}
 	
-	public void setGroup(String group) {
+	public void setGroup(String group, CommandSender sender) {
 		getCalculable().getGroupsAsString().clear();
 		getCalculable().addGroup(group);
 		sender.sendMessage(format("Set "+calc.getName()+"'s group to "+group));
 	}
 	
-	public void listGroups() {
+	public void listGroups(CommandSender sender) {
 		List<String> groups = getCalculable().serialiseGroups();
 		String[] gr = groups.toArray(new String[groups.size()]);
 		String mgr = Arrays.toString(gr);
@@ -96,18 +94,18 @@ public class Commands {
 		sender.sendMessage(mgr);
 	}
 	
-	public void addPermission(String permission) {
+	public void addPermission(String permission, CommandSender sender) {
 		Permission perm = Permission.loadFromString(permission);
 		getCalculable().addPermission(perm.name(), perm.isTrue());
 		sender.sendMessage(format("Added "+perm.toString()+" to "+calc.getName()));
 	}
 	
-	public void removePermission(String permission) {
+	public void removePermission(String permission, CommandSender sender) {
 		getCalculable().removePermission(permission);
 		sender.sendMessage(format("Removed "+permission+" from "+calc.getName()));
 	}
 	
-	public void listPermissions() {
+	public void listPermissions(CommandSender sender) {
 		List<String> permissions = getCalculable().serialisePermissions();
 		String[] pr = permissions.toArray(new String[permissions.size()]);
 		String mpr = Arrays.toString(pr);
@@ -115,7 +113,7 @@ public class Commands {
 		sender.sendMessage(mpr);
 	}
 	
-	public void hasPermission(String node) {
+	public void hasPermission(String node, CommandSender sender) {
 		Calculable c = getCalculable();
 		if(c instanceof User) {
 		User user = (User) c;
@@ -126,12 +124,12 @@ public class Commands {
 		}
 	}
 	
-	public void setValue(String key, String value) {
+	public void setValue(String key, String value, CommandSender sender) {
 		getCalculable().setValue(key, value);
 		sender.sendMessage(format(key + " set to " + value + " for " + calc.getName()));
 	}
 	
-	public void showValue(String key) {
+	public void showValue(String key, CommandSender sender) {
 		String value = getCalculable().getValue(key);
 		sender.sendMessage(format("Meta for "+calc.getName()+" "+calc.getName()+" - "+key+": "+value));
 	}
