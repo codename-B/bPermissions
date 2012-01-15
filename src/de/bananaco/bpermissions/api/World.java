@@ -83,7 +83,7 @@ public abstract class World {
 		// And now we check
 		if(type == CalculableType.USER) {
 			if(!users.containsKey(name)) {
-			add(new User(name, null, null, getName()));
+			add(new User(name, null, null, getName(), this));
 			// Don't forget to add the default group!
 			users.get(name).addGroup(getDefaultGroup());
 			// And calculate the effective Permissions!
@@ -97,7 +97,7 @@ public abstract class World {
 			return users.get(name);
 		} else if (type == CalculableType.GROUP) {
 			if(!groups.containsKey(name)) {
-			add(new Group(name, null, null, getName()));
+			add(new Group(name, null, null, getName(), this));
 			}
 			return groups.get(name);
 		}

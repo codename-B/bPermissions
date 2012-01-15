@@ -15,11 +15,15 @@ import de.bananaco.bpermissions.api.util.Permission;
  */
 public class Group extends MapCalculable {
 
+	private World w;
+	private WorldManager wm = WorldManager.getInstance();
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Group(String name, List<String> groups, Set<Permission> permissions,
-			String world) {
+			String world, World w) {
 		super(name, groups == null ? new HashSet() : new HashSet(groups),
 				permissions, world);
+		this.w = w;
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class Group extends MapCalculable {
 		boolean allowed = internalHasPermission(node);
 		return allowed;
 	}
-	
+
 	private boolean internalHasPermission(String node) {
 		Map<String, Boolean> perms = getMappedPermissions();
 		
@@ -51,6 +55,47 @@ public class Group extends MapCalculable {
 		if(perms.containsKey("*"))
 			return perms.get("*");
 		return false;
+	}
+	
+	/*
+	 * These methods are added
+	 * to allow auto-saving of
+	 * the World on any changes
+	 */
+	
+	@Override
+	public void addGroup(String group) {
+		if(wm.getAutoSave())
+			w.save();
+		super.addGroup(group);
+	}
+
+	@Override
+	public void removeGroup(String group) {
+		if(wm.getAutoSave())
+			w.save();
+		super.removeGroup(group);
+	}
+
+	@Override
+	public void addPermission(String permission, boolean isTrue) {
+		if(wm.getAutoSave())
+			w.save();
+		super.addPermission(permission, isTrue);
+	}
+
+	@Override
+	public void removePermission(String permission) {
+		if(wm.getAutoSave())
+			w.save();
+		super.removePermission(permission);
+	}
+
+	@Override
+	public void setValue(String key, String value) {
+		if(wm.getAutoSave())
+			w.save();
+		super.setValue(key, value);
 	}
 	
 }

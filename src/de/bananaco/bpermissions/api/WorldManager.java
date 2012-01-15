@@ -21,13 +21,15 @@ import java.util.Set;
  */
 public class WorldManager {
 	
-	public static WorldManager instance = null;
+	private static WorldManager instance = null;
 	
 	private World defaultWorld = null;
 	
 	private Map<String, String> mirrors = new HashMap<String, String>();
 	
 	Map<String, World> worlds = new HashMap<String, World>();
+	
+	private boolean autoSave = false;
 	
 	protected WorldManager() {
 
@@ -42,6 +44,14 @@ public class WorldManager {
 		if(instance == null)
 			instance = new WorldManager();
 		return instance;
+	}
+	
+	public void setAutoSave(boolean autoSave) {
+		this.autoSave = autoSave;
+	}
+	
+	public boolean getAutoSave() {
+		return autoSave;
 	}
 	
 	public void setMirrors(Map<String, String> mirrors) {

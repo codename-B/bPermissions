@@ -86,7 +86,7 @@ public class DefaultWorld extends World {
 						+ GROUPS);
 				Set<Permission> perms = Permission.loadFromString(nPerm);
 				// Create the new user
-				User user = new User(name, nGroup, perms, getName());
+				User user = new User(name, nGroup, perms, getName(), this);
 				// MetaData
 				ConfigurationSection meta = usersConfig
 						.getConfigurationSection(name + "." + META);
@@ -117,7 +117,7 @@ public class DefaultWorld extends World {
 						+ GROUPS);
 				Set<Permission> perms = Permission.loadFromString(nPerm);
 				// Create the new group
-				Group group = new Group(name, nGroup, perms, getName());
+				Group group = new Group(name, nGroup, perms, getName(), this);
 				// MetaData
 				ConfigurationSection meta = groupsConfig
 						.getConfigurationSection(name + "." + META);
