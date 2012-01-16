@@ -67,9 +67,10 @@ public abstract class Permissions extends JavaPlugin {
 		YamlConfiguration c = new YamlConfiguration();
 		
 		File cf = new File("plugins/bPermissions/config_old.yml");
-		if(!cf.exists())
+		if(!cf.exists()) {
+			cf.getParentFile().mkdirs();
 			cf.createNewFile();
-		
+		}
 		c.load(cf);
 
 		globalCommand = c.getString("commands.global-command", "global");
@@ -118,6 +119,11 @@ public abstract class Permissions extends JavaPlugin {
 
 		c.save(cf);
 		
+	}
+	
+	@Override
+	public void onLoad() {
+		PermissionBridge.loadPseudoPlugin(this, getClassLoader());
 	}
 	
 	public static WorldPermissionsManager getWorldPermissionsManager() {
