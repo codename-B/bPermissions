@@ -19,6 +19,8 @@ public abstract class MapCalculable extends Calculable {
 			Set<Permission> permissions, String world) {
 		super(name, groups, permissions, world);
 	}
+	
+	boolean dirty = true;
 
 	private final Map<String, Boolean> permissions = new HashMap<String, Boolean>();
 	
@@ -30,16 +32,30 @@ public abstract class MapCalculable extends Calculable {
 	 * @return Map<String, Boolean>
 	 */
 	public Map<String, Boolean> getMappedPermissions() {
+		if(isDirty())
+			try {
+				calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				e.printStackTrace();
+			}
 		return permissions;
 	}
 	
-	@Override
-	public void calculateEffectivePermissions() throws RecursiveGroupException {
+	//@Override
+	protected void calculateMappedPermissions() throws RecursiveGroupException {
+		if(!isDirty())
+			return;
 		super.calculateEffectivePermissions();
 		permissions.clear();
 		for(Permission perm : getEffectivePermissions()) {
 			permissions.put(perm.nameLowerCase(), perm.isTrue());
 		}
+		this.calculateEffectiveMeta();
+		dirty = false;
+	}
+	
+	public boolean isDirty() {
+		return dirty;
 	}
 	
 }

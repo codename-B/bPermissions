@@ -48,7 +48,9 @@ public abstract class Calculable extends CalculableMeta {
 	 * Used to calculate the total permissions gained by the object
 	 * @throws RecursiveGroupException 
 	 */
-	public void calculateEffectivePermissions() throws RecursiveGroupException {
+	protected void calculateEffectivePermissions() throws RecursiveGroupException {
+		if(!isDirty())
+			return;
 		try {
 		effectivePermissions.clear();
 		for (Group group : getGroups()) {
@@ -113,5 +115,7 @@ public abstract class Calculable extends CalculableMeta {
 	 * @return CalculableType
 	 */
 	public abstract CalculableType getType();
+	
+	protected abstract boolean isDirty();
 
 }

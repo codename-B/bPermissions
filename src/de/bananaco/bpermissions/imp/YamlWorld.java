@@ -16,7 +16,6 @@ import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.MetaData;
 import de.bananaco.bpermissions.api.util.Permission;
-import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 /**
  * Here is the main YamlWorld class
  * This loads from the default users.yml and groups.yml on first
@@ -172,14 +171,14 @@ public class YamlWorld extends World {
 			}
 		}
 
-		for (Calculable user : getAll(CalculableType.USER)) {
-			try {
-				user.calculateEffectivePermissions();
-				user.calculateEffectiveMeta();
-			} catch (RecursiveGroupException e) {
-				System.err.println(e.getMessage());
-			}
-		}
+		//for (Calculable user : getAll(CalculableType.USER)) {
+			//try {
+			//	user.calculateEffectivePermissions();
+				//user.calculateEffectiveMeta();
+			//} catch (RecursiveGroupException e) {
+			//	System.err.println(e.getMessage());
+			//}
+		//}
 
 	}
 
