@@ -49,7 +49,7 @@ public abstract class Calculable extends CalculableMeta {
 	 * Used to calculate the total permissions gained by the object
 	 * @throws RecursiveGroupException 
 	 */
-	protected void calculateEffectivePermissions() throws RecursiveGroupException {
+	public void calculateEffectivePermissions() throws RecursiveGroupException {
 		if(!isDirty())
 			return;
 		try {

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import de.bananaco.bpermissions.api.Group;
 import de.bananaco.bpermissions.api.User;
@@ -186,6 +187,13 @@ public class YamlWorld extends World {
 			//	System.err.println(e.getMessage());
 			//}
 		//}
+		for(Player player : this.permissions.getServer().getOnlinePlayers()) {
+			String name = player.getName();
+			String world = player.getWorld().getName();
+			if(wm.getWorld(world) == this) {
+				getUser(name).calculateEffectivePermissions();
+			}
+		}
 		wm.setAutoSave(autoSave);
 	}
 

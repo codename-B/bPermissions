@@ -97,7 +97,6 @@ public class SuperPermissionHandler extends PlayerListener {
 			System.err.println("Unable to setup! null user!");
 			return;
 		}
-		
 		PermissionAttachment att;
 		// Does the player have an attachment that we've assigned already?
 		// Then we add a new one or grab the existing one

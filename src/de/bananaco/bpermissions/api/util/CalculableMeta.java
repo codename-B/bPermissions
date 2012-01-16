@@ -21,7 +21,7 @@ public class CalculableMeta extends GroupCarrier {
 	 * Used to calculate the total permissions gained by the object
 	 * @throws RecursiveGroupException 
 	 */
-	protected void calculateEffectiveMeta() throws RecursiveGroupException {
+	public void calculateEffectiveMeta() throws RecursiveGroupException {
 		try {
 		// Implement meta priorities
 		effectiveMeta.clear();
