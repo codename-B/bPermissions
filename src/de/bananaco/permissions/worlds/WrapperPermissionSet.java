@@ -223,6 +223,11 @@ public class WrapperPermissionSet implements PermissionSet {
 	public void removePlayerNode(String node, String player) {
 		world.getUser(player).removePermission(node);
 	}
+
+	@Override
+	public boolean has(Player player, String node) {
+		return world.getUser(player.getName()).hasPermission(node);
+	}
 	
 	
 

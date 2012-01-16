@@ -240,4 +240,6 @@ public interface PermissionSet {
 	 * @param player
 	 */
 	public void removePlayerNode(String node, String player);
+	
+	public boolean has(Player player, String node);
 }
