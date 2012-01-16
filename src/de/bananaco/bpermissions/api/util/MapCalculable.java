@@ -45,6 +45,7 @@ public abstract class MapCalculable extends Calculable {
 	protected void calculateMappedPermissions() throws RecursiveGroupException {
 		if(!isDirty())
 			return;
+		long time = System.currentTimeMillis();
 		super.calculateEffectivePermissions();
 		permissions.clear();
 		for(Permission perm : getEffectivePermissions()) {
@@ -52,10 +53,16 @@ public abstract class MapCalculable extends Calculable {
 		}
 		this.calculateEffectiveMeta();
 		dirty = false;
+		long finish = System.currentTimeMillis()-time;
+		System.out.println("Calculated mapped permissions for "+getType().getName()+" "+getName()+". Took "+finish+"ms.");
 	}
 	
 	public boolean isDirty() {
 		return dirty;
+	}
+	
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 	
 }

@@ -68,6 +68,7 @@ public class User extends MapCalculable {
 		super.addGroup(group);
 		if(wm.getAutoSave())
 			w.save();
+		setDirty(true);
 	}
 
 	@Override
@@ -75,6 +76,7 @@ public class User extends MapCalculable {
 		super.removeGroup(group);
 		if(wm.getAutoSave())
 			w.save();
+		setDirty(true);
 	}
 
 	@Override
@@ -82,6 +84,7 @@ public class User extends MapCalculable {
 		super.addPermission(permission, isTrue);
 		if(wm.getAutoSave())
 			w.save();
+		setDirty(true);
 	}
 
 	@Override
@@ -89,6 +92,7 @@ public class User extends MapCalculable {
 		super.removePermission(permission);
 		if(wm.getAutoSave())
 			w.save();
+		setDirty(true);
 	}
 
 	@Override
@@ -96,6 +100,7 @@ public class User extends MapCalculable {
 		super.setValue(key, value);
 		if(wm.getAutoSave())
 			w.save();
+		setDirty(true);
 	}
 
 }

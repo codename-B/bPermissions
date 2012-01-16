@@ -77,7 +77,8 @@ public class YamlWorld extends World {
 
 	public boolean load() {
 		try {
-			clear();
+			// TODO check and see how much this bugs out
+			//clear();
 			loadUnsafe();
 			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
 			permissions.handler.setupAllPlayers();
