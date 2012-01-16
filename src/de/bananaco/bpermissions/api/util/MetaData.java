@@ -33,7 +33,7 @@ public class MetaData {
 				if (a.compareTo(b) != 0)
 					return a.compareTo(b);
 			}
-			return 0;
+			return f1.compareTo(f2);
 		}
 	};
 	
