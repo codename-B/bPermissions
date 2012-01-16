@@ -41,7 +41,7 @@ public abstract class MapCalculable extends Calculable {
 		return permissions;
 	}
 	
-	//@Override
+	@Override
 	protected void calculateEffectivePermissions() throws RecursiveGroupException {
 		if(!isDirty())
 			return;

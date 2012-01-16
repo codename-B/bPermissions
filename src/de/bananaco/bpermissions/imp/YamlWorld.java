@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import de.bananaco.bpermissions.api.Group;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.MetaData;
@@ -40,6 +41,8 @@ public class YamlWorld extends World {
 	private final File dgfile = new File("plugins/bPermissions/groups.yml");
 
 	private final Permissions permissions;
+	
+	private final WorldManager wm = WorldManager.getInstance();
 	
 	public YamlWorld(String world, Permissions permissions) {
 		super(world);
@@ -90,6 +93,8 @@ public class YamlWorld extends World {
 	}
 
 	private void loadUnsafe() throws Exception {
+		boolean autoSave = wm.getAutoSave();
+		wm.setAutoSave(false);
 		if (!ufile.exists()) {
 			if (ufile.getParentFile() != null)
 				ufile.getParentFile().mkdirs();
@@ -180,7 +185,7 @@ public class YamlWorld extends World {
 			//	System.err.println(e.getMessage());
 			//}
 		//}
-
+		wm.setAutoSave(autoSave);
 	}
 
 	public boolean save() {

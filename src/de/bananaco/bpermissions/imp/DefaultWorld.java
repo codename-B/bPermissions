@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import de.bananaco.bpermissions.api.Group;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.MetaData;
@@ -35,6 +36,8 @@ public class DefaultWorld extends World {
 	private final File gfile = new File("plugins/bPermissions/groups.yml");
 
 	protected final Permissions permissions;
+	
+	private final WorldManager wm = WorldManager.getInstance();
 	
 	public DefaultWorld(Permissions permissions) {
 		super(null);
@@ -60,12 +63,17 @@ public class DefaultWorld extends World {
 	}
 
 	private void loadUnsafe() throws Exception {
+		boolean autoSave = wm.getAutoSave();
+		wm.setAutoSave(false);
 		if (!ufile.exists()) {
 			if (ufile.getParentFile() != null)
 				ufile.getParentFile().mkdirs();
 			ufile.createNewFile();
 			gfile.createNewFile();
 		} else {
+			uconfig = new YamlConfiguration();
+			gconfig = new YamlConfiguration();
+
 			uconfig.load(ufile);
 			gconfig.load(gfile);
 		}
@@ -93,12 +101,11 @@ public class DefaultWorld extends World {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
-						user.setValue(key, meta.getString(key));
+						user.setValue(key, meta.get(key).toString());
 				}
 				// Upload to API
 				add(user);
 			}
-
 		}
 		/*
 		 * Load the groups
@@ -114,6 +121,7 @@ public class DefaultWorld extends World {
 						+ PERMISSIONS);
 				List<String> nGroup = groupsConfig.getStringList(name + "."
 						+ GROUPS);
+				
 				Set<Permission> perms = Permission.loadFromString(nPerm);
 				// Create the new group
 				Group group = new Group(name, nGroup, perms, getName(), this);
@@ -124,10 +132,11 @@ public class DefaultWorld extends World {
 				Set<String> keys = meta.getKeys(false);
 				if (keys != null && keys.size() > 0)
 					for (String key : keys)
-						group.setValue(key, meta.getString(key));
+						group.setValue(key, meta.get(key).toString());
 				}
 				// Upload to API
 				add(group);
+							
 			}
 		}
 
@@ -139,7 +148,7 @@ public class DefaultWorld extends World {
 			//	System.err.println(e.getMessage());
 			//}
 		//}
-
+		wm.setAutoSave(autoSave);
 	}
 
 	public boolean save() {
