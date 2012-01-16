@@ -66,41 +66,41 @@ public class User extends MapCalculable {
 	@Override
 	public void addGroup(String group) {
 		super.addGroup(group);
+		setDirty(true);
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void removeGroup(String group) {
 		super.removeGroup(group);
+		setDirty(true);
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void addPermission(String permission, boolean isTrue) {
 		super.addPermission(permission, isTrue);
+		setDirty(true);
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void removePermission(String permission) {
 		super.removePermission(permission);
+		setDirty(true);
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void setValue(String key, String value) {
 		super.setValue(key, value);
+		setDirty(true);
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override

@@ -82,6 +82,16 @@ public abstract class GroupCarrier extends PermissionCarrier {
 		return false;
 	}
 	
+	public boolean hasGroupRecursive(String group) {
+		if(groups.contains(group))
+			return true;
+		for(Group g : getGroups()) {
+			if(g.hasGroupRecursive(group))
+				return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Used to make saving prettier
 	 * 

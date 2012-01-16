@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.MapCalculable;
 import de.bananaco.bpermissions.api.util.Permission;
@@ -66,46 +67,61 @@ public class Group extends MapCalculable {
 	@Override
 	public void addGroup(String group) {
 		super.addGroup(group);
+		setDirty(true);
+		setCalculablesWithGroupDirty();
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void removeGroup(String group) {
 		super.removeGroup(group);
+		setDirty(true);
+		setCalculablesWithGroupDirty();
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void addPermission(String permission, boolean isTrue) {
 		super.addPermission(permission, isTrue);
+		setDirty(true);
+		setCalculablesWithGroupDirty();
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void removePermission(String permission) {
 		super.removePermission(permission);
+		setDirty(true);
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
 
 	@Override
 	public void setValue(String key, String value) {
 		super.setValue(key, value);
+		setDirty(true);
+		setCalculablesWithGroupDirty();
 		if(wm.getAutoSave())
 			w.save();
-		setDirty(true);
 	}
-	
+
 	@Override
 	protected World getWorldObject() {
 		return w;
+	}
+
+	public void setCalculablesWithGroupDirty() {
+		for(Calculable user : w.getAll(CalculableType.USER)) {
+			if(user.hasGroupRecursive(getName()))
+				((User) user).setDirty(true);
+		}
+		for(Calculable group : w.getAll(CalculableType.GROUP)) {
+			if(group.hasGroupRecursive(getName()))
+				((Group) group).setDirty(true);
+		}
 	}
 	
 }

@@ -201,7 +201,7 @@ public class YamlWorld extends World {
 	public boolean save() {
 		try {
 			saveUnsafe();
-			load();
+			//load();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -210,7 +210,6 @@ public class YamlWorld extends World {
 	}
 
 	private void saveUnsafe() throws Exception {
-
 		if (!ufile.exists()) {
 			ufile.getParentFile().mkdirs();
 			ufile.createNewFile();
@@ -257,6 +256,14 @@ public class YamlWorld extends World {
 		
 		uconfig.save(ufile);
 		gconfig.save(gfile);
+		
+		for(Player player : this.permissions.getServer().getOnlinePlayers()) {
+			String name = player.getName();
+			String world = player.getWorld().getName();
+			if(wm.getWorld(world) == this) {
+				getUser(name).calculateEffectivePermissions();
+			}
+		}
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public abstract class MapCalculable extends Calculable {
 	
 	@Override
 	public void calculateEffectivePermissions() throws RecursiveGroupException {
-		if(!isDirty())
+		if(!dirty)
 			return;
 		long time = System.currentTimeMillis();
 		super.calculateEffectivePermissions();
