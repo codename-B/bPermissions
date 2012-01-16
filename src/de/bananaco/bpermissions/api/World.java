@@ -224,5 +224,7 @@ public abstract class World {
 	}
 	
 	public abstract String getDefaultGroup();
+	
+	public abstract boolean setupPlayer(String player);
 
 }

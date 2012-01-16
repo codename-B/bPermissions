@@ -84,7 +84,8 @@ public class YamlWorld extends World {
 			//clear();
 			loadUnsafe();
 			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
-			permissions.handler.setupAllPlayers();
+			// TODO check and see that players are still setup
+			//permissions.handler.setupAllPlayers();
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -247,6 +248,12 @@ public class YamlWorld extends World {
 		
 		uconfig.save(ufile);
 		gconfig.save(gfile);
+	}
+
+	@Override
+	public boolean setupPlayer(String player) {
+		permissions.handler.setupPlayer(player);
+		return true;
 	}
 
 }

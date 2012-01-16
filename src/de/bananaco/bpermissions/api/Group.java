@@ -103,4 +103,9 @@ public class Group extends MapCalculable {
 		setDirty(true);
 	}
 	
+	@Override
+	protected World getWorldObject() {
+		return w;
+	}
+	
 }

@@ -103,4 +103,9 @@ public class User extends MapCalculable {
 		setDirty(true);
 	}
 
+	@Override
+	protected World getWorldObject() {
+		return w;
+	}
+
 }

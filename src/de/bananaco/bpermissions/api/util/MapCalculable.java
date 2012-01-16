@@ -55,6 +55,8 @@ public abstract class MapCalculable extends Calculable {
 		dirty = false;
 		long finish = System.currentTimeMillis()-time;
 		System.out.println("Calculated mapped permissions for "+getType().getName()+" "+getName()+". Took "+finish+"ms.");
+		if(getType() == CalculableType.USER)
+			getWorldObject().setupPlayer(getName());
 	}
 	
 	public boolean isDirty() {

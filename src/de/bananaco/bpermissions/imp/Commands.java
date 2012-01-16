@@ -3,6 +3,7 @@ package de.bananaco.bpermissions.imp;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import de.bananaco.bpermissions.api.Group;
@@ -22,6 +23,8 @@ public class Commands {
 	private String name = null;
 	
 	protected Commands() {
+		if(Bukkit.getServer().getWorlds().size() == 1)
+			world = instance.getWorld(Bukkit.getServer().getWorlds().get(0).getName());
 	}
 	
 	protected String format(String message) {

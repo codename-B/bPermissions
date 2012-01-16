@@ -212,4 +212,9 @@ public class DefaultWorld extends World {
 		gconfig.save(gfile);
 	}
 
+	@Override
+	public boolean setupPlayer(String player) {
+		return false;
+	}
+
 }

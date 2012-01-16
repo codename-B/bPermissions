@@ -83,6 +83,7 @@ public class SuperPermissionHandler extends PlayerListener {
 	 * @param world
 	 */
 	public void setupPlayer(Player player, World world) {
+		long time = System.currentTimeMillis();
 		// Some null checks, I guess?
 		if(world == null) {
 			System.err.println("Unable to setup! null world!");
@@ -118,10 +119,8 @@ public class SuperPermissionHandler extends PlayerListener {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		// And beep
-		try {
-		java.awt.Toolkit.getDefaultToolkit().beep();
-		} catch (Exception e) {}
+		long finish = System.currentTimeMillis()-time;
+		System.out.println("Setup superperms for "+player.getName()+". took "+finish+"ms.");
 	}
 
 	@Override
@@ -159,5 +158,14 @@ public class SuperPermissionHandler extends PlayerListener {
 		for(int i=0; i<length; i++)
 			sb.append("a");
 		return "The '*' node won't work with superperms! Ra"+sb.toString()+"wr!";
+	}
+
+	public void setupPlayer(String player) {
+		if(this.plugin.getServer().getPlayerExact(player) == null)
+			return;
+		Player p = this.plugin.getServer().getPlayerExact(player);
+		String w = p.getWorld().getName();
+		World world = wm.getWorld(w);
+		this.setupPlayer(p, world);
 	}
 }

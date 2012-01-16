@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.World;
 
 /**
  * This class contains the main calculations for
@@ -117,5 +118,7 @@ public abstract class Calculable extends CalculableMeta {
 	public abstract CalculableType getType();
 	
 	protected abstract boolean isDirty();
+	
+	protected abstract World getWorldObject();
 
 }
