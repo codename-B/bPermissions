@@ -82,7 +82,8 @@ public class YamlWorld extends World {
 	public boolean load() {
 		try {
 			// TODO check and see how much this bugs out
-			//clear();
+			// **THIS SHOULD NOW IMPLEMENT CHANGES WITHOUT THE LAG**
+			clear();
 			loadUnsafe();
 			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
 			// TODO check and see that players are still setup

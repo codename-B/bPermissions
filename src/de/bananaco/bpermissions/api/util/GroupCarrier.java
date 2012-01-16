@@ -97,4 +97,10 @@ public abstract class GroupCarrier extends PermissionCarrier {
 		return groups;
 	}
 
+	@Override
+	public void clear() {
+		this.groups.clear();
+		super.clear();
+	}
+
 }

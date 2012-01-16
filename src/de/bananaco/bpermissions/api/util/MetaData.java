@@ -127,5 +127,9 @@ public class MetaData {
 		// And return the priority (will usually be 0)
 		return priority;
 	}
+	
+	public void clear() {
+		clearValues();
+	}
 
 }

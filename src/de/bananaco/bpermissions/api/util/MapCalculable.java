@@ -67,4 +67,11 @@ public abstract class MapCalculable extends Calculable {
 		this.dirty = dirty;
 	}
 	
+	@Override
+	public void clear() {
+		this.permissions.clear();
+		super.clear();
+		setDirty(true);
+	}
+	
 }

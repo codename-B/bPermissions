@@ -121,4 +121,10 @@ public abstract class Calculable extends CalculableMeta {
 	
 	protected abstract World getWorldObject();
 
+	@Override
+	public void clear() {
+		this.effectivePermissions.clear();
+		super.clear();
+	}
+
 }

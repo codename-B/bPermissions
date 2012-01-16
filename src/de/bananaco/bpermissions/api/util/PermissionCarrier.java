@@ -84,5 +84,11 @@ public abstract class PermissionCarrier extends WorldCarrier {
 		sort(permissions);
 		return permissions;
 	}
+	
+	@Override
+	public void clear() {
+		this.permissions.clear();
+		super.clear();
+	}
 
 }

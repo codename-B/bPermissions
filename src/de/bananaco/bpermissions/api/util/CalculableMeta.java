@@ -66,4 +66,10 @@ public class CalculableMeta extends GroupCarrier {
 		return effectiveMeta.containsKey(key);
 	}
 
+	@Override
+	public void clear() {
+		this.effectiveMeta.clear();
+		super.clear();
+	}
+
 }
