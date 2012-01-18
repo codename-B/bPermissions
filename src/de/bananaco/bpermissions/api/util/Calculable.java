@@ -119,6 +119,8 @@ public abstract class Calculable extends CalculableMeta {
 	
 	protected abstract boolean isDirty();
 	
+	public abstract boolean hasPermission(String node);
+	
 	protected abstract World getWorldObject();
 
 	@Override

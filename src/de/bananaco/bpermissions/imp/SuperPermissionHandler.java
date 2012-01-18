@@ -53,6 +53,10 @@ public class SuperPermissionHandler extends PlayerListener {
 		Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(att);
 		// Clear the map (faster than removing the attachment and recalculating)
 		orig.clear();
+		
+		// DEBUG
+		//for(String key : perm.keySet()) System.out.println(key);
+		
 		// Then whack our map into there
 		orig.putAll(perm);
 		// That's all folks!
