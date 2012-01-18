@@ -5,7 +5,18 @@ import java.util.Set;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.Permission;
-
+/**
+ * Adds a super easy to use static interface to bPermissions 2
+ * 
+ * Needed imports:
+ * 
+ * de.bananaco.bpermisisons.api.util.CalculableType
+ * Can be CalculableType.GROUP or CalculableType.USER
+ * 
+ * de.bananaco.bpermisisons.api.util.Permission
+ * Carries a String and a Boolean, can be created when needed (new Permission(String, Boolean))
+ * and will override any existing permission by that name.
+ */
 public class ApiLayer {
 	private static WorldManager wm = WorldManager.getInstance();
 	
