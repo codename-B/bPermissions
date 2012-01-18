@@ -148,17 +148,31 @@ public class ApiLayer {
 	}
 	/**
 	 * Removes a single permission (String, Boolean) from a user or a group
-	 * The permission object is just for consistency, the boolean does not matter here.
+	 * The permission object is instead a String, the boolean does not matter here.
 	 * @param world
 	 * @param type
 	 * @param name
 	 * @param permissionToRemove
 	 */
-	public static void removePermission(String world, CalculableType type, String name, Permission permissionToRemove) {
+	public static void removePermission(String world, CalculableType type, String name, String permissionToRemove) {
 		World w = wm.getWorld(world);
 		Calculable c = w.get(name, type);
-		c.removePermission(permissionToRemove.name());
+		c.removePermission(permissionToRemove);
 	}
+	/**
+	 * Returns wether the user or group has the permission node
+	 * @param world
+	 * @param type
+	 * @param name
+	 * @param node
+	 * @return boolean
+	 */
+	public static boolean hasPermission(String world, CalculableType type, String name, String node) {
+		World w = wm.getWorld(world);
+		Calculable c = w.get(name, type);
+		return c.hasPermission(node);
+	}
+	
 	/**
 	 * Used to set the metadata value for a user or a group
 	 * @param world
