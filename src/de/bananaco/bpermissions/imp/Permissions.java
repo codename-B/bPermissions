@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -250,6 +251,19 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		 */
 		if(command.getName().equalsIgnoreCase("permissions")) {
 			if(args.length == 1) {
+				if(sender instanceof ConsoleCommandSender) {
+					if(args[0].equalsIgnoreCase("debug")) {
+						if(Debugger.getDebug()) {
+							for(World world : wm.getAllWorlds()) {
+								Debugger.log(world);
+							}
+							return true;
+						} else {
+							sender.sendMessage("Please enable debug mode to use this command.");
+							return true;
+						}
+					}
+				}
 				String action = args[0];
 				if(action.equalsIgnoreCase("save")) {
 					sendMessage(sender, "All worlds saved!");

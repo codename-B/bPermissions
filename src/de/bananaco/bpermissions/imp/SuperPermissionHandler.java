@@ -123,7 +123,7 @@ public class SuperPermissionHandler extends PlayerListener {
 			e.printStackTrace();
 		}
 		long finish = System.currentTimeMillis()-time;
-		System.out.println("Setup superperms for "+player.getName()+". took "+finish+"ms.");
+		Debugger.log("Setup superperms for "+player.getName()+". took "+finish+"ms.");
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public abstract class MapCalculable extends Calculable {
 	public void calculateEffectivePermissions() throws RecursiveGroupException {
 		if(!dirty)
 			return;
-		long time = System.currentTimeMillis();
+		//long time = System.currentTimeMillis();
 		super.calculateEffectivePermissions();
 		permissions.clear();
 		for(Permission perm : getEffectivePermissions()) {
@@ -53,8 +53,9 @@ public abstract class MapCalculable extends Calculable {
 		}
 		this.calculateEffectiveMeta();
 		dirty = false;
-		long finish = System.currentTimeMillis()-time;
-		System.out.println("Calculated mapped permissions for "+getType().getName()+" "+getName()+". Took "+finish+"ms.");
+		//long finish = System.currentTimeMillis()-time;
+		// Don't need to print this anymore
+		//System.out.println("Calculated mapped permissions for "+getType().getName()+" "+getName()+". Took "+finish+"ms.");
 		if(getType() == CalculableType.USER)
 			getWorldObject().setupPlayer(getName());
 	}

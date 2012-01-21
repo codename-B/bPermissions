@@ -36,6 +36,8 @@ public class Config {
 		// set the value to default
 		config.set("auto-save", config.get("auto-save", autoSave));
 		config.set("track-type", config.get("track-type", trackType));
+		// set the debugger value to default
+		config.set("debugging-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
 		// then load it into memory
 		autoSave = config.getBoolean("auto-save");
 		trackType = config.getString("track-type");

@@ -172,7 +172,6 @@ public class ApiLayer {
 		Calculable c = w.get(name, type);
 		return c.hasPermission(node);
 	}
-	
 	/**
 	 * Used to set the metadata value for a user or a group
 	 * @param world
