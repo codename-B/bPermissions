@@ -32,8 +32,10 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	
 	@Override
 	public void onDisable() {
+		if(wm != null) {
 		for(World world : wm.getAllWorlds())
 			world.save();
+		}
 		System.out.println(blankFormat("Disabled"));
 	}
 
