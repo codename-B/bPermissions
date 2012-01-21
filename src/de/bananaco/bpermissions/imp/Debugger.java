@@ -51,9 +51,9 @@ public class Debugger {
 			// Print the info
 			log("Printing info for "+name);
 			log("Permissions");
-			log(grp);
-			log("Groups");
 			log(pss);
+			log("Groups");
+			log(grp);
 		}
 
 		log("** PRINTING USER DEBUGGING INFO **");
@@ -70,9 +70,9 @@ public class Debugger {
 			// Print the info
 			log("Printing info for "+name);
 			log("Permissions");
-			log(grp);
-			log("Groups");
 			log(pss);
+			log("Groups");
+			log(grp);
 		}
 	}
 

@@ -17,6 +17,8 @@ public class Config {
 	
 	private boolean autoSave = true;
 	
+	private boolean offlineMode = false;
+		
 	public void load() {
 		try {
 			loadUnsafe();
@@ -38,9 +40,11 @@ public class Config {
 		config.set("track-type", config.get("track-type", trackType));
 		// set the debugger value to default
 		config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
+		config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
 		// then load it into memory
 		autoSave = config.getBoolean("auto-save");
 		trackType = config.getString("track-type");
+		offlineMode = config.getBoolean("allow-offline-mode");
 		// then load our PromotionTrack
 		if(trackType.equalsIgnoreCase("multi")) {
 			track = new MultiGroupPromotion();
@@ -60,6 +64,10 @@ public class Config {
 	
 	public PromotionTrack getPromotionTrack() {
 		return track;
+	}
+	
+	public boolean getAllowOfflineMode() {
+		return offlineMode;
 	}
 
 }

@@ -41,6 +41,16 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	public void onEnable() {
 		// Only happens after onEnable(), prevent NPE's
 		config = new Config();
+		// Load the config.yml
+		config.load();
+		// And test
+		boolean onlineMode = getServer().getOnlineMode();
+		// Don't allow online mode servers to run bPermissions by default
+		if(config.getAllowOfflineMode() == false && onlineMode == false) {
+			System.err.println(blankFormat("Please check config.yml to enable offline-mode use"));
+			this.setEnabled(false);
+			return;
+		}
 		wm = WorldManager.getInstance();
 		oldPermissions = (de.bananaco.permissions.Permissions) this;
 		oldPermissions.enable(this);
@@ -55,8 +65,6 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		commands = new HashMap<String, Commands>();
 		// Load the world mirroring setup
 		mrs.load();
-		// Load the config.yml
-		config.load();
 		// Register world loading
 		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
 		// Register player login
