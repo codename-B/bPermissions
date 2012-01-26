@@ -77,8 +77,6 @@ public class SingleGroupPromotion implements PromotionTrack {
 			for (World w : wm.getAllWorlds()) {
 				User user = w.getUser(player);
 				// If they don't have the group, set it to their group
-				// ** FIX FOR SINGLE GROUP PROMOTION BUG **
-				// ** FIX FOR SINGLE GROUP PROMOTION BUG #2**
 				int index = 0;
 				for (int i = 0; i <groups.size(); i++) {
 					System.out.println("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
@@ -88,27 +86,32 @@ public class SingleGroupPromotion implements PromotionTrack {
 							index = current+1;
 					}
 				}
+				if(index < groups.size()) {
 				System.out.println("index: "+index+" group: "+groups.get(index));
 				user.getGroupsAsString().clear();
 				user.addGroup(groups.get(index));
 				w.save();
+				}
 			}
 		} else {
 			User user = wm.getWorld(world).getUser(player);
 			// If they don't have the group, set it to their group
-			// ** FIX FOR SINGLE GROUP PROMOTION BUG **
-			// ** FIX FOR SINGLE GROUP PROMOTION BUG #2**
 			int index = 0;
 			for (int i = 0; i <groups.size(); i++) {
+				System.out.println("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
 				if(user.hasGroup(groups.get(i))) {
 					int current = getIndex(groups.get(i), groups);
-					if(current > index)
+					if(current >= index)
 						index = current+1;
 				}
 			}
+			
+			if(index<groups.size()) {
+			System.out.println("index: "+index+" group: "+groups.get(index));
 			user.getGroupsAsString().clear();
 			user.addGroup(groups.get(index));
 			wm.getWorld(world).save();
+			}
 		}
 	}
 
