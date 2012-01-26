@@ -79,7 +79,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 				// If they don't have the group, set it to their group
 				int index = 0;
 				for (int i = 0; i <groups.size(); i++) {
-					System.out.println("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
+					Debugger.log("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
 					if(user.hasGroup(groups.get(i))) {
 						int current = getIndex(groups.get(i), groups);
 						if(current >= index)
@@ -87,7 +87,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 					}
 				}
 				if(index < groups.size()) {
-				System.out.println("index: "+index+" group: "+groups.get(index));
+				Debugger.log("index: "+index+" group: "+groups.get(index));
 				user.getGroupsAsString().clear();
 				user.addGroup(groups.get(index));
 				w.save();
@@ -98,7 +98,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 			// If they don't have the group, set it to their group
 			int index = 0;
 			for (int i = 0; i <groups.size(); i++) {
-				System.out.println("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
+				Debugger.log("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
 				if(user.hasGroup(groups.get(i))) {
 					int current = getIndex(groups.get(i), groups);
 					if(current >= index)
@@ -107,7 +107,7 @@ public class SingleGroupPromotion implements PromotionTrack {
 			}
 			
 			if(index<groups.size()) {
-			System.out.println("index: "+index+" group: "+groups.get(index));
+			Debugger.log("index: "+index+" group: "+groups.get(index));
 			user.getGroupsAsString().clear();
 			user.addGroup(groups.get(index));
 			wm.getWorld(world).save();
@@ -122,32 +122,40 @@ public class SingleGroupPromotion implements PromotionTrack {
 			for (World w : wm.getAllWorlds()) {
 				User user = w.getUser(player);
 				// If they don't have the group, set it to their group
-				int index = 1;
+				int index = 0;
 				for (int i = 0; i <groups.size(); i++) {
+					Debugger.log("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
 					if(user.hasGroup(groups.get(i))) {
 						int current = getIndex(groups.get(i), groups);
 						if(current > index)
-							index = current;
+							index = current-1;
 					}
 				}
+				if(index >= 0) {
+				Debugger.log("index: "+index+" group: "+groups.get(index));
 				user.getGroupsAsString().clear();
-				user.addGroup(groups.get(index-1));
+				user.addGroup(groups.get(index));
 				wm.getWorld(world).save();
+				}
 			}
 		} else {
 			User user = wm.getWorld(world).getUser(player);
 			// If they don't have the group, set it to their group
-			int index = 1;
+			int index = 0;
 			for (int i = 0; i <groups.size(); i++) {
+				Debugger.log("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
 				if(user.hasGroup(groups.get(i))) {
 					int current = getIndex(groups.get(i), groups);
 					if(current > index)
-						index = current;
+						index = current-1;
 				}
 			}
+			if(index >= 0) {
+			Debugger.log("index: "+index+" group: "+groups.get(index));
 			user.getGroupsAsString().clear();
-			user.addGroup(groups.get(index-1));
+			user.addGroup(groups.get(index));
 			wm.getWorld(world).save();
+			}
 		}
 	}
 
