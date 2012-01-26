@@ -41,6 +41,8 @@ public class InfoReader {
 	public String getGroupValue(String group, String world, String valueToGet) {
 		if(group == null || world == null || valueToGet == null)
 			return "";
+		if(wm.getWorld(world) == null)
+			return "";
 		
 		return wm.getWorld(world).getGroup(group).getEffectiveValue(valueToGet);
 	}
@@ -96,6 +98,8 @@ public class InfoReader {
 	 * @return String
 	 */
 	public String getValue(Player player, String valueToGet) {
+		if(player == null)
+			return "";
 		return getValue(player.getName(), player.getWorld().getName(),
 				valueToGet);
 	}
@@ -111,7 +115,8 @@ public class InfoReader {
 	public String getValue(String player, String world, String valueToGet) {
 		if(player == null || world == null || valueToGet == null)
 			return "";
-		
+		if(wm.getWorld(world) == null)
+			return "";
 		return wm.getWorld(world).getUser(player).getEffectiveValue(valueToGet);
 	}
 

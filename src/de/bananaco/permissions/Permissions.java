@@ -142,6 +142,16 @@ public abstract class Permissions extends JavaPlugin {
 		return noob;
 	}
 	
+	@Override
+	public void onEnable() {
+		
+	}
+
+	@Override
+	public void onDisable() {
+		
+	}
+
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length == 1) {
 			if (args[0].equalsIgnoreCase("helpme")) {

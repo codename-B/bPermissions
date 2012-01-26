@@ -61,6 +61,14 @@ public class SingleGroupPromotion implements PromotionTrack {
 			e.printStackTrace();
 		}
 	}
+	
+	public int getIndex(String data, List<String> list) {
+		for(int i=0; i<list.size(); i++) {
+			if(data.equalsIgnoreCase(list.get(i)))
+				return i;
+		}
+		return -1;
+	}
 
 	@Override
 	public void promote(String player, String track, String world) {
@@ -68,37 +76,39 @@ public class SingleGroupPromotion implements PromotionTrack {
 		if (world == null) {
 			for (World w : wm.getAllWorlds()) {
 				User user = w.getUser(player);
-				boolean promoted = false;
 				// If they don't have the group, set it to their group
 				// ** FIX FOR SINGLE GROUP PROMOTION BUG **
 				// ** FIX FOR SINGLE GROUP PROMOTION BUG #2**
-				for (int i = groups.size()-2; i >= 0 && !promoted; i--)
-					if (user.getGroupsAsString().contains(groups.get(i))) {
-						// Clear the groups
-						user.getGroupsAsString().clear();
-						// Add the new group
-						user.addGroup(groups.get(i+1));
-						// We've promoted successfully
-						promoted = true;
-						w.save();
+				int index = 0;
+				for (int i = 0; i <groups.size(); i++) {
+					System.out.println("hasGroup?"+groups.get(i)+" "+user.hasGroup(groups.get(i)));
+					if(user.hasGroup(groups.get(i))) {
+						int current = getIndex(groups.get(i), groups);
+						if(current >= index)
+							index = current+1;
 					}
+				}
+				System.out.println("index: "+index+" group: "+groups.get(index));
+				user.getGroupsAsString().clear();
+				user.addGroup(groups.get(index));
+				w.save();
 			}
 		} else {
 			User user = wm.getWorld(world).getUser(player);
-			boolean promoted = false;
 			// If they don't have the group, set it to their group
 			// ** FIX FOR SINGLE GROUP PROMOTION BUG **
 			// ** FIX FOR SINGLE GROUP PROMOTION BUG #2**
-			for (int i = groups.size()-2; i >= 0 && !promoted; i--)
-				if (user.getGroupsAsString().contains(groups.get(i))) {
-					// Clear the groups
-					user.getGroupsAsString().clear();
-					// Add the new group
-					user.addGroup(groups.get(i+1));
-					// We've promoted successfully
-					promoted = true;
-					wm.getWorld(world).save();
+			int index = 0;
+			for (int i = 0; i <groups.size(); i++) {
+				if(user.hasGroup(groups.get(i))) {
+					int current = getIndex(groups.get(i), groups);
+					if(current > index)
+						index = current+1;
 				}
+			}
+			user.getGroupsAsString().clear();
+			user.addGroup(groups.get(index));
+			wm.getWorld(world).save();
 		}
 	}
 
@@ -108,40 +118,33 @@ public class SingleGroupPromotion implements PromotionTrack {
 		if (world == null) {
 			for (World w : wm.getAllWorlds()) {
 				User user = w.getUser(player);
-				boolean demoted = false;
 				// If they don't have the group, set it to their group
-				for (int i = groups.size() - 1; i >= 1 && !demoted; i--)
-					if (user.getGroupsAsString().contains(groups.get(i))) {
-						// Clear the groups
-						user.getGroupsAsString().clear();
-						// Add the new group
-						if (i > 0)
-							user.addGroup(groups.get(i - 1));
-						else
-							user.addGroup(wm.getWorld(world).getDefaultGroup());
-						// We've demoted successfully
-						demoted = true;
-						w.save();
+				int index = 1;
+				for (int i = 0; i <groups.size(); i++) {
+					if(user.hasGroup(groups.get(i))) {
+						int current = getIndex(groups.get(i), groups);
+						if(current > index)
+							index = current;
 					}
-
+				}
+				user.getGroupsAsString().clear();
+				user.addGroup(groups.get(index-1));
+				wm.getWorld(world).save();
 			}
 		} else {
 			User user = wm.getWorld(world).getUser(player);
-			boolean demoted = false;
 			// If they don't have the group, set it to their group
-			for (int i = groups.size() - 1; i >= 1 && !demoted; i--)
-				if (user.getGroupsAsString().contains(groups.get(i))) {
-					// Clear the groups
-					user.getGroupsAsString().clear();
-					// Add the new group
-					if (i > 0)
-						user.addGroup(groups.get(i - 1));
-					else
-						user.addGroup(wm.getWorld(world).getDefaultGroup());
-					// We've demoted successfully
-					demoted = true;
-					wm.getWorld(world).save();
+			int index = 1;
+			for (int i = 0; i <groups.size(); i++) {
+				if(user.hasGroup(groups.get(i))) {
+					int current = getIndex(groups.get(i), groups);
+					if(current > index)
+						index = current;
 				}
+			}
+			user.getGroupsAsString().clear();
+			user.addGroup(groups.get(index-1));
+			wm.getWorld(world).save();
 		}
 	}
 

@@ -31,6 +31,8 @@ public class WorldManager {
 	
 	private boolean autoSave = false;
 	
+	private boolean useGlobalFiles = false;
+	
 	protected WorldManager() {
 
 	}
@@ -54,6 +56,14 @@ public class WorldManager {
 		return autoSave;
 	}
 	
+	public void setUseGlobalFiles(boolean useGlobalFiles) {
+		this.useGlobalFiles = useGlobalFiles;
+	}
+	
+	public boolean getUseGlobalFiles() {
+		return useGlobalFiles;
+	}
+	
 	public void setMirrors(Map<String, String> mirrors) {
 		this.mirrors = mirrors;
 	}
@@ -68,6 +78,8 @@ public class WorldManager {
 	
 	public World getWorld(String name) {
 		if(name == null)
+			return getDefaultWorld();
+		if(name.equals("*"))
 			return getDefaultWorld();
 		
 		name = name.toLowerCase();
@@ -94,8 +106,15 @@ public class WorldManager {
 	public Set<World> getAllWorlds() {
 		Set<World> worlds = new HashSet();
 		for(String key : this.worlds.keySet()) {
-			worlds.add(this.worlds.get(key));
+			// Fix for mirrors.yml not working properly
+			if(!mirrors.containsKey(key)) {
+				worlds.add(this.worlds.get(key));
+			}
 		}
+		// Add the global world
+		if(useGlobalFiles && getDefaultWorld() != null)
+			worlds.add(getDefaultWorld());
+		
 		return worlds;
 	}
 	
@@ -106,6 +125,12 @@ public class WorldManager {
 	 */
 	public void createWorld(String name, World world) {
 		name = name.toLowerCase();
+		// Should ignore it if it's mirrored
+		if(mirrors.containsKey(name))
+			return;
+		if(name.equals("*"))
+			return;
+		
 		worlds.put(name, world);
 		world.load();
 	}

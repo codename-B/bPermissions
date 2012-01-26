@@ -32,6 +32,7 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	
 	@Override
 	public void onDisable() {
+		super.onDisable();
 		if(wm != null) {
 		for(World world : wm.getAllWorlds())
 			world.save();
@@ -40,7 +41,15 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	}
 
 	@Override
+	public void onLoad() {
+		// Load the world mirroring setup
+		mrs.load();
+		super.onLoad();
+	}
+
+	@Override
 	public void onEnable() {
+		super.onEnable();
 		// Only happens after onEnable(), prevent NPE's
 		config = new Config();
 		// Load the config.yml
@@ -53,7 +62,10 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 			this.setEnabled(false);
 			return;
 		}
+		// Get the instance
 		wm = WorldManager.getInstance();
+		// Set the global file flag
+		wm.setUseGlobalFiles(config.getUseGlobalFiles());
 		oldPermissions = (de.bananaco.permissions.Permissions) this;
 		oldPermissions.enable(this);
 		handler = new SuperPermissionHandler(this);
@@ -65,8 +77,6 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		world.load();
 		// Load the default Map for Commands
 		commands = new HashMap<String, Commands>();
-		// Load the world mirroring setup
-		mrs.load();
 		// Register world loading
 		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
 		// Register player login

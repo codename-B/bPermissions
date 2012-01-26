@@ -77,8 +77,10 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 * @return boolean
 	 */
 	public boolean hasGroup(String group) {
-		if(groups.contains(group))
-			return true;
+		for(String g : groups) {
+			if(g.equalsIgnoreCase(group))
+				return true;
+		}
 		return false;
 	}
 	

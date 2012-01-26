@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import de.bananaco.bpermissions.api.Group;
 import de.bananaco.bpermissions.api.User;
@@ -40,7 +41,7 @@ public class DefaultWorld extends World {
 	private final WorldManager wm = WorldManager.getInstance();
 	
 	public DefaultWorld(Permissions permissions) {
-		super(null);
+		super("*");
 		this.permissions = permissions;
 	}
 
@@ -61,6 +62,20 @@ public class DefaultWorld extends World {
 			return false;
 		}
 	}
+	
+	public void test() throws Exception {
+		if (!ufile.exists()) {
+			if (ufile.getParentFile() != null)
+				ufile.getParentFile().mkdirs();
+			ufile.createNewFile();
+			gfile.createNewFile();
+		} else {
+			uconfig = new YamlConfiguration();
+			gconfig = new YamlConfiguration();
+			uconfig.load(ufile);
+			gconfig.load(gfile);
+		}
+	}
 
 	private void loadUnsafe() throws Exception {
 		boolean autoSave = wm.getAutoSave();
@@ -73,7 +88,6 @@ public class DefaultWorld extends World {
 		} else {
 			uconfig = new YamlConfiguration();
 			gconfig = new YamlConfiguration();
-
 			uconfig.load(ufile);
 			gconfig.load(gfile);
 		}
@@ -148,6 +162,13 @@ public class DefaultWorld extends World {
 			//	System.err.println(e.getMessage());
 			//}
 		//}
+		for(Player player : this.permissions.getServer().getOnlinePlayers()) {
+			String name = player.getName();
+			String world = player.getWorld().getName();
+			if(wm.getWorld(world) == this) {
+				getUser(name).calculateEffectivePermissions();
+			}
+		}
 		wm.setAutoSave(autoSave);
 	}
 
@@ -162,10 +183,8 @@ public class DefaultWorld extends World {
 	}
 
 	private void saveUnsafe() throws Exception {
-
 		if (!ufile.exists()) {
-			if (ufile.getParentFile() != null)
-				ufile.getParentFile().mkdirs();
+			ufile.getParentFile().mkdirs();
 			ufile.createNewFile();
 			gfile.createNewFile();
 		}
@@ -210,6 +229,14 @@ public class DefaultWorld extends World {
 		
 		uconfig.save(ufile);
 		gconfig.save(gfile);
+		
+		for(Player player : this.permissions.getServer().getOnlinePlayers()) {
+			String name = player.getName();
+			String world = player.getWorld().getName();
+			if(wm.getWorld(world) == this) {
+				getUser(name).calculateEffectivePermissions();
+			}
+		}
 	}
 
 	@Override

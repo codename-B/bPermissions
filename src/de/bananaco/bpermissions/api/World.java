@@ -162,14 +162,14 @@ public abstract class World {
 	 * (useful for doing a clean load)
 	 */
 	public void clear() {
-		for(Calculable group : getAll(CalculableType.GROUP)) {
-			group.clear();
-		}
-		for(Calculable user : getAll(CalculableType.USER)) {
-			user.clear();
-		}
-		//groups.clear();
-		//users.clear();
+		//for(Calculable group : getAll(CalculableType.GROUP)) {
+		//	group.clear();
+		//}
+		//for(Calculable user : getAll(CalculableType.USER)) {
+		//	user.clear();
+		//}
+		groups.clear();
+		users.clear();
 	}
 	
 	/**

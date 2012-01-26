@@ -112,7 +112,15 @@ public class SuperPermissionHandler extends PlayerListener {
 			attachments.put(player, att);
 		}
 		// Grab the pre-calculated effectivePermissions from the User object
-		Map<String, Boolean> perms = world.getUser(player.getName()).getMappedPermissions();
+		Map<String, Boolean> perms;
+		// Implement global files
+		if(wm.getUseGlobalFiles() && wm.getDefaultWorld() != null) {
+		// If the global file is enabled, read from it first then override where applicable
+		perms = wm.getWorld("*").getUser(player.getName()).getMappedPermissions();
+		perms.putAll(world.getUser(player.getName()).getMappedPermissions());
+		} else {
+		perms = world.getUser(player.getName()).getMappedPermissions();
+		}
 		// Then whack it onto the player
 		// TODO wait for the bukkit team to get their finger out, we'll use our reflection here!
 		try {

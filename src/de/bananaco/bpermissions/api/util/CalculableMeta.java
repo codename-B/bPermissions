@@ -27,12 +27,16 @@ public class CalculableMeta extends GroupCarrier {
 		effectiveMeta.clear();
 		int lastGroup = -1;
 		for (Group group : getGroups()) {
-			if(group.getPriority() > lastGroup) {
-				lastGroup = group.getPriority();
-				group.calculateEffectiveMeta();
-				Map<String, String> meta = group.getEffectiveMeta();
-				for(String key : meta.keySet()) {
+			// Calculate down the tree of the child group
+			group.calculateEffectiveMeta();
+			Map<String, String> meta = group.getEffectiveMeta();
+			for(String key : meta.keySet()) {
+				// If the effectiveMeta does not contain the key or the priority is greater than the current
+				if(effectiveMeta.containsKey(key) || group.getPriority() > lastGroup) {
 					effectiveMeta.put(key, meta.get(key));
+					// Only if the priority is greater than the current do we update this
+					if(group.getPriority() > lastGroup)
+						lastGroup = group.getPriority();
 				}
 			}
 		}
