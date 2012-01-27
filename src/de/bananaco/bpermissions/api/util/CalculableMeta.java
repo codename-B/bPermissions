@@ -32,7 +32,7 @@ public class CalculableMeta extends GroupCarrier {
 			Map<String, String> meta = group.getEffectiveMeta();
 			for(String key : meta.keySet()) {
 				// If the effectiveMeta does not contain the key or the priority is greater than the current
-				if(effectiveMeta.containsKey(key) || group.getPriority() > lastGroup) {
+				if(!effectiveMeta.containsKey(key) || group.getPriority() > lastGroup) {
 					effectiveMeta.put(key, meta.get(key));
 					// Only if the priority is greater than the current do we update this
 					if(group.getPriority() > lastGroup)

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -45,6 +47,9 @@ public class YamlWorld extends World {
 	
 	private final WorldManager wm = WorldManager.getInstance();
 	
+	// If there's an error loading the files, don't save them as it overrides them!
+	private boolean error = false;
+	
 	public YamlWorld(String world, Permissions permissions) {
 		super(world);
 		this.permissions = permissions;
@@ -68,6 +73,7 @@ public class YamlWorld extends World {
 			gconfig.load(dgfile);
 			return true;
 		} catch (Exception e) {
+			error = true;
 			return false;
 		}
 	}
@@ -81,15 +87,15 @@ public class YamlWorld extends World {
 
 	public boolean load() {
 		try {
-			// TODO check and see how much this bugs out
-			// **THIS SHOULD NOW IMPLEMENT CHANGES WITHOUT THE LAG**
 			clear();
 			loadUnsafe();
 			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
-			// TODO check and see that players are still setup
-			//permissions.handler.setupAllPlayers();
+			// If it loaded correctly cancel the error
+			error = false;
 			return true;
 		} catch (Exception e) {
+			error = true;
+			Bukkit.getServer().broadcastMessage(ChatColor.RED+"Permissions for world:"+this.getName()+" did not load correctly! Please consult server.log");
 			e.printStackTrace();
 			return false;
 		}
@@ -180,14 +186,6 @@ public class YamlWorld extends World {
 			}
 		}
 
-		//for (Calculable user : getAll(CalculableType.USER)) {
-			//try {
-			//	user.calculateEffectivePermissions();
-				//user.calculateEffectiveMeta();
-			//} catch (RecursiveGroupException e) {
-			//	System.err.println(e.getMessage());
-			//}
-		//}
 		for(Player player : this.permissions.getServer().getOnlinePlayers()) {
 			String name = player.getName();
 			String world = player.getWorld().getName();
@@ -199,6 +197,10 @@ public class YamlWorld extends World {
 	}
 
 	public boolean save() {
+		if(error) {
+			Bukkit.getServer().broadcastMessage(ChatColor.RED+"Permissions for world:"+this.getName()+" did not load correctly, please consult server.log.");
+			return false;
+		}
 		try {
 			saveUnsafe();
 			//load();
