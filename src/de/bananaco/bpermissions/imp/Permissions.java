@@ -24,7 +24,8 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	
 	public SuperPermissionHandler handler;
 	private Listener loader;
-	private Map<String, Commands> commands;
+	// Change to public for people to hook into if they really need to
+	public Map<String, Commands> commands;
 	private WorldManager wm;
 	private DefaultWorld world;
 	private Config config;
