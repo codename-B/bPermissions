@@ -181,6 +181,13 @@ public abstract class Permissions extends JavaPlugin {
 						e.printStackTrace();
 					}
 				}
+				if(args[1].equalsIgnoreCase("pex")) {
+					try {
+						im.importPEX();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 				sender.sendMessage("Import attempted, view console for results");
 				sender.sendMessage("Note: if the files do not exist, you will see a FileNotFoundException");
 				return true;

@@ -23,6 +23,84 @@ public class ImportManager {
 		this.plugin = plugin;
 	}
 	
+	public void importPEX() throws Exception {
+		File file = new File("plugins/PermissionsEx/permissions.yml");
+		// No point doing anything if the file doesn't exist
+		if(!file.exists()) {
+			System.err.println("File not exist");
+			return;
+		}
+		YamlConfiguration perm = new YamlConfiguration();
+		perm.load(file);
+		
+		World world = plugin.getServer().getWorlds().get(0);
+		de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+		
+		ConfigurationSection users = perm.getConfigurationSection("users");
+		ConfigurationSection groups = perm.getConfigurationSection("groups");
+		
+		if(users.getKeys(false) != null && users.getKeys(false).size() > 0) {
+			for(String user : users.getKeys(false)) {
+				List<String> g = users.getStringList(user+".group");
+				List<String> p = users.getStringList(user+".permissions");
+				User u = wd.getUser(user);
+				// Remove the existing groups
+				u.getGroupsAsString().clear();
+				// Add all the groups
+				if(g != null && g.size() > 0)
+					for(String gr : g) {
+						u.addGroup(gr);
+					}
+				if(p != null && p.size() > 0)
+					for(String pr : p) {
+						if(pr.startsWith("-")) {
+							u.addPermission(pr.replace("-", ""), false);
+						} else {
+							u.addPermission(pr, true);
+						}
+					}
+				String prefix = users.getString(user+".prefix");
+				if(prefix != null)
+					u.setValue("prefix", prefix);
+				String suffix = users.getString(user+".suffix");
+				if(suffix != null)
+					u.setValue("suffix", suffix);
+			}
+		}
+		
+		if(groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
+			for(String group : groups.getKeys(false)) {
+				List<String> g = groups.getStringList(group+".inheritance");
+				List<String> p = groups.getStringList(group+".permissions");
+				Group u = wd.getGroup(group);
+				// Remove the existing groups
+				u.getGroupsAsString().clear();
+				// Add all the groups
+				if(g != null && g.size() > 0)
+					for(String gr : g) {
+						u.addGroup(gr);
+					}
+				if(p != null && p.size() > 0)
+					for(String pr : p) {
+						if(pr.startsWith("-")) {
+							u.addPermission(pr.replace("-", ""), false);
+						} else {
+							u.addPermission(pr, true);
+						}
+					}
+				String prefix = groups.getString(group+".prefix");
+				if(prefix != null)
+					u.setValue("prefix", prefix);
+				String suffix = groups.getString(group+".suffix");
+				if(suffix != null)
+					u.setValue("suffix", suffix);
+				String priority = groups.getString(group+".options.rank");
+				if(priority != null)
+					u.setValue("priority", priority);
+			}
+		}
+	}
+	
 	public void importYML() throws Exception {
 		for (World world : plugin.getServer().getWorlds()) {
 			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
