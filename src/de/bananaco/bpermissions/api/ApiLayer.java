@@ -64,7 +64,7 @@ public class ApiLayer {
 	public static String getValue(String world, CalculableType type, String name, String key) {
 		World w = wm.getWorld(world);
 		Calculable c = w.get(name, type);
-		return c.getValue(key);
+		return c.getEffectiveValue(key);
 	}
 	
 	/*
