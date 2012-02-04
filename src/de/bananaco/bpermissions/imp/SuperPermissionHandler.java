@@ -87,6 +87,9 @@ public class SuperPermissionHandler extends PlayerListener {
 	 * @param world
 	 */
 	public void setupPlayer(Player player, World world) {
+		if(!plugin.isEnabled())
+			return;
+		
 		long time = System.currentTimeMillis();
 		// Some null checks, I guess?
 		if(world == null) {
