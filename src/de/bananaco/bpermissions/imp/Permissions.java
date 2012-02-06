@@ -33,6 +33,9 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	
 	@Override
 	public void onDisable() {
+		// Cancel tasks
+		getServer().getScheduler().cancelTasks(this);
+		
 		super.onDisable();
 		if(wm != null) {
 		for(World world : wm.getAllWorlds())

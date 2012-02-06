@@ -29,6 +29,8 @@ public class SuperPermissionHandler extends PlayerListener {
 	private WorldManager wm = WorldManager.getInstance();
 	private Map<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
 	private Permissions plugin;
+	
+	private WorldChecker checker;
 
 	private static Field permissions;
 
@@ -63,6 +65,8 @@ public class SuperPermissionHandler extends PlayerListener {
 		att.getPermissible().recalculatePermissions();
 	}
 
+	// Main constructor
+	
 	protected SuperPermissionHandler(Permissions plugin) {
 		this.plugin = plugin;
 		// This next bit is simply to make bPermissions.* work with superperms, since I now have my bulk adding, I will concede to this
@@ -70,6 +74,10 @@ public class SuperPermissionHandler extends PlayerListener {
 		children.put("bPermissions.admin", true);
 		Permission permission = new Permission("bPermissions.*", PermissionDefault.OP, children);
 		plugin.getServer().getPluginManager().addPermission(permission);
+		
+		checker = new WorldChecker(plugin.getServer(), this);
+		
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, checker, 10, 10);
 	}
 
 	/**
@@ -127,6 +135,9 @@ public class SuperPermissionHandler extends PlayerListener {
 		// Then whack it onto the player
 		// TODO wait for the bukkit team to get their finger out, we'll use our reflection here!
 		try {
+			// The world
+			perms.put("world."+player.getWorld().getName(), true);
+			Debugger.log("world."+world.getName()+" set for "+player.getName());
 			setPermissions(att, perms);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
