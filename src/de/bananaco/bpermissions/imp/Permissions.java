@@ -11,13 +11,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.permissions.interfaces.PromotionTrack;
 
-public class Permissions extends de.bananaco.permissions.Permissions {
+public class Permissions extends JavaPlugin {
 	
 	private final Map<String, String> mirrors = new HashMap<String, String>();
 	private final Mirrors mrs = new Mirrors(mirrors);
@@ -29,14 +31,12 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 	private WorldManager wm;
 	private DefaultWorld world;
 	private Config config;
-	de.bananaco.permissions.Permissions oldPermissions;
 	
 	@Override
 	public void onDisable() {
 		// Cancel tasks
 		getServer().getScheduler().cancelTasks(this);
 		
-		super.onDisable();
 		if(wm != null) {
 		for(World world : wm.getAllWorlds())
 			world.save();
@@ -53,7 +53,6 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 
 	@Override
 	public void onEnable() {
-		super.onEnable();
 		// Only happens after onEnable(), prevent NPE's
 		config = new Config();
 		// Load the config.yml
@@ -70,8 +69,6 @@ public class Permissions extends de.bananaco.permissions.Permissions {
 		wm = WorldManager.getInstance();
 		// Set the global file flag
 		wm.setUseGlobalFiles(config.getUseGlobalFiles());
-		oldPermissions = (de.bananaco.permissions.Permissions) this;
-		oldPermissions.enable(this);
 		handler = new SuperPermissionHandler(this);
 		loader = new WorldLoader(this, mirrors);
 		world = new DefaultWorld(this);
