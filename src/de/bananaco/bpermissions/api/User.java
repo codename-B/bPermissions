@@ -18,6 +18,10 @@ public class User extends MapCalculable {
 	private World w;
 	private WorldManager wm = WorldManager.getInstance();
 	
+	public User(String name, World w) {
+		this(name, null, null, w.getName(), w);
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public User(String name, List<String> groups, Set<Permission> permissions,
 			String world, World w) {

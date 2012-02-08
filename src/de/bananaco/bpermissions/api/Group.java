@@ -19,6 +19,10 @@ public class Group extends MapCalculable {
 	private World w;
 	private WorldManager wm = WorldManager.getInstance();
 	
+	public Group(String name, World w) {
+		this(name, null, null, w.getName(), w);
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Group(String name, List<String> groups, Set<Permission> permissions,
 			String world, World w) {
@@ -95,6 +99,7 @@ public class Group extends MapCalculable {
 	public void removePermission(String permission) {
 		super.removePermission(permission);
 		setDirty(true);
+		setCalculablesWithGroupDirty();
 		if(wm.getAutoSave())
 			w.save();
 	}
