@@ -1,79 +1,52 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <groupId>de.bananaco</groupId>
     <artifactId>bPermissions</artifactId>
+    <version>dev-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <version>1337-SNAPSHOT</version>
+    
     <name>bPermissions</name>
+    <url>https://github.com/codename-B/bPermissions</url>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <!-- Repository locations -->
+    
+    <organization>
+        <name>BananaCode</name>
+        <url>https://github.com/codename-B</url>
+    </organization>
+
     <repositories>
-        <!-- Spout-related stuff (not currently used) -->
-        <!--<repository>
-            <id>spout-repo</id>
-            <url>http://ci.getspout.org/plugin/repository/everything/</url>
-        </repository>-->
-        <!--  WorldEdit/WorldGuard-related stuff -->
-        <repository>
-			<id>sk89q-mvn2</id>
-			<url>http://mvn2.sk89q.com/repo</url>
-		</repository>
-        <!-- Bukkit-related stuff -->
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/artifactory/repo</url>
         </repository>
     </repositories>
+    
     <build>
         <sourceDirectory>${basedir}/src/</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
                 </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <directory>${basedir}/src/</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
+    
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.0.1-R1</version>
-            <type>jar</type>
-        </dependency>
-	<dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.0.1-R1</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldedit</artifactId>
-            <version>4.7</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>1.0.1-R2-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <organization>
-    	<name>BananaCode</name>
-    	<url>http://bananaco.de/</url>
-    </organization>
 </project>
