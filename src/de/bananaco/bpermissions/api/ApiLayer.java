@@ -64,7 +64,16 @@ public class ApiLayer {
 	public static String getValue(String world, CalculableType type, String name, String key) {
 		World w = wm.getWorld(world);
 		Calculable c = w.get(name, type);
-		return c.getEffectiveValue(key);
+		String v = c.getEffectiveValue(key);
+		// Add support for prefix/suffix from global files
+		if(v.equals("") && wm.getUseGlobalFiles()) {
+			w = wm.getDefaultWorld();
+			if(w == null)
+				return v;
+			c = w.get(name, type);
+			v = c.getEffectiveValue(key);
+		}
+		return v;
 	}
 	
 	/*
