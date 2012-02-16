@@ -8,6 +8,7 @@ import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 
 public class CalculableTest {
 
@@ -21,6 +22,43 @@ public class CalculableTest {
 		System.out.println("#################################################");
 	}
 
+	public void test100LevelInheritance() {
+		Calculable base = new Group("base", world);
+		base.setValue("priority", "0");
+		base.setValue("prefix", "base");
+		
+		world.add(base);
+		
+		Calculable last = null;
+		
+		for(int i=1; i<100; i++) {
+		Calculable next = new Group("next"+String.valueOf(i), world);
+		next.setValue("priority", String.valueOf(i));
+		next.setValue("prefix", "next"+String.valueOf(i));
+		// Set up the inheritance structure
+		if(i == 1)
+			next.addGroup("base");
+		else
+			next.addGroup("next"+String.valueOf(i-1));
+		world.add(next);
+		last = next;
+		}
+		
+		Calculable user = new User("test", world);
+		user.addGroup(last.getName());
+		world.add(user);
+		
+		try {
+			user.calculateEffectiveMeta();
+		} catch (RecursiveGroupException e) {
+			e.printStackTrace();
+		}
+		
+		printLine();
+		System.out.println("Expected "+last.getEffectiveValue("prefix"));
+		System.out.println("Got "+user.getEffectiveValue("prefix"));
+	}
+	
 	public void testPriority() {
 		printLine();
 		// Create the groups
