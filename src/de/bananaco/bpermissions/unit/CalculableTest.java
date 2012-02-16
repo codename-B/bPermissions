@@ -22,6 +22,46 @@ public class CalculableTest {
 		System.out.println("#################################################");
 	}
 	
+	public void gv1222PrefixTest() {
+		printLine();
+		
+		User user = new User("gv1222", world);
+		user.addGroup("a");
+
+		Group a = new Group("A", world);
+		a.setValue("priority", "100");
+		a.setValue("prefix", "a");
+		
+		Group b = new Group("B", world);
+		b.setValue("priority", "50");
+		b.setValue("prefix", "b");
+		
+		
+		world.add(a);
+		world.add(b);
+		world.add(user);
+		
+		try {
+			user.calculateEffectiveMeta();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("gv1222 has group a with prefix: "+user.getEffectiveValue("prefix"));
+		
+		user.addGroup("b");
+		
+		try {
+			user.calculateEffectiveMeta();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("gv1222 has group a and b with prefix: "+user.getEffectiveValue("prefix"));
+		
+		System.out.println("Test "+(user.getEffectiveValue("prefix").equals("a")?"passed":"failed"));
+	}
+	
 	public void testNegativeToPositive() {
 		printLine();
 		
