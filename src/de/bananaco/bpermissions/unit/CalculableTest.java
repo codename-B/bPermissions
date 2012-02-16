@@ -21,6 +21,41 @@ public class CalculableTest {
 	public void printLine() {
 		System.out.println("#################################################");
 	}
+	
+	public void testNegativeToPositive() {
+		printLine();
+		
+		User user = new User("user", world);
+		user.addGroup("moderator");
+		world.add(user);
+		Group group0 = new Group("default", world);
+		group0.addPermission("permission.*", true);
+		group0.addPermission("permission.moderator", false);
+		world.add(group0);
+		Group group1 = new Group("moderator", world);
+		group1.addGroup("default");
+		group1.addPermission("permission.moderator", true);
+		world.add(group1);
+		
+		try {
+			user.calculateEffectivePermissions();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("user has group moderator");
+		System.out.println("moderator inherits default");
+		System.out.println("default has permission.* and ^permission.moderator");
+		System.out.println("moderator has permission.moderator");
+		
+		System.out.print("expected false got "); System.out.println(group0.hasPermission("permission.moderator"));
+		System.out.print("expected true got "); System.out.println(group0.hasPermission("permission.default"));
+		
+		System.out.print("expected true got "); System.out.println(group1.hasPermission("permission.moderator"));
+		System.out.print("expected true got "); System.out.println(group1.hasPermission("permission.default"));
+		
+		System.out.print("expected true got "); System.out.println(user.hasPermission("permission.moderator"));
+	}
 
 	public void test100LevelInheritance() {
 		Calculable base = new Group("base", world);

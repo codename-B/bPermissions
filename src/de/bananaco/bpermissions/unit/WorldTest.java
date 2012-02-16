@@ -11,8 +11,7 @@ public class WorldTest extends World {
 	@Override
 	public boolean load() {
 		CalculableTest test = new CalculableTest(this);
-		test.testPriority();
-		test.testPermissions();
+		test.testNegativeToPositive();
 		return true;
 	}
 
