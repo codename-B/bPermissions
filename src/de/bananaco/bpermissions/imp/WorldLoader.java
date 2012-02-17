@@ -4,8 +4,9 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.event.world.WorldListener;
 
 import de.bananaco.bpermissions.api.WorldManager;
 /**
@@ -17,7 +18,7 @@ import de.bananaco.bpermissions.api.WorldManager;
  *  
  *  (again, in this classfile, it can be passed through a constructor argument)
  */
-public class WorldLoader extends WorldListener {
+public class WorldLoader implements Listener {
 
 	private WorldManager wm = WorldManager.getInstance();
 	private Map<String, String> mirrors;
@@ -31,7 +32,7 @@ public class WorldLoader extends WorldListener {
 		}
 	}
 	
-	@Override
+	@EventHandler
 	public void onWorldInit(WorldInitEvent event) {
 		createWorld(event.getWorld());
 	}

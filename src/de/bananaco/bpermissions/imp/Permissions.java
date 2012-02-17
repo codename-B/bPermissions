@@ -8,15 +8,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
+import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.interfaces.PromotionTrack;
 
 public class Permissions extends JavaPlugin {
@@ -78,14 +78,10 @@ public class Permissions extends JavaPlugin {
 		world.load();
 		// Load the default Map for Commands
 		commands = new HashMap<String, Commands>();
-		// Register world loading
-		getServer().getPluginManager().registerEvent(Event.Type.WORLD_INIT, loader, Priority.Normal, this);
-		// Register player login
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_LOGIN, handler, Priority.Lowest, this);
-		// Register player chat
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, handler, Priority.Lowest, this);
-		// Register world changing
-		getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHANGED_WORLD, handler, Priority.Normal, this);
+		// Register loader events
+		getServer().getPluginManager().registerEvents(loader, this);
+		// Register handler events
+		getServer().getPluginManager().registerEvents(handler, this);
 		// Setup all online players
 		//handler.setupAllPlayers();
 		// And print a nice little message ;)
@@ -306,9 +302,18 @@ public class Permissions extends JavaPlugin {
 					sendMessage(sender, "Cleaning up files!");
 					wm.cleanup();
 					return true;
+				} else if(action.equalsIgnoreCase("helpme")) {
+					sendMessage(sender, "Creating example files!");
+					// Create the example file
+					new ForNoobs(this).addAll();
+					return true;
+				} else if(action.equalsIgnoreCase("backup")) {
+					sendMessage(sender, "Creating backup!");
+					new BackupPermissionsCommand(this).backup();
+					return true;
 				}
 			}
-			return super.onCommand(sender, command, label, args);
+			return false;
 		}
 		return true;
 	}

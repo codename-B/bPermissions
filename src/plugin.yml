@@ -7,7 +7,7 @@ commands:
   permissions:
     aliases: [p, bp, perm]
     description: reloads the nodes
-    usage: /<command> save|reload
+    usage: /<command> save|reload|helpme|backup
   user:
     aliases: [u, usr]
     description: messes with users

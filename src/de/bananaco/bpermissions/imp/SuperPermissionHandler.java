@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -24,7 +26,7 @@ import de.bananaco.bpermissions.api.WorldManager;
  * What's wrong with a PermissionProvider interface where we can
  * register a single PermissionProvider?!
  */
-public class SuperPermissionHandler extends PlayerListener {
+public class SuperPermissionHandler implements Listener {
 
 	private WorldManager wm = WorldManager.getInstance();
 	private Map<Player, PermissionAttachment> attachments = new HashMap<Player, PermissionAttachment>();
@@ -148,19 +150,19 @@ public class SuperPermissionHandler extends PlayerListener {
 		Debugger.log("Setup superperms for "+player.getName()+". took "+finish+"ms.");
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		// In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));
 	}
 
-	@Override
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
 	}
 	
-	@Override
+	@EventHandler
 	public void onPlayerChat(PlayerChatEvent event) {
 		Player player = event.getPlayer();
 		// If the player is an op and has given themselves an * node, mess with their chat
