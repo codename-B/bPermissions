@@ -88,7 +88,6 @@ public class YamlWorld extends World {
 		try {
 			clear();
 			loadUnsafe();
-			permissions.getServer().getPluginManager().callEvent(new WorldLoadedEvent(this));
 			// If it loaded correctly cancel the error
 			error = false;
 			return true;
