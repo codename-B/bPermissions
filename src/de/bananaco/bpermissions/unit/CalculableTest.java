@@ -22,6 +22,21 @@ public class CalculableTest {
 		System.out.println("#################################################");
 	}
 	
+	public void ApiLayerTest() {
+		printLine();
+		User user = new User("codename_B", world);
+		user.setValue("prefix", "test");
+		try {
+		user.calculateEffectiveMeta();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		world.add(user);
+		System.out.println("Expected: test");
+		System.out.println("Got: "+ApiLayer.getValue(world.getName(), CalculableType.USER, user.getName(), "prefix"));
+	}
+	
 	public void gv1222PrefixTest() {
 		printLine();
 		
