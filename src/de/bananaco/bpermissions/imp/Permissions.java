@@ -15,6 +15,7 @@ import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.interfaces.PromotionTrack;
@@ -267,6 +268,25 @@ public class Permissions extends JavaPlugin {
 		 * And now your standard "permissions" command
 		 */
 		if(command.getName().equalsIgnoreCase("permissions")) {
+			if(args.length == 2) {
+				if(args[0].equalsIgnoreCase("import")) {
+					sender.sendMessage("Importing from "+args[1]);
+					try {
+					if(args[1].equalsIgnoreCase("yml")) {
+						new ImportManager(this).importYML();
+					}
+					if(args[1].equalsIgnoreCase("pex")) {
+						new ImportManager(this).importPEX();
+					}
+					if(args[1].equalsIgnoreCase("p3")) {
+						new ImportManager(this).importPermissions3();
+					}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return true;
+				}
+			}
 			if(args.length == 1) {
 				if(sender instanceof ConsoleCommandSender) {
 					if(args[0].equalsIgnoreCase("debug")) {

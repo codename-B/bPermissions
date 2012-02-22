@@ -19,7 +19,7 @@ public class ImportManager {
 	private WorldManager wm = WorldManager.getInstance();
 	private final JavaPlugin plugin;
 	
-	protected ImportManager(JavaPlugin plugin) {
+	public ImportManager(JavaPlugin plugin) {
 		this.plugin = plugin;
 	}
 	
