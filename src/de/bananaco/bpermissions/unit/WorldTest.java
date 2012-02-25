@@ -11,7 +11,7 @@ public class WorldTest extends World {
 	@Override
 	public boolean load() {
 		CalculableTest test = new CalculableTest(this);
-		test.ApiLayerTest();
+		test.nullPassCheck();
 		return true;
 	}
 

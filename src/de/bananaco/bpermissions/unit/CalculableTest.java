@@ -6,6 +6,7 @@ import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.Group;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
+import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.RecursiveGroupException;
@@ -20,6 +21,18 @@ public class CalculableTest {
 	
 	public void printLine() {
 		System.out.println("#################################################");
+	}
+	
+	public void nullPassCheck() {
+		printLine();
+		WorldManager.getInstance().setDefaultWorld(world);
+		try {
+		ApiLayer.getValue(null, CalculableType.USER, "test", "test");
+		System.out.println("test passed!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("test failed!");
+		}
 	}
 	
 	public void ApiLayerTest() {
