@@ -63,6 +63,9 @@ public class ApiLayer {
 	 */
 	public static String getValue(String world, CalculableType type, String name, String key) {
 		World w = wm.getWorld(world);
+		// Fix for Vault bug 112 https://github.com/MilkBowl/Vault/issues/112
+		if(w == null)
+			return "";
 		Calculable c = w.get(name, type);
 		String v = c.getEffectiveValue(key);
 		// Add support for prefix/suffix from global files
