@@ -18,6 +18,7 @@ import de.bananaco.bpermissions.api.util.Permission;
  * and will override any existing permission by that name.
  */
 public class ApiLayer {
+	// This should never null, and if it does something horrible has gone wrong and that should be the least of our worries
 	private static WorldManager wm = WorldManager.getInstance();
 	
 	/*
@@ -33,6 +34,9 @@ public class ApiLayer {
 	 */
 	public static String[] getGroups(String world, CalculableType type, String name) {
 		World w = wm.getWorld(world);
+		// Null checks everywhere!
+		if(w == null || type == null || name == null)
+			return new String[0];
 		Calculable c = w.get(name, type);
 		Set<String> g = c.getGroupsAsString();
 		String[] groups = g.toArray(new String[g.size()]);
@@ -48,6 +52,9 @@ public class ApiLayer {
 	 */
 	public static Permission[] getPermissions(String world, CalculableType type, String name) {
 		World w = wm.getWorld(world);
+		// Null checks everywhere!
+		if(w == null || type == null || name == null)
+			return new Permission[0];
 		Calculable c = w.get(name, type);
 		Set<Permission> p = c.getPermissions();
 		Permission[] permissions = p.toArray(new Permission[p.size()]);
@@ -64,7 +71,7 @@ public class ApiLayer {
 	public static String getValue(String world, CalculableType type, String name, String key) {
 		World w = wm.getWorld(world);
 		// Fix for Vault bug 112 https://github.com/MilkBowl/Vault/issues/112
-		if(w == null)
+		if(w == null || type == null || name == null || key == null)
 			return "";
 		Calculable c = w.get(name, type);
 		String v = c.getEffectiveValue(key);
@@ -92,6 +99,8 @@ public class ApiLayer {
 	 */
 	public static void addGroup(String world, CalculableType type, String name, String groupToAdd) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || groupToAdd == null)
+			return;
 		Calculable c = w.get(name, type);
 		c.addGroup(groupToAdd);
 	}
@@ -104,6 +113,8 @@ public class ApiLayer {
 	 */
 	public static void setGroup(String world, CalculableType type, String name, String groupToAdd) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || groupToAdd == null)
+			return;
 		Calculable c = w.get(name, type);
 		c.getGroupsAsString().clear();
 		c.addGroup(groupToAdd);
@@ -117,6 +128,8 @@ public class ApiLayer {
 	 */
 	public static void removeGroup(String world, CalculableType type, String name, String groupToRemove) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || groupToRemove == null)
+			return;
 		Calculable c = w.get(name, type);
 		c.removeGroup(groupToRemove);
 	}
@@ -130,6 +143,8 @@ public class ApiLayer {
 	 */
 	public static boolean hasGroup(String world, CalculableType type, String name, String group) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || group == null)
+			return false;
 		Calculable c = w.get(name, type);
 		return c.hasGroup(group);
 	}
@@ -143,6 +158,8 @@ public class ApiLayer {
 	 */
 	public static boolean hasGroupRecursive(String world, CalculableType type, String name, String group) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || group == null)
+			return false;
 		Calculable c = w.get(name, type);
 		return c.hasGroupRecursive(group);
 	}
@@ -155,6 +172,8 @@ public class ApiLayer {
 	 */
 	public static void addPermission(String world, CalculableType type, String name, Permission permissionToAdd) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || permissionToAdd == null)
+			return;
 		Calculable c = w.get(name, type);
 		c.addPermission(permissionToAdd.name(), permissionToAdd.isTrue());
 	}
@@ -168,6 +187,8 @@ public class ApiLayer {
 	 */
 	public static void removePermission(String world, CalculableType type, String name, String permissionToRemove) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || permissionToRemove == null)
+			return;
 		Calculable c = w.get(name, type);
 		c.removePermission(permissionToRemove);
 	}
@@ -181,6 +202,8 @@ public class ApiLayer {
 	 */
 	public static boolean hasPermission(String world, CalculableType type, String name, String node) {
 		World w = wm.getWorld(world);
+		if(w == null || type == null || name == null || node == null)
+			return false;
 		Calculable c = w.get(name, type);
 		return c.hasPermission(node);
 	}
@@ -194,6 +217,8 @@ public class ApiLayer {
 	 */
 	public static void setValue(String world, CalculableType type, String name, String key, String value) {
 		World w = wm.getWorld(world);
+		if(world == null || type == null || name == null || key == null)
+			return;
 		Calculable c = w.get(name, type);
 		c.setValue(key, value);
 	}
