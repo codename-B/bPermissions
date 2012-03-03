@@ -203,10 +203,16 @@ public class ImportManager {
 					List<String> p = gConfig.getStringList("groups."+group+".permissions");
 					List<String> i = gConfig.getStringList("groups."+group+".inheritance");
 					
+					String prefix = gConfig.getString("groups."+group+".info."+"prefix");
+					String suffix = gConfig.getString("groups."+group+".info."+"suffix");
 					if(p != null)
 						gr.getPermissions().addAll(Permission.loadFromString(p));
 					if(i != null)
 						gr.getGroupsAsString().addAll(i);
+					if(prefix != null)
+						gr.setValue("prefix", prefix);
+					if(suffix != null)
+						gr.setValue("suffix", suffix);
 					} catch (Exception e) {
 						System.err.println("Error importing group: "+group);
 					}
