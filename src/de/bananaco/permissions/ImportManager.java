@@ -184,12 +184,19 @@ public class ImportManager {
 					List<String> p = uConfig.getStringList("users."+player+".permissions");
 					List<String> i = uConfig.getStringList("users."+player+".groups");
 					
+					String prefix = uConfig.getString("users."+player+".info."+"prefix");
+					String suffix = uConfig.getString("users."+player+".info."+"suffix");
+					
 					if(p != null)
 						user.getPermissions().addAll(Permission.loadFromString(p));
 					if(i != null) {
 						user.getGroupsAsString().clear();
 						user.getGroupsAsString().addAll(i);
 					}
+					if(prefix != null)
+						user.setValue("prefix", prefix);
+					if(suffix != null)
+						user.setValue("suffix", suffix);
 					} catch (Exception e) {
 						System.err.println("Error importing user: "+player);
 					}
