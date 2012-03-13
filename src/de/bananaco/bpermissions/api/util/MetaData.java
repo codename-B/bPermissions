@@ -15,7 +15,7 @@ import java.util.Map;
  * 
  * The sorting API has been moved to MetaData as that's where it fits best
  */
-public class MetaData {
+public abstract class MetaData {
 	
 	private final Map<String, String> values = new HashMap<String, String>();
 	
@@ -64,7 +64,15 @@ public class MetaData {
 	 */
 	public void setValue(String key, String value) {
 		values.put(key, value);
+		try {
+			this.calculateEffectiveMeta();
+		} catch (RecursiveGroupException e) {
+			e.printStackTrace();
+		}
 	}
+	
+	public abstract void calculateEffectiveMeta() throws RecursiveGroupException;
+	
 	/**
 	 * Return the map of metadata, this is a direct reference and not a copy.
 	 * @return Map<String,String>

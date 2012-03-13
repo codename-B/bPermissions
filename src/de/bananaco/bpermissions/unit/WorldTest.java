@@ -11,7 +11,7 @@ public class WorldTest extends World {
 	@Override
 	public boolean load() {
 		CalculableTest test = new CalculableTest(this);
-		test.nullPassCheck();
+		test.gv1222PrefixTest();
 		return true;
 	}
 

@@ -1,6 +1,6 @@
 package de.bananaco.bpermissions.api.util;
 
-public class WorldCarrier extends MetaData {
+public abstract class WorldCarrier extends MetaData {
 	
 	private final String world;
 	

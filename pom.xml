@@ -24,6 +24,10 @@
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/artifactory/repo</url>
         </repository>
+        <repository>
+            <id>spout-repo</id>
+            <url>http://repo.spout.org/artifactory/repo</url>
+        </repository>
     </repositories>
     
     <build>
@@ -46,6 +50,7 @@
 		<directory>${basedir}/src/</directory>
 		<includes>
 		    <include>plugin.yml</include>
+		    <include>spoutplugin.yml</include>
 		</includes>
 	    </resource>
 	</resources>
