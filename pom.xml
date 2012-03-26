@@ -26,7 +26,7 @@
         </repository>
         <repository>
             <id>spout-repo</id>
-            <url>http://repo.spout.org/artifactory/repo</url>
+            <url>http://nexus.spout.org/content/groups/public/</url>
         </repository>
     </repositories>
     
