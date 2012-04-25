@@ -145,4 +145,9 @@ public class Commands {
 		WorldManager.getInstance().saveAll();
 	}
 
+	public void clearMeta(String value, CommandSender sender) {
+		getCalculable().getMeta().remove(value);
+		sender.sendMessage(format("Meta for "+calc.getName()+" "+getCalculable().getName()+" - cleared"));
+	}
+
 }

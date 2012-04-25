@@ -4,6 +4,9 @@ author: codename_B
 website: http://bpermissions.com/
 main: de.bananaco.bpermissions.imp.Permissions
 commands:
+  exec:
+    description: executes the "shorthand" commands
+    usage: /<command> all
   permissions:
     aliases: [p, bp, perm]
     description: reloads the nodes

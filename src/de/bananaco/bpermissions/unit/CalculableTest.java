@@ -9,6 +9,7 @@ import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.api.util.Permission;
 import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 
 public class CalculableTest {
@@ -21,6 +22,25 @@ public class CalculableTest {
 	
 	public void printLine() {
 		System.out.println("#################################################");
+	}
+	
+	public void negativeInheritanceCheck() {
+		printLine();
+		WorldManager.getInstance().setDefaultWorld(world);
+		try {
+			ApiLayer.addPermission(null, CalculableType.GROUP, "groupA", Permission.loadFromString("command.node"));
+			ApiLayer.addPermission(null, CalculableType.GROUP, "groupB", Permission.loadFromString("^command.node"));
+			ApiLayer.addGroup(null, CalculableType.GROUP, "groupB", "groupA");
+			ApiLayer.addGroup(null, CalculableType.USER, "test", "groupB");
+			
+			Calculable test = WorldManager.getInstance().getDefaultWorld().get("test", CalculableType.USER);
+			System.out.println("Testing (true if passed) groupA: command.node groupB: ^command.node");
+			System.out.println("user hasgroup groupB - expected negative node: result");
+			test.calculateEffectivePermissions();
+			System.out.println(test.hasPermission("command.node") == false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void nullPassCheck() {

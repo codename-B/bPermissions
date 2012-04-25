@@ -238,6 +238,8 @@ public class Permissions extends JavaPlugin {
 						}
 					} else if(action.equalsIgnoreCase("meta")) {
 						cmd.showValue(value, sender);
+					} else if(action.equalsIgnoreCase("cmeta")) {
+						cmd.clearMeta(value, sender);
 					}
 					else if(action.equalsIgnoreCase("addperm")) {
 						cmd.addPermission(value, sender);
@@ -263,7 +265,35 @@ public class Permissions extends JavaPlugin {
 			}
 			return true;
 		}
-		
+		if(command.getName().equalsIgnoreCase("exec")) {
+			String name = "null";
+			CalculableType type = CalculableType.USER;
+			String action = "null";
+			String value = "null";
+			String world = null;
+			for(String c : args) {
+				if(c.startsWith("u:") || c.startsWith("g:")) {
+					if(c.startsWith("u:")) {
+						type = CalculableType.USER;
+					} else {
+						type = CalculableType.GROUP;
+					}
+					name = c.split(":")[1];
+				} else if(c.startsWith("a:")) {
+					action = c.split(":")[1];
+				} else if(c.startsWith("v:")) {
+					value = c.split(":")[1];
+				} else if(c.startsWith("w:")) {
+					world = c.split(":")[1];
+				}
+			}
+			String message = ChatColor.GOLD+"Executing action: "+ChatColor.GREEN+action+" "+value+ChatColor.GOLD+" in "+ChatColor.GREEN+(world==null?"all worlds":"world: "+world);
+			String message2 = ChatColor.GOLD+"Action applied to "+ChatColor.GREEN+type.getName()+" "+name;
+			
+			sender.sendMessage(message);
+			sender.sendMessage(message2);
+			ExtraCommands.execute(name, type, action, value, world);
+		}
 		/*
 		 * And now your standard "permissions" command
 		 */
