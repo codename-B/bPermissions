@@ -5,6 +5,7 @@ website: http://bpermissions.com/
 main: de.bananaco.bpermissions.imp.Permissions
 commands:
   exec:
+    aliases: [e, ex]
     description: executes the "shorthand" commands
     usage: /<command> all
   permissions:
