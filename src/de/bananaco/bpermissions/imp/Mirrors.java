@@ -50,4 +50,18 @@ public class Mirrors {
 		WorldManager.getInstance().setMirrors(mirrors);
 	}
 
+	public void save() {
+		try {
+			Set<String> keys = mirrors.keySet();
+			if(keys != null && keys.size() > 0) {
+				for(String key : keys) {
+					config.set(key, mirrors.get(key));
+				}
+				config.save(file);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

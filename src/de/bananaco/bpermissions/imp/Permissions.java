@@ -1,7 +1,9 @@
 package de.bananaco.bpermissions.imp;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -189,6 +191,12 @@ public class Permissions extends JavaPlugin {
 				}
 			} else if (args.length == 1) {
 				cmd.setWorld(args[0], sender);
+			} else if(args.length == 3 && args[0].equalsIgnoreCase("mirror")) {
+				String worldFrom = args[1];
+				String worldTo = args[2];
+				mirrors.put(worldFrom, worldTo);
+				mrs.save();
+				sender.sendMessage(worldFrom+" mirrored to "+worldTo);
 			} else {
 				sendMessage(sender, "Too many arguments.");
 			}
@@ -366,6 +374,16 @@ public class Permissions extends JavaPlugin {
 			return false;
 		}
 		return true;
+	}
+	
+	public void showPromoteOutput(CommandSender sender, String player) {
+		sender.sendMessage("The player: "+ChatColor.GREEN+player+ChatColor.WHITE+" now has these groups");
+		for(World world : WorldManager.getInstance().getAllWorlds()) {
+			Set<String> groups = world.getUser(player).getGroupsAsString();
+			String[] g = groups.toArray(new String[groups.size()]);
+			String gr = Arrays.toString(g);
+			sender.sendMessage("In world: "+world.getName()+" "+gr);
+		}
 	}
 
 	private String getName(CommandSender sender) {
