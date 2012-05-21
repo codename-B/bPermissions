@@ -76,6 +76,11 @@ public class YamlFile {
 			// Ignore blank lines
 			if(line.replaceAll(" ", "").equals("")) {
 				System.err.println("line "+i+" of "+file.getName() +" contained a Yaml error. A fix was attempted.");
+				line = line.replaceAll(" ", "");
+			}
+			if(line.equals(":")) {
+				System.err.println("line "+i+" of "+file.getName() +" contained a Yaml error. A fix was attempted.");
+				line = line.replaceAll(":", "");
 			}
 			else {
 			newData.add(line);
@@ -83,7 +88,14 @@ public class YamlFile {
 		}
 		
 		data.clear();
-		data.addAll(newData);
+		
+		// Remove all blank lines!
+		for(int i=0; i<newData.size(); i++) {
+			String d = newData.get(i);
+			if(!d.equals("")) {
+				data.add(d);
+			}
+		}
 	}
 	
 	/**
