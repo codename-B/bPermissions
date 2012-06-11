@@ -89,7 +89,7 @@ public class YamlFile {
 		
 		data.clear();
 		
-		// Remove all blank lines!
+		// Remove all blank lines
 		for(int i=0; i<newData.size(); i++) {
 			String d = newData.get(i);
 			if(!d.equals("")) {

@@ -217,7 +217,9 @@ public class ApiLayer {
 	 */
 	public static void setValue(String world, CalculableType type, String name, String key, String value) {
 		World w = wm.getWorld(world);
-		if(world == null || type == null || name == null || key == null)
+		// NPE FIX
+		//if(world == null || type == null || name == null || key == null)
+		if(w == null || type == null || name == null || key == null)
 			return;
 		Calculable c = w.get(name, type);
 		c.setValue(key, value);

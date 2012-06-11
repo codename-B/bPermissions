@@ -7,6 +7,8 @@ import java.util.Set;
 import de.bananaco.bpermissions.api.Group;
 import de.bananaco.bpermissions.api.World;
 
+//import org.bukkit.ChatColor;
+
 /**
  * This class contains the main calculations for
  * a GroupCarrier/PermissionCarrier.
@@ -23,6 +25,7 @@ public abstract class Calculable extends CalculableMeta {
 	public Calculable(String name, Set<String> groups,
 			Set<Permission> permissions, String world) {
 		super(groups, permissions, world);
+		// TODO does this remove the ChatColor?
 		this.name = name;
 		this.effectivePermissions = new HashSet();
 	}

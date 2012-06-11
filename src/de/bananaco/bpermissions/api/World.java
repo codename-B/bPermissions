@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+//import org.bukkit.ChatColor;
+
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 /**
@@ -51,6 +53,7 @@ public abstract class World {
 	 * @return boolean
 	 */
 	public boolean contains(String name, CalculableType type) {
+		//name = ChatColor.stripColor(name);
 		// A quick lowercase here
 		name = name.toLowerCase();
 		// And now we check
@@ -63,10 +66,12 @@ public abstract class World {
 	}
 	
 	public Group getGroup(String name) {
+		//name = ChatColor.stripColor(name);
 		return (Group) get(name, CalculableType.GROUP);
 	}
 	
 	public User getUser(String name) {
+		//name = ChatColor.stripColor(name);
 		return (User) get(name, CalculableType.USER);
 	}
 	
@@ -77,6 +82,7 @@ public abstract class World {
 	 * @return Calculable (Group/User)
 	 */
 	public Calculable get(String name, CalculableType type) {
+		//name = ChatColor.stripColor(name);
 		// A quick lowercase here
 		name = name.toLowerCase();
 		// And now we check

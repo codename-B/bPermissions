@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,12 +12,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
-
+import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.api.util.CalculableType;
 /**
  * Handles all the superperms registering/unregistering
  * for PermissionAttachments (it's basically just somewhere
@@ -146,6 +149,13 @@ public class SuperPermissionHandler implements Listener {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		// Set the metadata?
+		String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "prefix");
+		String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "suffix");
+		// WTF
+		player.setMetadata("prefix", new FixedMetadataValue(Permissions.instance, prefix));
+		player.setMetadata("suffix", new FixedMetadataValue(Permissions.instance, suffix));
+		// WHAT IS THIS I DONT EVEN
 		long finish = System.currentTimeMillis()-time;
 		Debugger.log("Setup superperms for "+player.getName()+". took "+finish+"ms.");
 	}
@@ -188,6 +198,8 @@ public class SuperPermissionHandler implements Listener {
 	}
 
 	public void setupPlayer(String player) {
+		player = ChatColor.stripColor(player);
+		
 		if(this.plugin.getServer().getPlayerExact(player) == null)
 			return;
 		Player p = this.plugin.getServer().getPlayerExact(player);

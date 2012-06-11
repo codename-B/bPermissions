@@ -35,6 +35,8 @@ public class Permissions extends JavaPlugin {
 	private DefaultWorld world;
 	private Config config;
 	
+	protected static JavaPlugin instance = null;
+	
 	@Override
 	public void onDisable() {
 		// Cancel tasks
@@ -56,6 +58,7 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		instance = this;
 		// Only happens after onEnable(), prevent NPE's
 		config = new Config();
 		// Load the config.yml
@@ -87,7 +90,9 @@ public class Permissions extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(handler, this);
 		// Setup all online players
 		//handler.setupAllPlayers();
-		// And print a nice little message ;)
+		// Load our custom nodes (if any)
+		new CustomNodes().load();
+		// And print a nice little message ;)		
 		System.out.println(blankFormat("Enabled"));
 	}
 	
