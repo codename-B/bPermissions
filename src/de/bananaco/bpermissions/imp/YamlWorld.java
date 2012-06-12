@@ -1,6 +1,7 @@
 package de.bananaco.bpermissions.imp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -270,6 +271,15 @@ public class YamlWorld extends World {
 	public boolean setupPlayer(String player) {
 		permissions.handler.setupPlayer(player);
 		return true;
+	}
+	
+	@Override
+	public void setDefaultGroup(String group) {
+		gconfig.set("default", group);
+		try {
+			gconfig.save(gfile);
+		} catch (IOException e) {
+		}
 	}
 
 }

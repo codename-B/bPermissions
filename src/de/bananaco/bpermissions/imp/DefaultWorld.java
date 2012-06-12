@@ -1,6 +1,7 @@
 package de.bananaco.bpermissions.imp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -241,6 +242,15 @@ public class DefaultWorld extends World {
 	@Override
 	public boolean setupPlayer(String player) {
 		return false;
+	}
+
+	@Override
+	public void setDefaultGroup(String group) {
+		gconfig.set("default", group);
+		try {
+			gconfig.save(gfile);
+		} catch (IOException e) {
+		}
 	}
 
 }

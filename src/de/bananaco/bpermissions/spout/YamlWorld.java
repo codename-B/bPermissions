@@ -260,4 +260,10 @@ public class YamlWorld extends World {
 		return true;
 	}
 
+	@Override
+	public void setDefaultGroup(String group) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

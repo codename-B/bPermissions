@@ -32,7 +32,9 @@ public class Permission {
 	 */
 	public static Permission loadFromString(String perm) {
 		if (perm.startsWith("^"))
-			return new Permission(perm.replace("^", ""), false);
+			return new Permission(perm.replaceFirst("^", ""), false);
+		if (perm.startsWith("-"))
+			return new Permission(perm.replaceFirst("-", ""), false);
 		else
 			return new Permission(perm, true);
 	}

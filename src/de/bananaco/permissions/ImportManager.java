@@ -1,6 +1,7 @@
 package de.bananaco.permissions;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -70,6 +71,10 @@ public class ImportManager {
 		
 		if(groups.getKeys(false) != null && groups.getKeys(false).size() > 0) {
 			for(String group : groups.getKeys(false)) {
+				if(groups.getBoolean(group+".default")) {
+					wd.setDefaultGroup(group);
+					System.out.println("DEFAULT GROUP DETECTED: "+group);
+				}
 				List<String> g = groups.getStringList(group+".inheritance");
 				List<String> p = groups.getStringList(group+".permissions");
 				Group u = wd.getGroup(group);
@@ -144,6 +149,108 @@ public class ImportManager {
 			wd.save();
 		}
 		wm.cleanup();
+	}
+	
+	public void importGroupManager() throws Exception {
+		for(World world : plugin.getServer().getWorlds()) {
+			de.bananaco.bpermissions.api.World wd = wm.getWorld(world.getName());
+			
+			File users = new File("plugins/GroupManager/worlds/" + world.getName()
+					+ "/users.yml");
+			File groups = new File("plugins/GroupManager/worlds/" + world.getName()
+					+ "/groups.yml");
+			
+			if(users.exists() && groups.exists()) {
+				System.out.println("Importing world: "+world.getName());
+
+				YamlConfiguration uConfig = new YamlConfiguration();
+				YamlConfiguration gConfig = new YamlConfiguration();
+				try {
+				uConfig.load(users);
+				gConfig.load(groups);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				ConfigurationSection usConfig = uConfig.getConfigurationSection("users");
+				ConfigurationSection grConfig = gConfig.getConfigurationSection("groups");
+				
+				Set<String> usersList = null;
+				if(usConfig != null)
+					usersList = usConfig.getKeys(false);
+				Set<String> groupsList = null;
+				if(grConfig != null)
+					groupsList = grConfig.getKeys(false);
+				
+				if (usersList != null)
+					for (String player : usersList) {
+						System.out.println("Importing user: "+player);
+						User user = wd.getUser(player);
+						try {
+						List<String> p = uConfig.getStringList("users."+player+".permissions");
+						List<String> i = uConfig.getStringList("users."+player+".subgroups");
+						i.add(uConfig.getString("users."+player+".group"));
+						
+						String prefix = uConfig.getString("users."+player+".info."+"prefix");
+						String suffix = uConfig.getString("users."+player+".info."+"suffix");
+						
+						if(p != null)
+							user.getPermissions().addAll(Permission.loadFromString(p));
+						if(i != null) {
+							user.getGroupsAsString().clear();
+							user.getGroupsAsString().addAll(i);
+						}
+						if(prefix != null)
+							user.setValue("prefix", prefix);
+						if(suffix != null)
+							user.setValue("suffix", suffix);
+						} catch (Exception e) {
+							System.err.println("Error importing user: "+player);
+						}
+					}
+				
+				if (groupsList != null)
+					for (String group : groupsList) {
+						System.out.println("Importing group: "+group);
+						Group gr = wd.getGroup(group);
+						try {
+						List<String> p = gConfig.getStringList("groups."+group+".permissions");
+						List<String> i = gConfig.getStringList("groups."+group+".inheritance");
+						
+						String prefix = gConfig.getString("groups."+group+".info."+"prefix");
+						String suffix = gConfig.getString("groups."+group+".info."+"suffix");
+						
+						if(gConfig.getBoolean("groups."+group+".default")) {
+							wd.setDefaultGroup(group);
+							System.out.println("DEFAULT GROUP DETECTED: "+group);
+						}
+						if(p != null)
+							gr.getPermissions().addAll(Permission.loadFromString(p));
+						if(i != null) {
+							List<String> fp = new ArrayList<String>();
+							for(int j=0; j<i.size(); j++) {
+								String fpp = i.get(j);
+								if(fpp.startsWith("g:")) {
+									// do nothing
+								} else {
+									fp.add(fpp);
+								}
+							}
+							i.clear();
+							i.addAll(fp);
+							gr.getGroupsAsString().addAll(i);
+						}
+						if(prefix != null)
+							gr.setValue("prefix", prefix);
+						if(suffix != null)
+							gr.setValue("suffix", suffix);
+						} catch (Exception e) {
+							System.err.println("Error importing group: "+group);
+						}
+					}
+				wd.save();
+				}
+			}
+			wm.cleanup();
 	}
 	
 	public void importPermissions3() throws Exception {

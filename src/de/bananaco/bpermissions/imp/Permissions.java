@@ -326,6 +326,9 @@ public class Permissions extends JavaPlugin {
 					if(args[1].equalsIgnoreCase("p3")) {
 						new ImportManager(this).importPermissions3();
 					}
+					if(args[1].equalsIgnoreCase("gm")) {
+						new ImportManager(this).importGroupManager();
+					}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

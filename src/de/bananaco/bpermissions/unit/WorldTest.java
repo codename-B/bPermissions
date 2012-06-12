@@ -31,4 +31,10 @@ public class WorldTest extends World {
 		return false;
 	}
 
+	@Override
+	public void setDefaultGroup(String group) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

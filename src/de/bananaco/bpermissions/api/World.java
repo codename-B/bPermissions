@@ -235,6 +235,8 @@ public abstract class World {
 		save();
 	}
 	
+	public abstract void setDefaultGroup(String group);
+	
 	public abstract String getDefaultGroup();
 	
 	public abstract boolean setupPlayer(String player);
