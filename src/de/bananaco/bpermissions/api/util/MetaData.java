@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.bananaco.bpermissions.api.Group;
+
 /**
  * This class acts as the MetaData store for direct interaction
  * with prefix/suffix get/set etcetera.
@@ -36,6 +38,17 @@ public abstract class MetaData {
 			return f1.compareTo(f2);
 		}
 	};
+	
+	private final static Comparator<Group> comparGrp = new Comparator<Group>()
+			{
+				public int compare(Group o1, Group o2) {
+					if(o1.getPriority() > o2.getPriority())
+						return -1;
+					if(o2.getPriority() < o2.getPriority())
+						return 1;
+					return 0;
+				}
+			};
 	
 	private static boolean sort = true;
 	
@@ -101,6 +114,10 @@ public abstract class MetaData {
 			return;
 		List<Object> d = (List<Object>) data;
 		Collections.sort(d, comparObj);
+	}
+	
+	public static void sortGroups(List<Group> groups) {
+		Collections.sort(groups, comparGrp);
 	}
 	
 	/**

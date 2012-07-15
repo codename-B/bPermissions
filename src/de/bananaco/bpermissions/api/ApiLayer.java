@@ -1,5 +1,6 @@
 package de.bananaco.bpermissions.api;
 
+import java.util.List;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.util.Calculable;
@@ -38,7 +39,7 @@ public class ApiLayer {
 		if(w == null || type == null || name == null)
 			return new String[0];
 		Calculable c = w.get(name, type);
-		Set<String> g = c.getGroupsAsString();
+		List<String> g = c.serialiseGroups();
 		String[] groups = g.toArray(new String[g.size()]);
 		return groups;
 	}

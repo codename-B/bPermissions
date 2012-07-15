@@ -82,8 +82,8 @@ public class YamlFile {
 				System.err.println("line "+i+" of "+file.getName() +" contained a Yaml error. A fix was attempted.");
 				line = line.replaceAll(":", "");
 			}
-			else {
-			newData.add(line);
+			else if(!line.equals(":") && !line.equals("")){
+				newData.add(line);
 			}
 		}
 		

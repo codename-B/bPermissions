@@ -31,10 +31,10 @@ public class Permission {
 	 * @return Permission
 	 */
 	public static Permission loadFromString(String perm) {
-		if (perm.startsWith("^"))
-			return new Permission(perm.replaceFirst("^", ""), false);
-		if (perm.startsWith("-"))
-			return new Permission(perm.replaceFirst("-", ""), false);
+		if(perm.startsWith("^"))
+			return new Permission(perm.replace("^", ""), false);
+		if(perm.startsWith("-"))
+			return new Permission(perm.replace("-", ""), false);
 		else
 			return new Permission(perm, true);
 	}
