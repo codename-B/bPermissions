@@ -33,13 +33,12 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 * @return Set<Group>
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<Group> getGroups() {
-		List<Group> groups = new ArrayList();
+	public Set<Group> getGroups() {
+		Set<Group> groups = new HashSet();//new ArrayList();
 		for (String name : this.groups) {
 			Group group = (Group) WorldManager.getInstance().getWorld(getWorld()).get(name, CalculableType.GROUP);
 			groups.add(group);
 		}
-		sortGroups(groups);
 		return groups;
 	}
 
@@ -103,7 +102,9 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	public List<String> serialiseGroups() {
 		List<String> groups = new ArrayList<String>();
 		// Yes, we're lowercasing everything
-		List<Group> gr = getGroups();
+		List<Group> gr = new ArrayList<Group>(getGroups());
+		// also sort it
+		sortGroups(gr);
 		for(int i=0; i<gr.size(); i++) {
 			groups.add(gr.get(i).getNameLowerCase());
 		}

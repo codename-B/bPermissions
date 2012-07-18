@@ -35,7 +35,7 @@ import de.bananaco.bpermissions.api.util.CalculableType;
 public class SuperPermissionHandler implements Listener {
 
 	private WorldManager wm = WorldManager.getInstance();
-	private Map<Integer, PermissionAttachment> attachments = new HashMap<Integer, PermissionAttachment>();
+	//private Map<Integer, PermissionAttachment> attachments = new HashMap<Integer, PermissionAttachment>();
 	private Permissions plugin;
 	
 	private WorldChecker checker;
@@ -123,7 +123,7 @@ public class SuperPermissionHandler implements Listener {
 		// possible cleanup
 		Set<PermissionAttachment> att2 = new HashSet<PermissionAttachment>();
 		for(PermissionAttachmentInfo info : player.getEffectivePermissions()) {
-			if(info.getAttachment().getPlugin() == plugin) {
+			if(info != null && info.getAttachment() != null && info.getAttachment().getPlugin() == plugin) {
 				att2.add(info.getAttachment());
 			}
 		}
@@ -135,13 +135,13 @@ public class SuperPermissionHandler implements Listener {
 		PermissionAttachment att;
 		// Does the player have an attachment that we've assigned already?
 		// Then we add a new one or grab the existing one
-		if(attachments.containsKey(player.hashCode())) {
-			att = attachments.get(player.hashCode());
-		}
-		else {
-			att = player.addAttachment(plugin);
-			attachments.put(player.hashCode(), att);
-		}
+		//if(attachments.containsKey(player.hashCode())) {
+		//	att = attachments.get(player.hashCode());
+		//}
+		//else {
+		att = player.addAttachment(plugin);
+		//attachments.put(player.hashCode(), att);
+		//}
 		// Grab the pre-calculated effectivePermissions from the User object
 		Map<String, Boolean> perms;
 		// Implement global files

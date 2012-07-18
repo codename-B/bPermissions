@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -17,6 +18,7 @@ import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
+import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
 import de.bananaco.permissions.fornoobs.ForNoobs;
@@ -347,6 +349,17 @@ public class Permissions extends JavaPlugin {
 							sender.sendMessage("Please enable debug mode to use this command.");
 							return true;
 						}
+					}
+					if(args[0].equalsIgnoreCase("debugperms")) {
+						Player[] players = Bukkit.getOnlinePlayers();
+						if(players.length == 0) {
+							System.err.println("You need some online players!");
+						} else {
+							for(Player player : players) {
+								PermissionsTest.test(player);
+							}
+						}
+						return true;
 					}
 				}
 				String action = args[0];
