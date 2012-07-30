@@ -37,7 +37,7 @@ public class SuperPermissionHandler implements Listener {
 	private WorldManager wm = WorldManager.getInstance();
 	//private Map<Integer, PermissionAttachment> attachments = new HashMap<Integer, PermissionAttachment>();
 	private Permissions plugin;
-	
+
 	private WorldChecker checker;
 
 	private static Field permissions;
@@ -57,16 +57,20 @@ public class SuperPermissionHandler implements Listener {
 	 * This is put in place until such a time as Bukkit pull 466 is implemented
 	 * https://github.com/Bukkit/Bukkit/pull/466
 	 */
+	public static void setPermissions(PermissionAttachment att, Map<String, Boolean> perm) {
+		try {
+			doSetPermissions(att, perm);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("unchecked")
-	public static void setPermissions(PermissionAttachment att, Map<String, Boolean> perm) throws IllegalArgumentException, IllegalAccessException {
+	private static void doSetPermissions(PermissionAttachment att, Map<String, Boolean> perm) throws Exception {
 		// Grab a reference to the original object
 		Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(att);
 		// Clear the map (faster than removing the attachment and recalculating)
 		orig.clear();
-		
-		// DEBUG
-		//for(String key : perm.keySet()) System.out.println(key);
-		
 		// Then whack our map into there
 		orig.putAll(perm);
 		// That's all folks!
@@ -74,7 +78,7 @@ public class SuperPermissionHandler implements Listener {
 	}
 
 	// Main constructor
-	
+
 	protected SuperPermissionHandler(Permissions plugin) {
 		this.plugin = plugin;
 		// This next bit is simply to make bPermissions.* work with superperms, since I now have my bulk adding, I will concede to this
@@ -82,9 +86,7 @@ public class SuperPermissionHandler implements Listener {
 		children.put("bPermissions.admin", true);
 		Permission permission = new Permission("bPermissions.*", PermissionDefault.OP, children);
 		plugin.getServer().getPluginManager().addPermission(permission);
-		
 		checker = new WorldChecker(plugin.getServer(), this);
-		
 		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, checker, 10, 10);
 	}
 
@@ -92,10 +94,11 @@ public class SuperPermissionHandler implements Listener {
 	 * A guaranteed way to setup all players in the server in one fell swoop
 	 */
 	public void setupAllPlayers() {
-		for(Player player : plugin.getServer().getOnlinePlayers())
+		for(Player player : plugin.getServer().getOnlinePlayers()) {
 			setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+		}
 	}
-	
+
 	/**
 	 * Set up the Player via the specified World object
 	 * (note this is a bPermissions world, not a Bukkit world)
@@ -105,7 +108,7 @@ public class SuperPermissionHandler implements Listener {
 	public void setupPlayer(Player player, World world) {
 		if(!plugin.isEnabled())
 			return;
-		
+
 		long time = System.currentTimeMillis();
 		// Some null checks, I guess?
 		if(world == null) {
@@ -132,44 +135,24 @@ public class SuperPermissionHandler implements Listener {
 				at.remove();
 			}
 		}
-		PermissionAttachment att;
-		// Does the player have an attachment that we've assigned already?
-		// Then we add a new one or grab the existing one
-		//if(attachments.containsKey(player.hashCode())) {
-		//	att = attachments.get(player.hashCode());
-		//}
-		//else {
-		att = player.addAttachment(plugin);
-		//attachments.put(player.hashCode(), att);
-		//}
+		
 		// Grab the pre-calculated effectivePermissions from the User object
-		Map<String, Boolean> perms;
-		// Implement global files
-		if(wm.getUseGlobalFiles() && wm.getDefaultWorld() != null) {
-		// If the global file is enabled, read from it first then override where applicable
-		perms = wm.getWorld("*").getUser(player.getName()).getMappedPermissions();
-		perms.putAll(world.getUser(player.getName()).getMappedPermissions());
-		} else {
-		perms = world.getUser(player.getName()).getMappedPermissions();
-		}
 		// Then whack it onto the player
 		// TODO wait for the bukkit team to get their finger out, we'll use our reflection here!
-		try {
-			// The world
-			perms.put("world."+player.getWorld().getName(), true);
-			Debugger.log("world."+world.getName()+" set for "+player.getName());
-			setPermissions(att, perms);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		PermissionAttachment att = player.addAttachment(plugin);
+		Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getName());
+		perms.put("world."+player.getWorld().getName(), true);
+		
+		Debugger.log("world."+world.getName()+" set for "+player.getName());
+		setPermissions(att, perms);
+
 		// Set the metadata?
 		String prefix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "prefix");
 		String suffix = ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), "suffix");
 		// WTF
 		player.setMetadata("prefix", new FixedMetadataValue(Permissions.instance, prefix));
 		player.setMetadata("suffix", new FixedMetadataValue(Permissions.instance, suffix));
+
 		// WHAT IS THIS I DONT EVEN
 		long finish = System.currentTimeMillis()-time;
 		Debugger.log("Setup superperms for "+player.getName()+". took "+finish+"ms.");
@@ -186,13 +169,13 @@ public class SuperPermissionHandler implements Listener {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
 	}
-	
+
 	@EventHandler
 	public void onPlayerChat(PlayerChatEvent event) {
 		Player player = event.getPlayer();
 		// If the player is an op and has given themselves an * node, mess with their chat
 		if(wm.getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission("*")) {
-				event.setMessage(rawritise(event.getMessage()));
+			event.setMessage(rawritise(event.getMessage()));
 		}
 	}
 
@@ -214,7 +197,7 @@ public class SuperPermissionHandler implements Listener {
 
 	public void setupPlayer(String player) {
 		player = ChatColor.stripColor(player);
-		
+
 		if(this.plugin.getServer().getPlayerExact(player) == null)
 			return;
 		Player p = this.plugin.getServer().getPlayerExact(player);

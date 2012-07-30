@@ -34,8 +34,11 @@ public abstract class GroupCarrier extends PermissionCarrier {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Set<Group> getGroups() {
-		Set<Group> groups = new HashSet();//new ArrayList();
+		Set<Group> groups = new HashSet();
 		for (String name : this.groups) {
+			if(WorldManager.getInstance().getWorld(getWorld()) == null) {
+				System.err.println(getWorld()+" is null?");
+			}
 			Group group = (Group) WorldManager.getInstance().getWorld(getWorld()).get(name, CalculableType.GROUP);
 			groups.add(group);
 		}

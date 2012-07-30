@@ -95,7 +95,7 @@ public class Permissions extends JavaPlugin {
 		// Load our custom nodes (if any)
 		new CustomNodes().load();
 		// And print a nice little message ;)		
-		System.out.println(blankFormat("Enabled"));
+		Debugger.log(blankFormat("Enabled"));
 	}
 	
 	public static String blankFormat(String message) {

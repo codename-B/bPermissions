@@ -1,6 +1,7 @@
 package de.bananaco.bpermissions.unit;
 
 import java.util.Arrays;
+import java.util.Map;
 
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.Group;
@@ -40,6 +41,34 @@ public class CalculableTest {
 			System.out.println(test.hasPermission("command.node") == false);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void testGlobalPermissionsCalculation() {
+		printLine();		
+		
+		WorldManager.getInstance().setUseGlobalFiles(true);
+		
+		ApiLayer.setGroup(null, CalculableType.USER, "test", "default");
+		ApiLayer.setGroup(world.getName(), CalculableType.USER, "test", "default");
+		
+		ApiLayer.addPermission(null, CalculableType.USER, "test", Permission.loadFromString("^global.negative"));
+		ApiLayer.addPermission(null, CalculableType.USER, "test", Permission.loadFromString("global.positive"));
+		ApiLayer.addPermission(null, CalculableType.USER, "test", Permission.loadFromString("^world.positive"));
+		ApiLayer.addPermission(world.getName(), CalculableType.USER, "test", Permission.loadFromString("world.positive"));
+		
+		WorldManager.getInstance().update();
+		
+		Map<String, Boolean> permissions = ApiLayer.getEffectivePermissions(world.getName(), CalculableType.USER, "test");
+		
+		for(String key : permissions.keySet()) {
+			System.out.println(key+":"+String.valueOf(permissions.get(key)));
+		}
+		
+		if(permissions.get("global.negative") == false && permissions.get("global.positive") == true && permissions.get("world.positive") == true) {
+			System.out.println("test passed!");
+		} else {
+			System.out.println("test failed");
 		}
 	}
 	

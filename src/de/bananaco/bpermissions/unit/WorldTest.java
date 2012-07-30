@@ -10,14 +10,11 @@ public class WorldTest extends World {
 
 	@Override
 	public boolean load() {
-		CalculableTest test = new CalculableTest(this);
-		test.negativeInheritanceCheck();
 		return true;
 	}
 
 	@Override
 	public boolean save() {
-		
 		return true;
 	}
 

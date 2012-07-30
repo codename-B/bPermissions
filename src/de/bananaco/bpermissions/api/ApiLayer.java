@@ -1,6 +1,8 @@
 package de.bananaco.bpermissions.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.util.Calculable;
@@ -21,11 +23,11 @@ import de.bananaco.bpermissions.api.util.Permission;
 public class ApiLayer {
 	// This should never null, and if it does something horrible has gone wrong and that should be the least of our worries
 	private static WorldManager wm = WorldManager.getInstance();
-	
+
 	/*
 	 * Used for getting values
 	 */
-	
+
 	/**
 	 * Used to get the groups of a user or a group as a String[] array
 	 * @param world
@@ -61,6 +63,48 @@ public class ApiLayer {
 		Permission[] permissions = p.toArray(new Permission[p.size()]);
 		return permissions;
 	}
+
+	/**
+	 * Returns an effective set of the permissions including calculated inheritance from
+	 * global files!
+	 * 
+	 * Used internally and is also accessible to the world
+	 * @param world
+	 * @param type
+	 * @param name
+	 * @return Map<String, Boolean> permissions
+	 */
+	public static Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name) {
+		Map<String, Boolean> permissions = new HashMap<String, Boolean>();
+		// our two thingies
+		World global;
+		World w;
+		// define them
+		global = wm.getUseGlobalFiles()?wm.getDefaultWorld():null;
+		w = world==null?null:wm.getWorld(world);
+		// do we apply globals?
+		if(global != null) {
+			for(Permission p : global.get(name, type).getEffectivePermissions()) {
+				permissions.put(p.nameLowerCase(), p.isTrue());
+			}
+		}
+		// now we apply the per-world stuff (or globals if w==null)
+		if(w != null) {
+			for(Permission p : w.get(name, type).getEffectivePermissions()) {
+				permissions.put(p.nameLowerCase(), p.isTrue());
+			}
+		}
+		return permissions;
+	}
+	
+	/**
+	 * Static access to WorldManager.getInstance().update();
+	 * @return success
+	 */
+	public static boolean update() {
+		return wm.update();
+	}
+
 	/**
 	 * Used to return the metadata value for a user or a group. Will never return null but may return ""
 	 * @param world
@@ -86,11 +130,11 @@ public class ApiLayer {
 		}
 		return v;
 	}
-	
+
 	/*
 	 * Used for setting values
 	 */
-	
+
 	/**
 	 * Used to add a single group to a user or a group
 	 * @param world
@@ -225,5 +269,5 @@ public class ApiLayer {
 		Calculable c = w.get(name, type);
 		c.setValue(key, value);
 	}
-	
+
 }
