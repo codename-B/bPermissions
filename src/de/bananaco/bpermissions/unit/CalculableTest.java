@@ -25,6 +25,40 @@ public class CalculableTest {
 		System.out.println("#################################################");
 	}
 	
+	public void slipcorTest() {
+		printLine();
+		System.out.println("slipcor test begin!");
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "donator", "priority", "52");
+		ApiLayer.addGroup(world.getName(), CalculableType.GROUP, "donator", "default");
+		ApiLayer.setGroup(world.getName(), CalculableType.USER, "slipcor", "donator");
+		
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "mage", "priority", "55");
+		ApiLayer.addGroup(world.getName(), CalculableType.GROUP, "mage", "default");
+		ApiLayer.addGroup(world.getName(), CalculableType.USER, "slipcor", "mage");
+		
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "mayor", "priority", "66");
+		ApiLayer.addGroup(world.getName(), CalculableType.USER, "slipcor", "mayor");
+		
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "default", Permission.loadFromString("^test.test"));
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "mage", Permission.loadFromString("test.test"));
+		
+		ApiLayer.update();
+		
+		System.out.print("slipcor has groups: ");
+		for(String group : ApiLayer.getGroups(world.getName(), CalculableType.USER, "slipcor")) {
+			System.out.print(group+" ");
+		}
+		System.out.println(".");
+		
+		boolean perm = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "slipcor", "test.test");
+		System.out.println("slipcor has perm - test.test: "+String.valueOf(perm));
+		if(perm) {
+			System.out.println("Test passed!");
+		} else {
+			System.out.println("Test failed!");
+		}
+	}
+	
 	public void negativeInheritanceCheck() {
 		printLine();
 		WorldManager.getInstance().setDefaultWorld(world);

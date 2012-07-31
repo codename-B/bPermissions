@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.WorldManager;
 
 public class CalculableMeta extends GroupCarrier {
 
@@ -28,7 +29,8 @@ public class CalculableMeta extends GroupCarrier {
 		
 		Map<String, Integer> pr = new HashMap<String, Integer>();
 		
-		for (Group group : getGroups()) {
+		for (String gr : serialiseGroups()) {
+			Group group = WorldManager.getInstance().getWorld(getWorld()).getGroup(gr);
 			// Calculate down the tree of the child group
 			group.calculateEffectiveMeta();
 			Map<String, String> meta = group.getEffectiveMeta();

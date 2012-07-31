@@ -15,7 +15,7 @@ public class TestMain {
 		WorldManager.getInstance().setUseGlobalFiles(true);
 		
 		CalculableTest ct = new CalculableTest(world);
-		ct.testGlobalPermissionsCalculation();
+		ct.slipcorTest();
 		//ct.ApiLayerTest();
 		//ct.gv1222PrefixTest();
 		//ct.negativeInheritanceCheck();

@@ -57,12 +57,13 @@ public abstract class Calculable extends CalculableMeta {
 			return;
 		try {
 		effectivePermissions.clear();
-		for (Group group : getGroups()) {
+		for (String gr : serialiseGroups()) {
+			Group group = getWorldObject().getGroup(gr);
 			group.calculateEffectivePermissions();
 			for(Permission perm : group.getEffectivePermissions()) {
-				if(effectivePermissions.contains(perm))
-					effectivePermissions.remove(perm);
-				effectivePermissions.add(perm);
+				if(!effectivePermissions.contains(perm)) {
+					effectivePermissions.add(perm);
+				}
 			}
 		}
 		for(Permission perm : this.getPermissions()) {
