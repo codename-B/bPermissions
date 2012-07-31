@@ -42,11 +42,15 @@ public abstract class MetaData {
 	private final static Comparator<Group> comparGrp = new Comparator<Group>()
 			{
 				public int compare(Group o1, Group o2) {
-					if(o1.getPriority() > o2.getPriority())
+					if(o1.getPriority() > o2.getPriority()) {
 						return -1;
-					if(o2.getPriority() < o2.getPriority())
+					}
+					else if(o1.getPriority() < o2.getPriority()) {
 						return 1;
-					return 0;
+					}
+					else {
+						return o1.getName().compareTo(o2.getName());
+					}
 				}
 			};
 	

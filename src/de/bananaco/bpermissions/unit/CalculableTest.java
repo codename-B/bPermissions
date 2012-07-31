@@ -44,14 +44,49 @@ public class CalculableTest {
 		
 		ApiLayer.update();
 		
-		System.out.print("slipcor has groups: ");
+		//System.out.print("slipcor has groups: ");
+		//for(String group : ApiLayer.getGroups(world.getName(), CalculableType.USER, "slipcor")) {
+		//	System.out.print(group+" ");
+		//}
+		//System.out.println(".");
+		
+		boolean perm = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "slipcor", "test.test");
+		//System.out.println("slipcor has perm - test.test: "+String.valueOf(perm));
+		if(perm) {
+			System.out.println("Test passed!");
+		} else {
+			System.out.println("Test failed!");
+		}
+	}
+	
+	public void slipcorTest2() {
+		printLine();
+		System.out.println("slipcor test2 begin!");
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "smage", "priority", "51");
+		ApiLayer.addGroup(world.getName(), CalculableType.GROUP, "smage", "mage");
+		
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "mage", "priority", "50");
+		ApiLayer.addGroup(world.getName(), CalculableType.GROUP, "mage", "default");
+		
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "default", "priority", "1");
+		
+		ApiLayer.setGroup(world.getName(), CalculableType.USER, "slipcor", "default");
+		ApiLayer.addGroup(world.getName(), CalculableType.USER, "slipcor", "smage");
+		
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "default", Permission.loadFromString("^test.test"));
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "smage", Permission.loadFromString("test.test"));
+		
+		ApiLayer.update();
+		
+		//System.out.print("slipcor has groups: ");
 		for(String group : ApiLayer.getGroups(world.getName(), CalculableType.USER, "slipcor")) {
 			System.out.print(group+" ");
 		}
-		System.out.println(".");
+		//System.out.println(".");
 		
 		boolean perm = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "slipcor", "test.test");
-		System.out.println("slipcor has perm - test.test: "+String.valueOf(perm));
+		//System.out.println("slipcor has perm - test.test: "+String.valueOf(perm));
+		
 		if(perm) {
 			System.out.println("Test passed!");
 		} else {
@@ -292,7 +327,7 @@ public class CalculableTest {
 		System.out.println("default, moderator, admin assigned to User 'user'");
 		System.out.println("'user' has groups:");
 		System.out.println(Arrays.toString(ApiLayer.getGroups(world.getName(), CalculableType.USER, user.getName())));
-
+		System.out.println("Primary group " + ApiLayer.getGroups(world.getName(), CalculableType.USER, user.getName())[0]);
 		System.out.println("default priority: "+group0.getPriority());
 		System.out.println("moderator priority: "+group1.getPriority());
 		System.out.println("admin priority: "+group2.getPriority());

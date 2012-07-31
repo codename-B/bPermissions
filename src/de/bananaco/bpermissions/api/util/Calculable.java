@@ -1,7 +1,9 @@
 package de.bananaco.bpermissions.api.util;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.Group;
@@ -56,19 +58,26 @@ public abstract class Calculable extends CalculableMeta {
 		if(!isDirty())
 			return;
 		try {
+		Map<String, Integer> priorities = new HashMap<String, Integer>();
 		effectivePermissions.clear();
 		for (String gr : serialiseGroups()) {
 			Group group = getWorldObject().getGroup(gr);
 			group.calculateEffectivePermissions();
 			for(Permission perm : group.getEffectivePermissions()) {
-				if(!effectivePermissions.contains(perm)) {
+				if(!priorities.containsKey(perm.nameLowerCase()) || priorities.get(perm.nameLowerCase()) < group.getPriority()) {
+					priorities.put(perm.nameLowerCase(), group.getPriority());
+					if(effectivePermissions.contains(perm)) {
+						effectivePermissions.remove(perm);
+					}
 					effectivePermissions.add(perm);
 				}
 			}
 		}
+		priorities.clear();
 		for(Permission perm : this.getPermissions()) {
-			if(effectivePermissions.contains(perm))
+			if(effectivePermissions.contains(perm)) {
 				effectivePermissions.remove(perm);
+			}
 			effectivePermissions.add(perm);
 		}
 		//print();
