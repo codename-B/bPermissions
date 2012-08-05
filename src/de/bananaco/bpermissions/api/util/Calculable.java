@@ -92,6 +92,12 @@ public abstract class Calculable extends CalculableMeta {
 	 * @return Set<Permission>
 	 */
 	public Set<Permission> getEffectivePermissions() {
+		if(isDirty())
+			try {
+				calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				e.printStackTrace();
+			}
 		return effectivePermissions;
 	}
 

@@ -55,7 +55,6 @@ public class Permissions extends JavaPlugin {
 	public void onLoad() {
 		// Load the world mirroring setup
 		mrs.load();
-		super.onLoad();
 	}
 
 	@Override

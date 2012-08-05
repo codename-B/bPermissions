@@ -6,13 +6,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permission;
@@ -169,40 +169,17 @@ public class SuperPermissionHandler implements Listener {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
 	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerLogin(PlayerJoinEvent event) {
+		// Likewise, in theory this should be all we need to detect when a player joins
+		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
+	}
 
-	@EventHandler
-	public void onPlayerChat(PlayerChatEvent event) {
-		Player player = event.getPlayer();
-		// If the player is an op and has given themselves an * node, mess with their chat
-		if(wm.getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission("*")) {
-			event.setMessage(rawritise(event.getMessage()));
+	public void setupPlayer(String name) {
+		if(Bukkit.getPlayer(name) != null) {
+			Player player = Bukkit.getPlayer(name);
+			this.setupPlayer(player, wm.getWorld(player.getWorld().getName()));
 		}
-	}
-
-	/**
-	 * Changes a String of any length
-	 * into a String of "raaaaaaaaaawr"
-	 * with "a" being the length of the 
-	 * original String
-	 * @param message
-	 * @return String<raaaaaaawr>
-	 */
-	private String rawritise(String message) {
-		int length = message.length()-5;
-		StringBuilder sb = new StringBuilder();
-		for(int i=0; i<length; i++)
-			sb.append("a");
-		return "The '*' node won't work with superperms! Ra"+sb.toString()+"wr!";
-	}
-
-	public void setupPlayer(String player) {
-		player = ChatColor.stripColor(player);
-
-		if(this.plugin.getServer().getPlayerExact(player) == null)
-			return;
-		Player p = this.plugin.getServer().getPlayerExact(player);
-		String w = p.getWorld().getName();
-		World world = wm.getWorld(w);
-		this.setupPlayer(p, world);
 	}
 }

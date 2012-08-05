@@ -38,6 +38,14 @@ public abstract class MapCalculable extends Calculable {
 			} catch (RecursiveGroupException e) {
 				e.printStackTrace();
 			}
+		else if(permissions.size() == 0)
+			try {
+				// force-dirty
+				dirty = true;
+				calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				e.printStackTrace();
+			}
 		return permissions;
 	}
 	

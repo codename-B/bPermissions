@@ -84,14 +84,18 @@ public class ApiLayer {
 		w = world==null?null:wm.getWorld(world);
 		// do we apply globals?
 		if(global != null) {
-			for(Permission p : global.get(name, type).getEffectivePermissions()) {
-				permissions.put(p.nameLowerCase(), p.isTrue());
+			if(type == CalculableType.GROUP) {
+				permissions.putAll(((Group) global.get(name, type)).getMappedPermissions());
+			} else if(type == CalculableType.USER) {
+				permissions.putAll(((User) global.get(name, type)).getMappedPermissions());
 			}
 		}
 		// now we apply the per-world stuff (or globals if w==null)
 		if(w != null) {
-			for(Permission p : w.get(name, type).getEffectivePermissions()) {
-				permissions.put(p.nameLowerCase(), p.isTrue());
+			if(type == CalculableType.GROUP) {
+				permissions.putAll(((Group) global.get(name, type)).getMappedPermissions());
+			} else if(type == CalculableType.USER) {
+				permissions.putAll(((User) global.get(name, type)).getMappedPermissions());
 			}
 		}
 		return permissions;
