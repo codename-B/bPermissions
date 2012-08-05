@@ -89,7 +89,7 @@ public class ApiLayer {
 		}
 		// now we apply the per-world stuff (or globals if w==null)
 		if(w != null) {
-			permissions.putAll(((MapCalculable) global.get(name, type)).getMappedPermissions());
+			permissions.putAll(((MapCalculable) w.get(name, type)).getMappedPermissions());
 		}
 		return permissions;
 	}
