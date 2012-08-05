@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.bananaco.bpermissions.api.util.Calculable;
+import de.bananaco.bpermissions.api.util.MapCalculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.Permission;
 /**
@@ -84,19 +85,11 @@ public class ApiLayer {
 		w = world==null?null:wm.getWorld(world);
 		// do we apply globals?
 		if(global != null) {
-			if(type == CalculableType.GROUP) {
-				permissions.putAll(((Group) global.get(name, type)).getMappedPermissions());
-			} else if(type == CalculableType.USER) {
-				permissions.putAll(((User) global.get(name, type)).getMappedPermissions());
-			}
+			permissions.putAll(((MapCalculable) global.get(name, type)).getMappedPermissions());
 		}
 		// now we apply the per-world stuff (or globals if w==null)
 		if(w != null) {
-			if(type == CalculableType.GROUP) {
-				permissions.putAll(((Group) global.get(name, type)).getMappedPermissions());
-			} else if(type == CalculableType.USER) {
-				permissions.putAll(((User) global.get(name, type)).getMappedPermissions());
-			}
+			permissions.putAll(((MapCalculable) global.get(name, type)).getMappedPermissions());
 		}
 		return permissions;
 	}
