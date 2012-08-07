@@ -82,7 +82,7 @@ public abstract class World {
 	 * @return Calculable (Group/User)
 	 */
 	public Calculable get(String name, CalculableType type) {
-		//name = ChatColor.stripColor(name);
+		name = ChatColor.stripColor(name);
 		// A quick lowercase here
 		name = name.toLowerCase();
 		// And now we check
