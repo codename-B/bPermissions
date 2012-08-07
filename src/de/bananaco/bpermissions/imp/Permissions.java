@@ -112,7 +112,7 @@ public class Permissions extends JavaPlugin {
 	}
 	
 	public static boolean hasPermission(Player player, String node) {
-		player.getName().startsWith("\u00A7"))
+		if (player.getName().startsWith("\u00A7"))
 			playerName = player.getName.substring(2, player.getName.length - 2);
 		return WorldManager.getInstance().getWorld(player.getWorld().getName()).getUser(playerName).hasPermission(node);
 	}
