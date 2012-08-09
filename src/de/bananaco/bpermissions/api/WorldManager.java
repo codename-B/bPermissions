@@ -168,6 +168,8 @@ public class WorldManager {
 				for(Calculable c : w.getAll(CalculableType.USER)) {
 					c.calculateEffectivePermissions();
 					c.calculateEffectiveMeta();
+					// now setup
+					w.setupPlayer(c.getName());
 				}
 			}
 			return true;

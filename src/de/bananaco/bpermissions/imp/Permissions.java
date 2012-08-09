@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
@@ -95,6 +96,18 @@ public class Permissions extends JavaPlugin {
 		new CustomNodes().load();
 		// And print a nice little message ;)		
 		Debugger.log(blankFormat("Enabled"));
+		// print dino
+		printDinosaurs();
+	}
+	
+	public static void printDinosaurs() {
+		String dino = 	"            __ "+"\n"+
+						"           / _)"+"\n"+
+						"    .-^^^-/ /  "+"\n"+
+						" __/       /"+"\n"+
+						"<__.|_|-|_|"+"\n"+
+						"==DINOSAUR==";
+		System.out.println("\n"+dino);
 	}
 	
 	public static String blankFormat(String message) {
@@ -172,6 +185,7 @@ public class Permissions extends JavaPlugin {
 					sendMessage(sender, "That track ("+name+") does not exist");
 				}
 			}
+			ApiLayer.update();
 			return true;
 		}
 
@@ -266,6 +280,7 @@ public class Permissions extends JavaPlugin {
 					} else {
 						sendMessage(sender, "Please consult the command documentation!");
 					}
+					ApiLayer.update();
 				}
 			} else if(args.length == 3 && args[0].equalsIgnoreCase("meta")) {
 				if(calc == null) {
@@ -309,6 +324,7 @@ public class Permissions extends JavaPlugin {
 			sender.sendMessage(message);
 			sender.sendMessage(message2);
 			ExtraCommands.execute(name, type, action, value, world);
+			ApiLayer.update();
 		}
 		/*
 		 * And now your standard "permissions" command
