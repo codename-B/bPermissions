@@ -28,6 +28,8 @@ public class ValidityCheck {
 		// now the priorities checker
 		if(promoter != null) {
 			User p = wm.getWorld(world).getUser(promoter.getName());
+			Debugger.log(u.getName()+":"+u.getPriority());
+			Debugger.log(p.getName()+":"+p.getPriority());
 			if(p.getPriority() <= u.getPriority()) {
 				priorities = false;
 			}

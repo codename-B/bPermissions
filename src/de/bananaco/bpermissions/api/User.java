@@ -111,5 +111,14 @@ public class User extends MapCalculable {
 	protected World getWorldObject() {
 		return w;
 	}
+	
+	// override metadata here to use inherited priority too!
+	@Override
+	public int getPriority() {
+		if(getEffectiveMeta().containsKey("priority")) {
+			return Integer.parseInt(getEffectiveMeta().get("priority"));
+		}
+		return 0;
+	}
 
 }
