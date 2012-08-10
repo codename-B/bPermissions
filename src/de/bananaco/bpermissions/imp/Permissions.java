@@ -26,10 +26,10 @@ import de.bananaco.permissions.fornoobs.ForNoobs;
 import de.bananaco.permissions.interfaces.PromotionTrack;
 
 public class Permissions extends JavaPlugin {
-	
+
 	private final Map<String, String> mirrors = new HashMap<String, String>();
 	private final Mirrors mrs = new Mirrors(mirrors);
-	
+
 	public SuperPermissionHandler handler;
 	private Listener loader;
 	// Change to public for people to hook into if they really need to
@@ -37,17 +37,17 @@ public class Permissions extends JavaPlugin {
 	private WorldManager wm;
 	private DefaultWorld world;
 	private Config config;
-	
+
 	protected static JavaPlugin instance = null;
-	
+
 	@Override
 	public void onDisable() {
 		// Cancel tasks
 		getServer().getScheduler().cancelTasks(this);
-		
+
 		if(wm != null) {
-		for(World world : wm.getAllWorlds())
-			world.save();
+			for(World world : wm.getAllWorlds())
+				world.save();
 		}
 		System.out.println(blankFormat("Disabled"));
 	}
@@ -99,21 +99,21 @@ public class Permissions extends JavaPlugin {
 		// print dino
 		printDinosaurs();
 	}
-	
+
 	public static void printDinosaurs() {
 		String dino = 	"            __ "+"\n"+
-						"           / _)"+"\n"+
-						"    .-^^^-/ /  "+"\n"+
-						" __/       /"+"\n"+
-						"<__.|_|-|_|"+"\n"+
-						"==DINOSAUR==";
+				"           / _)"+"\n"+
+				"    .-^^^-/ /  "+"\n"+
+				" __/       /"+"\n"+
+				"<__.|_|-|_|"+"\n"+
+				"==DINOSAUR==";
 		System.out.println("\n"+dino);
 	}
-	
+
 	public static String blankFormat(String message) {
 		return "[bPermissions] "+message;
 	}
-	
+
 	public static String format(String message) {
 		ChatColor vary = ChatColor.GREEN;
 		if(message.contains("!")) {
@@ -123,20 +123,20 @@ public class Permissions extends JavaPlugin {
 		}
 		return ChatColor.BLUE+"[bPermissions] "+vary+message;
 	}
-	
+
 	public static boolean hasPermission(Player player, String node) {
 		return WorldManager.getInstance().getWorld(player.getWorld().getName()).getUser(player.getName()).hasPermission(node);
 	}
-	
+
 	public void sendMessage(CommandSender sender, String message) {
 		sender.sendMessage(format(message));
 	}
-	
+
 	public boolean has(CommandSender sender, String perm) {
 		if(sender instanceof Player)
 			return sender.hasPermission(perm);
 		else
-		return true;
+			return true;
 	}
 
 	@Override
@@ -146,8 +146,8 @@ public class Permissions extends JavaPlugin {
 
 		if (sender instanceof Player)
 			allowed = hasPermission((Player) sender, "bPermissions.admin")
-					|| sender.isOp();
-		
+			|| sender.isOp();
+
 		/*
 		 * Promote/Demote shizzledizzle
 		 */
@@ -168,6 +168,26 @@ public class Permissions extends JavaPlugin {
 			if(command.getName().equalsIgnoreCase("promote")) {
 				PromotionTrack track = config.getPromotionTrack();
 				if(track.containsTrack(name)) {
+					// user validity check
+					if(config.trackLimit()) {
+						boolean isValid = true;
+						Player s = (sender instanceof Player)?(Player) sender:null;
+						if(world == null) {
+							for(org.bukkit.World w : Bukkit.getWorlds()) {
+								boolean v = new ValidityCheck(s, track, name, player, w.getName()).isValid();
+								if(!v) {
+									isValid = false;
+								}
+							}
+						} else {
+							isValid = new ValidityCheck(s, track, name, player, world).isValid();
+						}
+						if(!isValid) {
+							sender.sendMessage(ChatColor.RED+"Invalid promotion!");
+							return true;
+						}
+					}
+					// or the rest
 					track.promote(player, name, world);
 					sendMessage(sender, "Promoted along the track: "+name+" in "+(world==null?"all worlds":"world: "+world));
 					this.showPromoteOutput(sender, player);
@@ -178,6 +198,26 @@ public class Permissions extends JavaPlugin {
 			else if(command.getName().equalsIgnoreCase("demote")) {
 				PromotionTrack track = config.getPromotionTrack();
 				if(track.containsTrack(name)) {
+					// user validity check
+					if(config.trackLimit()) {
+						boolean isValid = true;
+						Player s = (sender instanceof Player)?(Player) sender:null;
+						if(world == null) {
+							for(org.bukkit.World w : Bukkit.getWorlds()) {
+								boolean v = new ValidityCheck(s, track, name, player, w.getName()).isValid();
+								if(!v) {
+									isValid = false;
+								}
+							}
+						} else {
+							isValid = new ValidityCheck(s, track, name, player, world).isValid();
+						}
+						if(!isValid) {
+							sender.sendMessage(ChatColor.RED+"Invalid promotion!");
+							return true;
+						}
+					}
+					// or the rest
 					track.demote(player, name, world);
 					sendMessage(sender, "Demoted along the track: "+name+" in "+(world==null?"all worlds":"world: "+world));
 					this.showPromoteOutput(sender, player);
@@ -320,7 +360,7 @@ public class Permissions extends JavaPlugin {
 			}
 			String message = ChatColor.GOLD+"Executing action: "+ChatColor.GREEN+action+" "+value+ChatColor.GOLD+" in "+ChatColor.GREEN+(world==null?"all worlds":"world: "+world);
 			String message2 = ChatColor.GOLD+"Action applied to "+ChatColor.GREEN+type.getName()+" "+name;
-			
+
 			sender.sendMessage(message);
 			sender.sendMessage(message2);
 			ExtraCommands.execute(name, type, action, value, world);
@@ -334,18 +374,18 @@ public class Permissions extends JavaPlugin {
 				if(args[0].equalsIgnoreCase("import")) {
 					sender.sendMessage("Importing from "+args[1]);
 					try {
-					if(args[1].equalsIgnoreCase("yml")) {
-						new ImportManager(this).importYML();
-					}
-					if(args[1].equalsIgnoreCase("pex")) {
-						new ImportManager(this).importPEX();
-					}
-					if(args[1].equalsIgnoreCase("p3")) {
-						new ImportManager(this).importPermissions3();
-					}
-					if(args[1].equalsIgnoreCase("gm")) {
-						new ImportManager(this).importGroupManager();
-					}
+						if(args[1].equalsIgnoreCase("yml")) {
+							new ImportManager(this).importYML();
+						}
+						if(args[1].equalsIgnoreCase("pex")) {
+							new ImportManager(this).importPEX();
+						}
+						if(args[1].equalsIgnoreCase("p3")) {
+							new ImportManager(this).importPermissions3();
+						}
+						if(args[1].equalsIgnoreCase("gm")) {
+							new ImportManager(this).importGroupManager();
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -413,7 +453,7 @@ public class Permissions extends JavaPlugin {
 		}
 		return true;
 	}
-	
+
 	public void showPromoteOutput(CommandSender sender, String player) {
 		sender.sendMessage("The player: "+ChatColor.GREEN+player+ChatColor.WHITE+" now has these groups");
 		for(World world : WorldManager.getInstance().getAllWorlds()) {

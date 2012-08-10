@@ -94,6 +94,29 @@ public class CalculableTest {
 		}
 	}
 	
+	public void slipcorTest3() {
+		printLine();
+		System.out.println("slipcor test3 begin!");
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "groupA", Permission.loadFromString("node"));
+		
+		ApiLayer.addGroup(world.getName(), CalculableType.GROUP, "groupB", "groupA");
+		ApiLayer.addGroup(world.getName(), CalculableType.GROUP, "groupC", "groupB");
+		ApiLayer.setGroup(world.getName(), CalculableType.USER, "test", "groupC");
+		ApiLayer.addGroup(world.getName(), CalculableType.USER, "test", "groupD");
+		
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "groupC", "priority", "5");
+		ApiLayer.setValue(world.getName(), CalculableType.GROUP, "groupD", "priority", "25");
+		
+		ApiLayer.update();
+		
+		boolean perm = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "node");
+		if(perm) {
+			System.out.println("Test passed!");
+		} else {
+			System.out.println("Test failed!");
+		}
+	}
+	
 	public void negativeInheritanceCheck() {
 		printLine();
 		WorldManager.getInstance().setDefaultWorld(world);

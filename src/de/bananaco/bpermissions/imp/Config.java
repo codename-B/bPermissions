@@ -20,6 +20,8 @@ public class Config {
 	private boolean autoSave = true;
 	
 	private boolean offlineMode = false;
+	
+	private boolean trackLimit = false;
 		
 	public void load() {
 		try {
@@ -44,11 +46,13 @@ public class Config {
 		config.set("debug-mode", Debugger.setDebug(config.getBoolean("debug-mode", Debugger.getDebug())));
 		config.set("allow-offline-mode", config.get("allow-offline-mode", offlineMode));
 		config.set("use-global-files", config.get("use-global-files", useGlobalFiles));
+		config.set("track-limit", config.get("track-limit", trackLimit));
 		// then load it into memory
 		useGlobalFiles = config.getBoolean("use-global-files");
 		autoSave = config.getBoolean("auto-save");
 		trackType = config.getString("track-type");
 		offlineMode = config.getBoolean("allow-offline-mode");
+		trackLimit = config.getBoolean("track-limit");
 		// then load our PromotionTrack
 		if(trackType.equalsIgnoreCase("multi")) {
 			track = new MultiGroupPromotion();
@@ -64,6 +68,10 @@ public class Config {
 		track.load();
 		// finally save the config
 		config.save(file);
+	}
+	
+	public boolean trackLimit() {
+		return trackLimit;
 	}
 	
 	public boolean getUseGlobalFiles() {

@@ -1,5 +1,7 @@
 package de.bananaco.permissions.interfaces;
 
+import java.util.List;
+
 public interface PromotionTrack {
 	
 	public void load();
@@ -21,4 +23,6 @@ public interface PromotionTrack {
 	 * @return boolean
 	 */
 	public boolean containsTrack(String track);
+	
+	public List<String> getGroups(String track);
 }

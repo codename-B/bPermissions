@@ -163,5 +163,10 @@ public class SingleGroupPromotion implements PromotionTrack {
 	public boolean containsTrack(String track) {
 		return trackmap.containsKey(track.toLowerCase());
 	}
+	
+	@Override
+	public List<String> getGroups(String track) {
+		return config.getStringList(track);
+	}
 
 }
