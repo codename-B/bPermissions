@@ -420,6 +420,16 @@ public class Permissions extends JavaPlugin {
 						}
 						return true;
 					}
+					if(args[0].equalsIgnoreCase("debugset")) {
+						Player[] players = Bukkit.getOnlinePlayers();
+						if(players.length == 0) {
+							System.err.println("You need some online players!");
+						} else {
+							Player player = players[0];
+							BukkitCompat.runTest(player, this);
+						}
+						return true;
+					}
 				}
 				String action = args[0];
 				if(action.equalsIgnoreCase("save")) {
