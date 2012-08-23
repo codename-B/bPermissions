@@ -1,12 +1,10 @@
 package de.bananaco.bpermissions.imp;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.entity.CraftHumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +18,6 @@ import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
@@ -39,74 +36,65 @@ import de.bananaco.bpermissions.api.util.CalculableType;
  */
 public class SuperPermissionHandler implements Listener {
 
+	// this is used to counter for those occasions where the setup errors
+	static class SuperPermissionReloader implements Runnable {
+
+		private final SuperPermissionHandler handler;
+		
+		public SuperPermissionReloader(SuperPermissionHandler handler) {
+			this.handler = handler;
+		}
+
+		// if the player has no "bpermissions" PermissionAttachment, fix that
+		public void run() {
+			// now need to check if there is no-one online!
+			if(Bukkit.getOnlinePlayers().length == 0)
+				return;
+			// let us run this as an async task for now
+			List<Player> update = new ArrayList<Player>();
+			for(Player player : Bukkit.getOnlinePlayers()) {
+				PermissibleBase pb = BukkitCompat.getBase(player);
+				List<PermissionAttachment> attach = BukkitCompat.getAttachments(pb);
+				boolean up = true;
+				for(PermissionAttachment att : attach) {
+					if(att.getPlugin().getName().equalsIgnoreCase("bpermissions")) {
+						up = false;
+					}
+				}
+				// do we update?
+				if(up) {
+					update.add(player);
+				}
+			}
+			// and update those players who have failed to meet the cut!
+			if(update.size() > 0) {
+				Debugger.log("Force-updating "+update.size()+" players!");
+				for(Player player : update) {
+					handler.setupPlayer(player.getName());
+				}
+				update.clear();
+			}
+		}
+
+	}
+
 	private WorldManager wm = WorldManager.getInstance();
 	//private Map<Integer, PermissionAttachment> attachments = new HashMap<Integer, PermissionAttachment>();
 	private Permissions plugin;
-
-	private static Field permissions;
-	private static Field base;
-	private static Field basePermissions;
-	private static Field attachments;
-	
-	static {
-		try {
-			permissions = PermissionAttachment.class.getDeclaredField("permissions");
-			permissions.setAccessible(true);
-			base = CraftHumanEntity.class.getDeclaredField("perm");
-			base.setAccessible(true);
-			basePermissions = PermissibleBase.class.getDeclaredField("permissions");
-			basePermissions.setAccessible(true);
-			attachments = PermissibleBase.class.getDeclaredField("attachments");
-			attachments.setAccessible(true);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * This is put in place until such a time as Bukkit pull 466 is implemented
 	 * https://github.com/Bukkit/Bukkit/pull/466
 	 */
-	public static void setPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) {
-		try {
-			doSetPermissions(p, plugin, perm);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void doSetPermissions(Permissible p, Plugin plugin, Map<String, Boolean> perm) throws Exception {
-		// Grab a reference to the original object
-		//Map<String, Boolean> orig = (Map<String, Boolean>) permissions.get(att);
-		// Clear the map (faster than removing the attachment and recalculating)
-		//orig.clear();
-		// Then whack our map into there
-		//orig.putAll(perm);
-		// * NEW CODE *
-		PermissibleBase pb = (PermissibleBase) base.get(p);
-		// I know, it's a lot more reflection
-		Map<String, PermissionAttachmentInfo> info = (Map<String, PermissionAttachmentInfo>) basePermissions.get(pb);
-		info.clear();
-		// What can I do? Even more reflection! This also slows things down by about 2ms (but in the scale of things it works, yay!)
-		List<PermissionAttachment> delete = new ArrayList<PermissionAttachment>();
-		List<PermissionAttachment> attach = (List<PermissionAttachment>) attachments.get(pb);
-		for(PermissionAttachment att : attach) {
-			if(att.getPlugin().getName().equalsIgnoreCase("bpermissions")) {
-				Debugger.log("Removing "+att.toString());
-				delete.add(att);
+	public static void setPermissions(final Permissible p, final Plugin plugin, final Map<String, Boolean> perm) {
+		Runnable r = new Runnable() {
+			public void run() {
+				// hook into the BukkitCompat layer
+				BukkitCompat.setPermissions(p, plugin, perm);
 			}
-		}
-		for(PermissionAttachment att : delete) {
-			attach.remove(att);
-		}
-		delete.clear();
-		
-		PermissionAttachment att = pb.addAttachment(plugin);
-		permissions.set(att, perm);
-		pb.recalculatePermissions();
+		};
+		// now schedule (to ensure sync!
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 1);
 	}
 
 	// Main constructor
@@ -153,8 +141,8 @@ public class SuperPermissionHandler implements Listener {
 			System.err.println("Unable to setup! null user!");
 			return;
 		}
-		
-		
+
+
 		// Grab the pre-calculated effectivePermissions from the User object
 		// Then whack it onto the player
 		// TODO wait for the bukkit team to get their finger out, we'll use our reflection here!
@@ -178,24 +166,24 @@ public class SuperPermissionHandler implements Listener {
 		// In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		// Just to be doubly sure, I guess
-		if(event.getFrom().getWorld() != event.getTo().getWorld()) {
+		if(!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
 			// schedule a check of the players permissions 1 tick after the teleport
 			final Player player = event.getPlayer();
 			final org.bukkit.World start = event.getFrom().getWorld();
 			// setup the player
 			Runnable r = new Runnable() {
 				public void run() {
-					if(start != player.getWorld()) {
+					if(!start.equals(player.getWorld())) {
 						setupPlayer(player, wm.getWorld(player.getWorld().getName()));
 					}
 				}
 			};
 			// must be sync
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 1);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 5);
 		}
 	}
 
@@ -204,7 +192,7 @@ public class SuperPermissionHandler implements Listener {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerLogin(PlayerJoinEvent event) {
 		// Likewise, in theory this should be all we need to detect when a player joins
