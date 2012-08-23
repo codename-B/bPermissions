@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
@@ -225,7 +224,7 @@ public class Permissions extends JavaPlugin {
 					sendMessage(sender, "That track ("+name+") does not exist");
 				}
 			}
-			ApiLayer.update();
+			//ApiLayer.update();
 			return true;
 		}
 
@@ -320,7 +319,7 @@ public class Permissions extends JavaPlugin {
 					} else {
 						sendMessage(sender, "Please consult the command documentation!");
 					}
-					ApiLayer.update();
+					//ApiLayer.update();
 				}
 			} else if(args.length == 3 && args[0].equalsIgnoreCase("meta")) {
 				if(calc == null) {
@@ -364,7 +363,7 @@ public class Permissions extends JavaPlugin {
 			sender.sendMessage(message);
 			sender.sendMessage(message2);
 			ExtraCommands.execute(name, type, action, value, world);
-			ApiLayer.update();
+			//ApiLayer.update();
 		}
 		/*
 		 * And now your standard "permissions" command

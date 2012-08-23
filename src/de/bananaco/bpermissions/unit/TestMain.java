@@ -15,7 +15,8 @@ public class TestMain {
 		WorldManager.getInstance().setUseGlobalFiles(true);
 		
 		CalculableTest ct = new CalculableTest(world);
-		ct.slipcorTest3();
+		ct.heroChatTest();
+		//ct.slipcorTest3();
 		//ct.slipcorTest2();
 		//ct.ApiLayerTest();
 		//ct.gv1222PrefixTest();

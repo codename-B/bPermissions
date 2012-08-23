@@ -266,6 +266,16 @@ public class YamlWorld extends World {
 			}
 		}
 	}
+	
+	@Override
+	public boolean setupAll() {
+		Player[] players = Bukkit.getOnlinePlayers();
+		for(Player player : players) {
+			setupPlayer(player.getName());
+		}
+		// return true for success
+		return true;
+	}
 
 	@Override
 	public boolean setupPlayer(String player) {

@@ -25,6 +25,25 @@ public class CalculableTest {
 		System.out.println("#################################################");
 	}
 	
+	public void heroChatTest() {
+		printLine();
+		System.out.println("Setting up whitelist group:");
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "whitelist", Permission.loadFromString("herochat.speak.*"));
+		ApiLayer.addPermission(world.getName(), CalculableType.GROUP, "whitelist", Permission.loadFromString("^herochat.speak.admin"));
+		ApiLayer.setGroup(world.getName(), CalculableType.USER, "test", "whitelist");
+		ApiLayer.update();
+		
+		Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(world.getName(), CalculableType.USER, "test");
+		System.out.println("Whitelist permissions: ");
+		for(String key : perms.keySet()) {
+			System.out.println(key+":"+perms.get(key));
+		}
+		boolean user = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "herochat.speak.user");
+		boolean admin = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "herochat.speak.admin");
+		System.out.println("Has permission herochat.speak.user: "+user);
+		System.out.println("Has permission herochat.speak.admin: "+admin);
+	}
+	
 	public void slipcorTest() {
 		printLine();
 		System.out.println("slipcor test begin!");

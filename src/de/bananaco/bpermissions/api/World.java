@@ -241,4 +241,8 @@ public abstract class World {
 	
 	public abstract boolean setupPlayer(String player);
 
+	public boolean setupAll() {
+		// override to return true
+		return false;
+	}
 }
