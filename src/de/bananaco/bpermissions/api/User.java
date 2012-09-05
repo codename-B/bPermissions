@@ -12,7 +12,7 @@ import de.bananaco.bpermissions.api.util.Permission;
  * A slight increase in memory usage for a dramatic increase in speed is definately a worthwhile trade-off.
  */
 public class User extends CalculableWrapper {
-	
+
 	private World w;
 	
 	public User(String name, World w) {

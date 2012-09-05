@@ -9,6 +9,7 @@ import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.MapCalculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.Permission;
+import de.bananaco.bpermissions.imp.Debugger;
 /**
  * Adds a super easy to use static interface to bPermissions 2
  * 
@@ -247,6 +248,7 @@ public class ApiLayer {
 		if(w == null || type == null || name == null || node == null)
 			return false;
 		Calculable c = w.get(name, type);
+		Debugger.log(w.getName()+":"+type.name()+":"+name+":"+node);
 		return c.hasPermission(node);
 	}
 	/**

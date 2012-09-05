@@ -82,7 +82,7 @@ public class Permissions extends JavaPlugin {
 		world = new DefaultWorld(this);
 		// Set the default world to our defaults
 		wm.setDefaultWorld(world);
-		// Load the default users.yml and groups.yml
+		// load the default world
 		world.load();
 		// Load the default Map for Commands
 		commands = new HashMap<String, Commands>();
@@ -101,7 +101,7 @@ public class Permissions extends JavaPlugin {
 		// And print a nice little message ;)		
 		Debugger.log(blankFormat("Enabled"));
 		// print dino
-		printDinosaurs();
+		//printDinosaurs();
 	}
 
 	public static void printDinosaurs() {
@@ -452,8 +452,8 @@ public class Permissions extends JavaPlugin {
 					sendMessage(sender, "Cleaning up files!");
 					wm.cleanup();
 					return true;
-				} else if(action.equalsIgnoreCase("helpme")) {
-					sendMessage(sender, "Creating example files!");
+				} else if(action.equalsIgnoreCase("examplefiles")) {
+					sendMessage(sender, "Created example files!");
 					// Create the example file
 					new ForNoobs(this).addAll();
 					return true;

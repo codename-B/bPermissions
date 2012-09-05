@@ -287,6 +287,7 @@ public class CalculableTest {
 
 	public void test100LevelInheritance() {
 		Calculable base = new Group("base", world);
+		base.addPermission("base.node", true);
 		base.setValue("priority", "0");
 		base.setValue("prefix", "base");
 		
@@ -320,6 +321,7 @@ public class CalculableTest {
 		printLine();
 		System.out.println("Expected "+last.getEffectiveValue("prefix"));
 		System.out.println("Got "+user.getEffectiveValue("prefix"));
+		System.out.println("base.node "+String.valueOf(user.hasPermission("base.node")));
 	}
 	
 	public void testPriority() {

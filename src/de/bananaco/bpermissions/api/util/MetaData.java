@@ -24,9 +24,23 @@ public abstract class MetaData {
 	private final static Comparator<Object> comparObj = new Comparator<Object>()
 	{
 		public int compare(Object o1, Object o2) {
+			if(o1 instanceof Calculable && o2 instanceof Calculable) {
+				return comparGrp.compare((Calculable) o1, (Calculable) o2);
+			}
 			// Because we're not passing these anymore, we get them somehow
 			String f1 = o1.toString();
 			String f2 = o2.toString();
+			if(f1.startsWith("^") || f2.startsWith("^")) {
+				if(f1.startsWith("^") && f2.startsWith("^")) {
+					// do nothing
+				} else {
+					if(f1.startsWith("^")) {
+						return 1;
+					} else {
+						return -1;
+					}
+				}
+			}
 			// Then the same as in compar
 			int i = (f1.length() > f2.length()) ? f2.length() : f1.length();
 			for (int n = 0; n < i - 1; n++) {
@@ -39,9 +53,9 @@ public abstract class MetaData {
 		}
 	};
 	
-	private final static Comparator<Group> comparGrp = new Comparator<Group>()
+	private final static Comparator<Calculable> comparGrp = new Comparator<Calculable>()
 			{
-				public int compare(Group o1, Group o2) {
+				public int compare(Calculable o1, Calculable o2) {
 					if(o1.getPriority() > o2.getPriority()) {
 						return -1;
 					}
@@ -49,7 +63,7 @@ public abstract class MetaData {
 						return 1;
 					}
 					else {
-						return o1.getName().compareTo(o2.getName());
+						return comparObj.compare(o1.toString(), o2.toString());
 					}
 				}
 			};

@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permissible;
@@ -22,6 +23,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
 import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.CalculableType;
@@ -86,15 +88,8 @@ public class SuperPermissionHandler implements Listener {
 	 * This is put in place until such a time as Bukkit pull 466 is implemented
 	 * https://github.com/Bukkit/Bukkit/pull/466
 	 */
-	public static void setPermissions(final Permissible p, final Plugin plugin, final Map<String, Boolean> perm) {
-		Runnable r = new Runnable() {
-			public void run() {
-				// hook into the BukkitCompat layer
-				BukkitCompat.setPermissions(p, plugin, perm);
-			}
-		};
-		// now schedule (to ensure sync!
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 1);
+	public synchronized static void setPermissions(final Permissible p, final Plugin plugin, final Map<String, Boolean> perm) {
+		BukkitCompat.setPermissions(p, plugin, perm);
 	}
 
 	// Main constructor
@@ -113,7 +108,7 @@ public class SuperPermissionHandler implements Listener {
 	 */
 	public void setupAllPlayers() {
 		for(Player player : plugin.getServer().getOnlinePlayers()) {
-			setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+			setupPlayer(player);
 		}
 	}
 
@@ -123,29 +118,14 @@ public class SuperPermissionHandler implements Listener {
 	 * @param player
 	 * @param world
 	 */
-	public void setupPlayer(Player player, World world) {
+	public void setupPlayer(Player player) {
 		if(!plugin.isEnabled())
 			return;
 
 		long time = System.currentTimeMillis();
-		// Some null checks, I guess?
-		if(world == null) {
-			System.err.println("Unable to setup! null world!");
-			return;
-		}
-		if(player == null) {
-			System.err.println("Unable to setup! null player!");
-			return;
-		}
-		if(world.getUser(player.getName()) == null) {
-			System.err.println("Unable to setup! null user!");
-			return;
-		}
-
-
 		// Grab the pre-calculated effectivePermissions from the User object
 		// Then whack it onto the player
-		// TODO wait for the bukkit team to get their finger out, we'll use our reflection here!
+		// TODO wait for the bukkit team to get their finger out, we'll use our reflection here!		
 		Map<String, Boolean> perms = ApiLayer.getEffectivePermissions(player.getWorld().getName(), CalculableType.USER, player.getName());
 		setPermissions(player, plugin, perms);
 
@@ -164,11 +144,13 @@ public class SuperPermissionHandler implements Listener {
 	@EventHandler
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
 		// In theory this should be all we need to detect world, it isn't cancellable so... should be fine?
-		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));
+		setupPlayer(event.getPlayer());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
+		if(event.isCancelled())
+			return;
 		// Just to be doubly sure, I guess
 		if(!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
 			// schedule a check of the players permissions 1 tick after the teleport
@@ -178,7 +160,7 @@ public class SuperPermissionHandler implements Listener {
 			Runnable r = new Runnable() {
 				public void run() {
 					if(!start.equals(player.getWorld())) {
-						setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+						setupPlayer(player);
 					}
 				}
 			};
@@ -186,23 +168,37 @@ public class SuperPermissionHandler implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 5);
 		}
 	}
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPreLogin(PlayerPreLoginEvent event) {
+		for(World world : wm.getAllWorlds()) {
+			User user = world.getUser(event.getName());
+			try {
+				user.calculateEffectivePermissions();
+				user.calculateEffectiveMeta();
+			} catch (Exception e) {
+				System.err.println(e.getStackTrace()[0].toString());
+			}
+			Debugger.log("PlayerPreLogin setup: "+user.getName());
+		}
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		// Likewise, in theory this should be all we need to detect when a player joins
-		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
+		setupPlayer(event.getPlayer());		
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerJoinEvent event) {
 		// Likewise, in theory this should be all we need to detect when a player joins
-		setupPlayer(event.getPlayer(), wm.getWorld(event.getPlayer().getWorld().getName()));		
+		setupPlayer(event.getPlayer());		
 	}
 
 	public void setupPlayer(String name) {
 		if(Bukkit.getPlayer(name) != null) {
 			Player player = Bukkit.getPlayer(name);
-			this.setupPlayer(player, wm.getWorld(player.getWorld().getName()));
+			this.setupPlayer(player);
 		}
 	}
 }

@@ -19,6 +19,8 @@ public class ExtraCommands {
 		// add all if null
 		if(world == null)
 			worlds.addAll(wm.getAllWorlds());
+		else
+			worlds.add(wm.getWorld(world));
 		for(World w : worlds) {
 			Calculable c = w.get(name, type);
 			if(action.equalsIgnoreCase("addgroup")) {

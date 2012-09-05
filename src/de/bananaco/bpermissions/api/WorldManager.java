@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
 /**
  * This is the api that will be accessed
  * by plugins utilising the new bPermissions API
@@ -35,6 +32,8 @@ public class WorldManager {
 	private boolean autoSave = false;
 	
 	private boolean useGlobalFiles = false;
+	
+	protected boolean loaded = false;
 	
 	protected WorldManager() {
 
@@ -161,16 +160,7 @@ public class WorldManager {
 	public boolean update() {
 		try {
 			for(World w : getAllWorlds()) {
-				for(Calculable c : w.getAll(CalculableType.GROUP)) {
-					c.calculateEffectivePermissions();
-					c.calculateEffectiveMeta();
-				}
-				for(Calculable c : w.getAll(CalculableType.USER)) {
-					c.calculateEffectivePermissions();
-					c.calculateEffectiveMeta();
-					// now setup
-					w.setupPlayer(c.getName());
-				}
+				w.setupAll();
 			}
 			return true;
 		} catch (Exception e) {

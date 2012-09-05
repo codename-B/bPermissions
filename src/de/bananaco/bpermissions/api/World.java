@@ -30,6 +30,7 @@ public abstract class World {
 		this.users = new HashMap();
 		this.groups = new HashMap();
 	}
+	
 	/**
 	 * Make sure you call .calculateEffectivePermissions
 	 * for all the users once this is done!
@@ -243,6 +244,11 @@ public abstract class World {
 
 	public boolean setupAll() {
 		// override to return true
+		return false;
+	}
+	
+	public boolean isOnline(User user) {
+		// override to return true;
 		return false;
 	}
 }

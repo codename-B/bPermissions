@@ -16,14 +16,14 @@ public class TestMain {
 		
 		CalculableTest ct = new CalculableTest(world);
 		ct.heroChatTest();
-		//ct.slipcorTest3();
-		//ct.slipcorTest2();
-		//ct.ApiLayerTest();
-		//ct.gv1222PrefixTest();
-		//ct.negativeInheritanceCheck();
-		//ct.nullPassCheck();
-		//ct.test100LevelInheritance();
-		//ct.testPermissions();
+		ct.slipcorTest3();
+		ct.slipcorTest2();
+		ct.ApiLayerTest();
+		ct.gv1222PrefixTest();
+		ct.negativeInheritanceCheck();
+		ct.nullPassCheck();
+		ct.test100LevelInheritance();
+		ct.testPermissions();
 	}
 
 }

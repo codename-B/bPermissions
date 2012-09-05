@@ -1,5 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
+import java.io.File;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public class WorldLoader implements Listener {
 		
 		if(!mirrors.containsKey(world)) {
 		System.out.println(Permissions.blankFormat("Loading world: "+w.getName()));
-		wm.createWorld(world, new YamlWorld(world, permissions));
+		wm.createWorld(world, new YamlWorld(world, permissions, new File("plugins/bPermissions/"+world+"/")));
 		}
 	}
 
