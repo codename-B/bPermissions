@@ -2,9 +2,8 @@ package de.bananaco.bpermissions.imp;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.api.util.Calculable;
@@ -94,10 +92,10 @@ public class Permissions extends JavaPlugin {
 		//handler.setupAllPlayers();
 		// Load our custom nodes (if any)
 		new CustomNodes().load();
+		new YamlTask(this);
+		//ApiLayer.update();
 		
-		ApiLayer.update();
-		
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
 		// And print a nice little message ;)		
 		Debugger.log(blankFormat("Enabled"));
 		// print dino
@@ -441,11 +439,7 @@ public class Permissions extends JavaPlugin {
 					for(World world : wm.getAllWorlds()) {
 						world.load();
 					}
-					// Iterate through all players and ensure 100% that they're setup
-					// !! Should occur automatically now !!
-					//for(Player player : getServer().getOnlinePlayers()) {
-					//	handler.setupPlayer(player, wm.getWorld(player.getWorld().getName()));
-					//}
+					wm.getWorld("*").setupAll();
 					sendMessage(sender, "All worlds reloaded!");
 					return true;
 				} else if(action.equalsIgnoreCase("cleanup")) {
@@ -471,7 +465,7 @@ public class Permissions extends JavaPlugin {
 	public void showPromoteOutput(CommandSender sender, String player) {
 		sender.sendMessage("The player: "+ChatColor.GREEN+player+ChatColor.WHITE+" now has these groups");
 		for(World world : WorldManager.getInstance().getAllWorlds()) {
-			Set<String> groups = world.getUser(player).getGroupsAsString();
+			List<String> groups = world.getUser(player).serialiseGroups();
 			String[] g = groups.toArray(new String[groups.size()]);
 			String gr = Arrays.toString(g);
 			sender.sendMessage("In world: "+world.getName()+" "+gr);

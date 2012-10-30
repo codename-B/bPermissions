@@ -55,10 +55,10 @@ public abstract class CalculableWrapper extends MapCalculable {
 		super.addGroup(group);
 		setDirty(true);
 		setCalculablesWithGroupDirty();
-		if(wm.getAutoSave())
+		if(wm.getAutoSave()) {
 			getWorldObject().save();
-		
-		getWorldObject().setupAll();
+			getWorldObject().setupAll();
+		}
 	}
 
 	@Override
@@ -66,10 +66,10 @@ public abstract class CalculableWrapper extends MapCalculable {
 		super.removeGroup(group);
 		setDirty(true);
 		setCalculablesWithGroupDirty();
-		if(wm.getAutoSave())
+		if(wm.getAutoSave()) {
 			getWorldObject().save();
-		
-		getWorldObject().setupAll();
+			getWorldObject().setupAll();
+		}
 	}
 
 	@Override
@@ -77,10 +77,10 @@ public abstract class CalculableWrapper extends MapCalculable {
 		super.addPermission(permission, isTrue);
 		setDirty(true);
 		setCalculablesWithGroupDirty();
-		if(wm.getAutoSave())
+		if(wm.getAutoSave()) {
 			getWorldObject().save();
-		
-		getWorldObject().setupAll();
+			getWorldObject().setupAll();
+		}
 	}
 
 	@Override
@@ -88,10 +88,10 @@ public abstract class CalculableWrapper extends MapCalculable {
 		super.removePermission(permission);
 		setDirty(true);
 		setCalculablesWithGroupDirty();
-		if(wm.getAutoSave())
+		if(wm.getAutoSave()) {
 			getWorldObject().save();
-		
-		getWorldObject().setupAll();
+			getWorldObject().setupAll();
+		}
 	}
 
 	@Override
@@ -99,10 +99,10 @@ public abstract class CalculableWrapper extends MapCalculable {
 		super.setValue(key, value);
 		setDirty(true);
 		setCalculablesWithGroupDirty();
-		if(wm.getAutoSave())
+		if(wm.getAutoSave()) {
 			getWorldObject().save();
-		
-		getWorldObject().setupAll();
+			getWorldObject().setupAll();
+		}
 	}
 
 	public void setCalculablesWithGroupDirty() {

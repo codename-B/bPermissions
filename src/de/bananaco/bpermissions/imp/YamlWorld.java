@@ -1,8 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +9,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import de.bananaco.bpermissions.api.Group;
@@ -21,22 +20,20 @@ import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.MetaData;
 import de.bananaco.bpermissions.api.util.Permission;
-import de.bananaco.bpermissions.fake.FakeMethods;
-import de.bananaco.bpermissions.fake.FakeYaml;
 /**
  * Here is the main YamlWorld class
  * This loads from the default users.yml and groups.yml on first
  * creation. Isn't it pretty?
  */
-public class YamlWorld extends World {
+public class YamlWorld extends World implements Runnable {
 
 	protected static final String GROUPS = "groups";
 	protected static final String PERMISSIONS = "permissions";
 	protected static final String META = "meta";
 	protected static final String USERS = "users";
 
-	protected FakeYaml uconfig = new FakeYaml();
-	protected FakeYaml gconfig = new FakeYaml();
+	protected YamlConfiguration uconfig = new YamlConfiguration();
+	protected YamlConfiguration gconfig = new YamlConfiguration();
 
 	private final File ufile;
 	private final File gfile;
@@ -47,12 +44,26 @@ public class YamlWorld extends World {
 
 	// If there's an error loading the files, don't save them as it overrides them!
 	protected boolean error = false;
+	// Only save if flagged true
+	protected boolean save = false;
 
 	public YamlWorld(String world, Permissions permissions, File root) {
 		super(world);
 		this.permissions = permissions;
 		this.ufile = new File(root,"users.yml");
 		this.gfile = new File(root,"groups.yml");
+	}
+	
+	@Override
+	public void run() {
+		if(save) {
+			try {
+				saveUnsafe(false);
+				save = false;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -65,8 +76,8 @@ public class YamlWorld extends World {
 	@Override
 	protected void cleanup() {
 		super.cleanup();
-		uconfig = new FakeYaml();
-		gconfig = new FakeYaml();
+		uconfig = new YamlConfiguration();
+		gconfig = new YamlConfiguration();
 		try {
 			saveUnsafe(true);
 		} catch (Exception e) {
@@ -98,19 +109,20 @@ public class YamlWorld extends World {
 			ufile.createNewFile();
 			gfile.createNewFile();
 		}
-		uconfig = new FakeYaml();
-		gconfig = new FakeYaml();
+		uconfig = new YamlConfiguration();
+		gconfig = new YamlConfiguration();
 		
 		long t = System.currentTimeMillis();
-		uconfig.load(new FileInputStream(ufile));
-		gconfig.load(new FileInputStream(gfile));
+		uconfig.load(ufile);
+		gconfig.load(gfile);
 		long f = System.currentTimeMillis();
 		Debugger.log("Loading files took "+(f-t)+"ms");
-		
+
 		/*
 		 * Load the users
 		 */
-		FakeMethods usersConfig = uconfig.getFakeMethods(USERS);
+		ConfigurationSection usersConfig = uconfig
+				.getConfigurationSection(USERS);
 		if (usersConfig != null) {
 			Set<String> names = usersConfig.getKeys(false);
 			for (String name : names) {
@@ -122,8 +134,8 @@ public class YamlWorld extends World {
 				// Create the new user
 				User user = new User(name, nGroup, perms, getName(), this);
 				// MetaData
-				FakeMethods meta = usersConfig
-						.getFakeMethods(name + "." + META);
+				ConfigurationSection meta = usersConfig
+						.getConfigurationSection(name + "." + META);
 				if(meta != null) {
 					Set<String> keys = meta.getKeys(false);
 					if (keys != null && keys.size() > 0) {
@@ -136,12 +148,13 @@ public class YamlWorld extends World {
 				add(user);
 			}
 		} else {
-			Debugger.log("Empty FakeMethods:"+USERS+":"+ufile.getPath());
+			Debugger.log("Empty ConfigurationSection:"+USERS+":"+ufile.getPath());
 		}
 		/*
 		 * Load the groups
 		 */
-		FakeMethods groupsConfig = gconfig.getFakeMethods(GROUPS);
+		ConfigurationSection groupsConfig = gconfig
+				.getConfigurationSection(GROUPS);
 		if (groupsConfig != null) {
 			Set<String> names = groupsConfig.getKeys(false);
 			for (String name : names) {
@@ -154,8 +167,8 @@ public class YamlWorld extends World {
 				// Create the new group
 				Group group = new Group(name, nGroup, perms, getName(), this);
 				// MetaData
-				FakeMethods meta = groupsConfig
-						.getFakeMethods(name + "." + META);
+				ConfigurationSection meta = groupsConfig
+						.getConfigurationSection(name + "." + META);
 				if(meta != null) {
 					Set<String> keys = meta.getKeys(false);
 					if (keys != null && keys.size() > 0)
@@ -166,7 +179,7 @@ public class YamlWorld extends World {
 				add(group);			
 			}
 		} else {
-			Debugger.log("Empty FakeMethods:"+GROUPS+":"+gfile.getPath());
+			Debugger.log("Empty ConfigurationSection:"+GROUPS+":"+gfile.getPath());
 		}
 
 		Debugger.log(this.getAll(CalculableType.USER).size()+" users loaded.");
@@ -188,13 +201,8 @@ public class YamlWorld extends World {
 			Bukkit.getServer().broadcastMessage(ChatColor.RED+"Permissions for world:"+this.getName()+" did not load correctly, please consult server.log.");
 			return false;
 		}
-		try {
-			saveUnsafe(false);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+		save = true;
+		return true;
 	}
 
 	protected void saveUnsafe(boolean sort) throws Exception {
@@ -249,8 +257,8 @@ public class YamlWorld extends World {
 		}
 
 		long t = System.currentTimeMillis();
-		uconfig.save(new FileOutputStream(ufile));
-		gconfig.save(new FileOutputStream(gfile));
+		uconfig.save(ufile);
+		gconfig.save(gfile);
 		long f = System.currentTimeMillis();
 		Debugger.log("Saving files took "+(f-t)+"ms");
 	}
@@ -280,7 +288,7 @@ public class YamlWorld extends World {
 	public void setDefaultGroup(String group) {
 		gconfig.set("default", group);
 		try {
-			gconfig.save(new FileOutputStream(gfile));
+			gconfig.save(gfile);
 		} catch (IOException e) {
 		}
 	}

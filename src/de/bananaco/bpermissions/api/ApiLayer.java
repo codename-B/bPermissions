@@ -9,6 +9,7 @@ import de.bananaco.bpermissions.api.util.Calculable;
 import de.bananaco.bpermissions.api.util.MapCalculable;
 import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.api.util.Permission;
+import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 import de.bananaco.bpermissions.imp.Debugger;
 /**
  * Adds a super easy to use static interface to bPermissions 2
@@ -76,7 +77,7 @@ public class ApiLayer {
 	 * @param name
 	 * @return Map<String, Boolean> permissions
 	 */
-	public static Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name) {
+	public static synchronized Map<String, Boolean> getEffectivePermissions(String world, CalculableType type, String name) {
 		Map<String, Boolean> permissions = new HashMap<String, Boolean>();
 		// our two thingies
 		World global;
@@ -86,10 +87,20 @@ public class ApiLayer {
 		w = world==null?null:wm.getWorld(world);
 		// do we apply globals?
 		if(global != null) {
+			try {
+				global.get(name, type).calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				e.printStackTrace();
+			}
 			permissions.putAll(((MapCalculable) global.get(name, type)).getMappedPermissions());
 		}
 		// now we apply the per-world stuff (or globals if w==null)
 		if(w != null) {
+			try {
+				w.get(name, type).calculateEffectivePermissions();
+			} catch (RecursiveGroupException e) {
+				e.printStackTrace();
+			}
 			permissions.putAll(((MapCalculable) w.get(name, type)).getMappedPermissions());
 		}
 		return permissions;

@@ -59,7 +59,7 @@ public class SuperPermissionHandler implements Listener {
 				List<PermissionAttachment> attach = BukkitCompat.getAttachments(pb);
 				boolean up = true;
 				for(PermissionAttachment att : attach) {
-					if(att.getPlugin().getName().equalsIgnoreCase("bpermissions")) {
+					if(att.getPlugin() != null && att.getPlugin() instanceof Permissions) {
 						up = false;
 					}
 				}
@@ -100,7 +100,9 @@ public class SuperPermissionHandler implements Listener {
 		Map<String, Boolean> children = new HashMap<String, Boolean>();
 		children.put("bPermissions.admin", true);
 		Permission permission = new Permission("bPermissions.*", PermissionDefault.OP, children);
-		plugin.getServer().getPluginManager().addPermission(permission);
+		if(plugin.getServer().getPluginManager().getPermission("bPermissions.*") == null) {
+			plugin.getServer().getPluginManager().addPermission(permission);
+		}
 	}
 
 	/**

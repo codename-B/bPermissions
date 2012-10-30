@@ -105,11 +105,23 @@ public class BukkitCompat {
 		
 		plugin.getServer().getPluginManager().addPermission(positive);
 		plugin.getServer().getPluginManager().addPermission(negative);
-		PermissionAttachment att = player.addAttachment(plugin);
-		
-		att.setPermission(player.getName(), true);
-		att.setPermission("^"+player.getName(), true);
-		
+		PermissionAttachment att = null;
+		for(PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
+			if(pai.getAttachment() != null && pai.getAttachment().getPlugin() != null) {
+				if(pai.getAttachment().getPlugin() instanceof Permissions) {
+					att = pai.getAttachment();
+					break;
+				}
+			}
+		}
+		// only if null
+		if(att == null) {
+			att = player.addAttachment(plugin);
+			att.setPermission(player.getName(), true);
+			att.setPermission("^"+player.getName(), true);
+		}
+		// recalculate permissions
+		player.recalculatePermissions();
 		return att;
 	}
 	
