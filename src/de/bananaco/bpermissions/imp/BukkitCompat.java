@@ -1,6 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
-import org.bukkit.craftbukkit.entity.CraftHumanEntity;
+import org.bukkit.craftbukkit.v1_4_5.entity.CraftHumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.PermissibleBase;
