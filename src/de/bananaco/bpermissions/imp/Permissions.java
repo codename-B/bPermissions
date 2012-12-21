@@ -95,7 +95,8 @@ public class Permissions extends JavaPlugin {
 		new YamlTask(this);
 		//ApiLayer.update();
 		
-		getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
+		// REMOVED
+		// getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
 		// And print a nice little message ;)		
 		Debugger.log(blankFormat("Enabled"));
 		// print dino

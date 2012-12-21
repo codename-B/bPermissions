@@ -38,48 +38,6 @@ import de.bananaco.bpermissions.api.util.CalculableType;
  */
 public class SuperPermissionHandler implements Listener {
 
-	// this is used to counter for those occasions where the setup errors
-	static class SuperPermissionReloader implements Runnable {
-
-		private final SuperPermissionHandler handler;
-		
-		public SuperPermissionReloader(SuperPermissionHandler handler) {
-			this.handler = handler;
-		}
-
-		// if the player has no "bpermissions" PermissionAttachment, fix that
-		public void run() {
-			// now need to check if there is no-one online!
-			if(Bukkit.getOnlinePlayers().length == 0)
-				return;
-			// let us run this as an async task for now
-			List<Player> update = new ArrayList<Player>();
-			for(Player player : Bukkit.getOnlinePlayers()) {
-				PermissibleBase pb = BukkitCompat.getBase(player);
-				List<PermissionAttachment> attach = BukkitCompat.getAttachments(pb);
-				boolean up = true;
-				for(PermissionAttachment att : attach) {
-					if(att.getPlugin() != null && att.getPlugin() instanceof Permissions) {
-						up = false;
-					}
-				}
-				// do we update?
-				if(up) {
-					update.add(player);
-				}
-			}
-			// and update those players who have failed to meet the cut!
-			if(update.size() > 0) {
-				Debugger.log("Force-updating "+update.size()+" players!");
-				for(Player player : update) {
-					handler.setupPlayer(player.getName());
-				}
-				update.clear();
-			}
-		}
-
-	}
-
 	private WorldManager wm = WorldManager.getInstance();
 	//private Map<Integer, PermissionAttachment> attachments = new HashMap<Integer, PermissionAttachment>();
 	private Permissions plugin;
