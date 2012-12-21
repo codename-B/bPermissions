@@ -1,8 +1,0 @@
-name: bPermissions
-version: 2.9.1
-description: bPermissions is a permissions plugin!
-author: codename_B
-website: http://www.bpermissions.com
-main: de.bananaco.bpermissions.spout.Permissions
-load: startup
-platform: SMP
