@@ -54,7 +54,6 @@ public class YamlWorld extends World implements Runnable {
 		this.gfile = new File(root,"groups.yml");
 	}
 	
-	@Override
 	public void run() {
 		if(save) {
 			try {

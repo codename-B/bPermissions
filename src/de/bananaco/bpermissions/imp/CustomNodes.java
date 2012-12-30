@@ -17,6 +17,7 @@ public class CustomNodes {
 	private YamlConfiguration config;// = new YamlConfiguration();
 	
 	public void load() {
+		// System.out.println("Loading Custom Nodes");
 		try {
 			List<Permission> permissions = doLoad();
 			for(int i=0; i<permissions.size(); i++) {
@@ -40,29 +41,29 @@ public class CustomNodes {
 		}
 		config.load(file);
 		List<Permission> permissions = new ArrayList<Permission>();
-		Set<String> keys = config.getKeys(false);
+		Set<String> keys = config.getKeys(true);
 		if(keys != null && keys.size() > 0) {
 			for(String key : keys) {
+				// System.out.println("Loading Key: " + key);
 				String permission = key;
-				List<String> childList = config.getStringList(permission+".children");
+				List<String> childList = config.getStringList(permission);
+				// System.out.println("Size: " + childList.size());
 				if(childList != null && childList.size() > 0) {
+					// for (String child : childList) {
+					//	System.out.println(child);
+					// }
 					Map<String, Boolean> children = new HashMap<String, Boolean>();
 					// Using our custom decoder here (yay for code re-use)
 					Set<de.bananaco.bpermissions.api.util.Permission> perms = de.bananaco.bpermissions.api.util.Permission.loadFromString(childList);
 					for(de.bananaco.bpermissions.api.util.Permission perm : perms) {
+						// System.out.println("Perm To Lowercase: " + perm.nameLowerCase());
 						children.put(perm.nameLowerCase(), perm.isTrue());
 					}
-					// Now load the rest of that buggerypokery!
-					String pd = config.getString(permission+".default", "op");
 					PermissionDefault pdo = PermissionDefault.OP;
-					if(pd.equalsIgnoreCase("not-op")) {
-						pdo = PermissionDefault.NOT_OP;
-					} else if(pd.equalsIgnoreCase("true")) {
-						pdo = PermissionDefault.TRUE;
-					} else if(pd.equalsIgnoreCase("false")) {
-						pdo = PermissionDefault.FALSE;
-					}
+					permission = permission.replace("permissions.", "");
+					// System.out.println(permission.toLowerCase());
 					Permission perm = new Permission(permission.toLowerCase(), pdo, children);
+					// System.out.println("Adding Permissions: " + permission.toLowerCase());
 					permissions.add(perm);
 				}
 			}

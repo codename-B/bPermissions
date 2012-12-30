@@ -63,7 +63,6 @@ public class LumpGroupPromotion implements PromotionTrack {
 		}
 	}
 
-	@Override
 	public void promote(String player, String track, String world) {
 		List<String> groups = trackmap.get(track.toLowerCase());
 		if (world == null) {
@@ -83,7 +82,6 @@ public class LumpGroupPromotion implements PromotionTrack {
 		}
 	}
 
-	@Override
 	public void demote(String player, String track, String world) {
 		List<String> groups = trackmap.get(track.toLowerCase());
 		if (world == null) {
@@ -109,12 +107,10 @@ public class LumpGroupPromotion implements PromotionTrack {
 		}
 	}
 
-	@Override
 	public boolean containsTrack(String track) {
 		return trackmap.containsKey(track.toLowerCase());
 	}
 
-	@Override
 	public List<String> getGroups(String track) {
 		return config.getStringList(track);
 	}
