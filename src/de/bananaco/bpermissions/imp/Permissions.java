@@ -92,7 +92,6 @@ public class Permissions extends JavaPlugin {
 		//handler.setupAllPlayers();
 		// Load our custom nodes (if any)
 		new CustomNodes().load();
-		new YamlTask(this);
 		//ApiLayer.update();
 		
 		// REMOVED

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -123,11 +124,11 @@ public class SuperPermissionHandler implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 5);
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
+	public void onPreLogin(AsyncPlayerPreLoginEvent event) {
 		for(World world : wm.getAllWorlds()) {
-			User user = world.getUser(event.getPlayer().getName());
+			User user = world.getUser(event.getName());
 			try {
 				user.calculateEffectivePermissions();
 				user.calculateEffectiveMeta();
@@ -136,6 +137,10 @@ public class SuperPermissionHandler implements Listener {
 			}
 			Debugger.log("PlayerLogin Setup: " + user.getName());
 		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerLogin(PlayerLoginEvent event) {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer());		
 	}
