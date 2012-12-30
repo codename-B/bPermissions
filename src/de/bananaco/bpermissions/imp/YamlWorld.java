@@ -25,7 +25,7 @@ import de.bananaco.bpermissions.api.util.Permission;
  * This loads from the default users.yml and groups.yml on first
  * creation. Isn't it pretty?
  */
-public class YamlWorld extends World implements Runnable {
+public class YamlWorld extends World {
 
 	protected static final String GROUPS = "groups";
 	protected static final String PERMISSIONS = "permissions";
@@ -52,18 +52,6 @@ public class YamlWorld extends World implements Runnable {
 		this.permissions = permissions;
 		this.ufile = new File(root,"users.yml");
 		this.gfile = new File(root,"groups.yml");
-	}
-	
-	@Override
-	public void run() {
-		if(save) {
-			try {
-				saveUnsafe(false);
-				save = false;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@Override
@@ -202,6 +190,13 @@ public class YamlWorld extends World implements Runnable {
 			return false;
 		}
 		save = true;
+		// no longer async, sorry!
+		try {
+			saveUnsafe(false);
+			save = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return true;
 	}
 
