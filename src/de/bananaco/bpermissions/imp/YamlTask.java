@@ -11,10 +11,9 @@ public class YamlTask implements Runnable {
 	
 	YamlTask(JavaPlugin plugin) {
 		// register event
-		plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, this, 20*10, 20*10);
+		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, 20*10, 20*10);
 	}
 
-	@Override
 	public void run() {
 		for(World world : wm.getAllWorlds()) {
 			if(world instanceof Runnable) {

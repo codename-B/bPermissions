@@ -1,8 +1,6 @@
 package de.bananaco.bpermissions.imp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,13 +10,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.permissions.Permissible;
-import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
@@ -128,23 +123,19 @@ public class SuperPermissionHandler implements Listener {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, r, 5);
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPreLogin(PlayerPreLoginEvent event) {
+	public void onPlayerLogin(PlayerLoginEvent event) {
 		for(World world : wm.getAllWorlds()) {
-			User user = world.getUser(event.getName());
+			User user = world.getUser(event.getPlayer().getName());
 			try {
 				user.calculateEffectivePermissions();
 				user.calculateEffectiveMeta();
 			} catch (Exception e) {
 				System.err.println(e.getStackTrace()[0].toString());
 			}
-			Debugger.log("PlayerPreLogin setup: "+user.getName());
+			Debugger.log("PlayerLogin Setup: " + user.getName());
 		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent event) {
 		// Likewise, in theory this should be all we need to detect when a player joins
 		setupPlayer(event.getPlayer());		
 	}
