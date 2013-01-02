@@ -19,10 +19,10 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 
 import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.api.util.CalculableType;
 /**
  * Handles all the superperms registering/unregistering
  * for PermissionAttachments (it's basically just somewhere

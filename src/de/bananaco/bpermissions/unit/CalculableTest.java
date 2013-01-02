@@ -1,17 +1,21 @@
 package de.bananaco.bpermissions.unit;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.Calculable;
+import de.bananaco.bpermissions.api.CalculableType;
+import de.bananaco.bpermissions.api.CustomNodes;
 import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.Permission;
+import de.bananaco.bpermissions.api.RecursiveGroupException;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
-import de.bananaco.bpermissions.api.util.Permission;
-import de.bananaco.bpermissions.api.util.RecursiveGroupException;
 
 public class CalculableTest {
 
@@ -23,6 +27,59 @@ public class CalculableTest {
 	
 	public void printLine() {
 		System.out.println("#################################################");
+	}
+	
+	public void customNodesTest() {
+		printLine();
+		System.out.println("Setting up a custom node");
+		Map<String, Boolean> children = new HashMap<String, Boolean>();
+		children.put("parent.node", false);
+		children.put("child.node", true);
+		System.out.println("Set parent.node: false child.node: true");
+		Permission perm = Permission.loadWithChildren("custom.node", true, children);
+		
+		List<Permission> customs = new ArrayList<Permission>();
+		customs.add(perm);
+		
+		children = new HashMap<String, Boolean>();
+		System.out.println("Setting up a custom node");
+		children.put("custom.two", true);
+		System.out.println("Set custom.two: true");
+		perm = Permission.loadWithChildren("parent.node", true, children);
+		customs.add(perm);
+		
+		CustomNodes.loadNodes(customs);
+		
+		ApiLayer.addPermission(null, CalculableType.GROUP, "default", Permission.loadFromString("custom.node"));
+		boolean result;
+		
+		result = !ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "parent.node");
+		System.out.println("Custom node permissions check #1 pass: "+result);
+		
+		result = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "child.node");
+		System.out.println("Custom node permissions check #2 pass: "+result);
+		
+		result = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "custom.two");
+		System.out.println("Custom node permissions check #3 pass: "+result);
+		
+		ApiLayer.removePermission(null, CalculableType.GROUP, "default", "custom.node");
+		ApiLayer.addPermission(null, CalculableType.GROUP, "default", Permission.loadFromString("^custom.node"));
+		
+		result = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "parent.node");
+		System.out.println("Custom node permissions check #4 pass: "+result);
+		
+		result = !ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "child.node");
+		System.out.println("Custom node permissions check #5 pass: "+result);
+	}
+	
+	public void globalPermsTest() {
+		printLine();
+		System.out.println("Setting group default with worldedit.wand in global");
+		System.out.println("Use global files: "+WorldManager.getInstance().getUseGlobalFiles());
+		ApiLayer.addPermission(null, CalculableType.GROUP, "default", Permission.loadFromString("worldedit.wand"));
+		
+		boolean result = ApiLayer.hasPermission(world.getName(), CalculableType.USER, "test", "worldedit.wand");
+		System.out.println("Global permissions check pass: "+result);
 	}
 	
 	public void heroChatTest() {

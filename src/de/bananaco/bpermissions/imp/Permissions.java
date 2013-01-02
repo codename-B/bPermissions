@@ -13,10 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.bananaco.bpermissions.api.Calculable;
+import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
 import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.bananaco.bpermissions.api.Calculable;
+import de.bananaco.bpermissions.api.CalculableType;
+import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
-import de.bananaco.bpermissions.api.util.Permission;
 
 public class ExtraCommands {
 

@@ -1,16 +1,11 @@
 package de.bananaco.bpermissions.api;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.MapCalculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
-import de.bananaco.bpermissions.api.util.Permission;
-import de.bananaco.bpermissions.api.util.RecursiveGroupException;
-import de.bananaco.bpermissions.imp.Debugger;
 /**
  * Adds a super easy to use static interface to bPermissions 2
  * 
@@ -83,10 +78,10 @@ public class ApiLayer {
 		World global;
 		World w;
 		// define them
-		global = wm.getUseGlobalFiles()?wm.getDefaultWorld():null;
+		global = wm.getWorld(null);
 		w = world==null?null:wm.getWorld(world);
 		// do we apply globals?
-		if(global != null) {
+		if(wm.getUseGlobalFiles()) {
 			try {
 				global.get(name, type).calculateEffectivePermissions();
 			} catch (RecursiveGroupException e) {
@@ -102,6 +97,18 @@ public class ApiLayer {
 				e.printStackTrace();
 			}
 			permissions.putAll(((MapCalculable) w.get(name, type)).getMappedPermissions());
+		}
+		// custom node checking
+		for(String key : new HashSet<String>(permissions.keySet())) {
+			if(CustomNodes.contains(key)) {
+				Map<String, Boolean> children = CustomNodes.getChildren(key);
+				// if negative
+				if(!permissions.get(key)) {
+					children = Permission.reverse(children);
+				}
+				// push into Map
+				permissions.putAll(children);
+			}
 		}
 		return permissions;
 	}
@@ -255,12 +262,8 @@ public class ApiLayer {
 	 * @return boolean
 	 */
 	public static boolean hasPermission(String world, CalculableType type, String name, String node) {
-		World w = wm.getWorld(world);
-		if(w == null || type == null || name == null || node == null)
-			return false;
-		Calculable c = w.get(name, type);
-		Debugger.log(w.getName()+":"+type.name()+":"+name+":"+node);
-		return c.hasPermission(node);
+		// pass through to global checking etc
+		return Calculable.hasPermission(node, getEffectivePermissions(world, type, name));
 	}
 	/**
 	 * Used to set the metadata value for a user or a group

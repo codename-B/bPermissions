@@ -4,8 +4,8 @@ import java.util.Set;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import de.bananaco.bpermissions.api.util.Permission;
 
+import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.WorldManager;
 

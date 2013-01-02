@@ -8,29 +8,41 @@ import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+//import org.bukkit.permissions.Permission;
+//import org.bukkit.permissions.PermissionDefault;
+
+import de.bananaco.bpermissions.api.Permission;
 
 public class CustomNodes {
 	
 	private final File file = new File("plugins/bPermissions/custom_nodes.yml");
 	private YamlConfiguration config;// = new YamlConfiguration();
+	private PermissionDefault pdo = PermissionDefault.OP;
 	
 	public void load() {
 		// System.out.println("Loading Custom Nodes");
 		try {
 			List<Permission> permissions = doLoad();
+			// load into API
+			de.bananaco.bpermissions.api.CustomNodes.loadNodes(permissions);
 			for(int i=0; i<permissions.size(); i++) {
 				// If the permission doesn't already exist
-				if(Bukkit.getServer().getPluginManager().getPermission(permissions.get(i).getName()) == null) {
+				if(Bukkit.getServer().getPluginManager().getPermission(permissions.get(i).nameLowerCase()) == null) {
 					// Add it!
-					Bukkit.getServer().getPluginManager().addPermission(permissions.get(i));
+					Bukkit.getServer().getPluginManager().addPermission(convert(permissions.get(i)));
 				}
 				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public org.bukkit.permissions.Permission convert(Permission perm) {
+		String name = perm.nameLowerCase();
+		Map<String, Boolean> children = perm.getChildren();
+		return new org.bukkit.permissions.Permission(name, pdo, children);
 	}
 
 	private List<Permission> doLoad() throws Exception {
@@ -54,15 +66,14 @@ public class CustomNodes {
 					// }
 					Map<String, Boolean> children = new HashMap<String, Boolean>();
 					// Using our custom decoder here (yay for code re-use)
-					Set<de.bananaco.bpermissions.api.util.Permission> perms = de.bananaco.bpermissions.api.util.Permission.loadFromString(childList);
-					for(de.bananaco.bpermissions.api.util.Permission perm : perms) {
+					Set<de.bananaco.bpermissions.api.Permission> perms = de.bananaco.bpermissions.api.Permission.loadFromString(childList);
+					for(de.bananaco.bpermissions.api.Permission perm : perms) {
 						// System.out.println("Perm To Lowercase: " + perm.nameLowerCase());
 						children.put(perm.nameLowerCase(), perm.isTrue());
 					}
-					PermissionDefault pdo = PermissionDefault.OP;
 					permission = permission.replace("permissions.", "");
 					// System.out.println(permission.toLowerCase());
-					Permission perm = new Permission(permission.toLowerCase(), pdo, children);
+					Permission perm = Permission.loadWithChildren(permission.toLowerCase(), true, children);
 					// System.out.println("Adding Permissions: " + permission.toLowerCase());
 					permissions.add(perm);
 				}

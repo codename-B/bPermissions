@@ -9,8 +9,6 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
 /**
  * This is the class to extend for new implementations
  * of bPermissions.

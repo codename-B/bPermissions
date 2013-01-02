@@ -7,13 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import de.bananaco.bpermissions.api.Calculable;
+import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
-import de.bananaco.bpermissions.api.util.Permission;
 
 public class Commands {
 

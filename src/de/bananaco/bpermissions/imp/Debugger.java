@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import de.bananaco.bpermissions.api.Calculable;
+import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
-import de.bananaco.bpermissions.api.util.Calculable;
-import de.bananaco.bpermissions.api.util.CalculableType;
 
 public class Debugger {
 	

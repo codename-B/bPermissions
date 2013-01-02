@@ -11,9 +11,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.bananaco.bpermissions.api.Group;
+import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.WorldManager;
-import de.bananaco.bpermissions.api.util.Permission;
 
 public class ImportManager {
 
