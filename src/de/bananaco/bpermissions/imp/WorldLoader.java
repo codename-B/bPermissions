@@ -43,7 +43,7 @@ public class WorldLoader implements Listener {
 		String world = w.getName().toLowerCase();
 		
 		if(!mirrors.containsKey(world)) {
-		System.out.println(Permissions.blankFormat("Loading world: "+w.getName()));
+		Debugger.log("Loading world: "+w.getName());
 		wm.createWorld(world, new YamlWorld(world, permissions, new File("plugins/bPermissions/"+world+"/")));
 		}
 	}

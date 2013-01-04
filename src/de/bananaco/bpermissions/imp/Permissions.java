@@ -18,6 +18,7 @@ import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
@@ -105,7 +106,6 @@ public class Permissions extends JavaPlugin {
 		//handler.setupAllPlayers();
 		// Load our custom nodes (if any)
 		new CustomNodes().load();
-		//ApiLayer.update();
 		
 		// REMOVED
 		// getServer().getScheduler().scheduleSyncRepeatingTask(this, new SuperPermissionHandler.SuperPermissionReloader(handler), 5, 5);
@@ -116,6 +116,20 @@ public class Permissions extends JavaPlugin {
 		
 		// set main thread enabled
 		mt.setStarted(true);
+		// setup all players
+		final World world = this.world;
+		mt.schedule(new TaskRunnable() {
+			public void run() {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
+					public void run() {
+						world.setupAll();
+					}
+				}, 0);
+			}
+			public TaskType getType() {
+				return TaskType.SERVER;
+			}
+		});
 	}
 
 	public static void printDinosaurs() {
@@ -455,7 +469,11 @@ public class Permissions extends JavaPlugin {
 					for(World world : wm.getAllWorlds()) {
 						world.load();
 					}
-					wm.getWorld("*").setupAll();
+					Debugger.log("Waiting for tasks to complete.");
+					while(mt.hasTasks()) {
+						// wait for tasks to complete
+					}
+					world.setupAll();
 					sendMessage(sender, "All worlds reloaded!");
 					return true;
 				} else if(action.equalsIgnoreCase("cleanup")) {

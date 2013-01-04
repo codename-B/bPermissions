@@ -23,6 +23,6 @@ public interface TaskThread {
 	 * Schedule a task to be run
 	 * @param r
 	 */
-	public void schedule(Runnable r);
+	public void schedule(TaskRunnable r);
 
 }

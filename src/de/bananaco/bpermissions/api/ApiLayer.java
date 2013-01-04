@@ -23,6 +23,67 @@ public class ApiLayer {
 	private static WorldManager wm = WorldManager.getInstance();
 
 	/*
+	 * DEPRACATED FIX METHODS
+	 */
+	// de.bananaco.bpermissions.api.util.CalculableType
+	@Deprecated
+	public static CalculableType getType(de.bananaco.bpermissions.api.util.CalculableType type) {
+		return (type == de.bananaco.bpermissions.api.util.CalculableType.GROUP)?CalculableType.GROUP:CalculableType.USER;
+	}
+	@Deprecated
+	public static String[] getGroups(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name) {
+		return getGroups(world, getType(type), name);
+	}
+	@Deprecated
+	public static Permission[] getPermissions(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name) {
+		return getPermissions(world, getType(type), name);
+	}
+	@Deprecated
+	public static synchronized Map<String, Boolean> getEffectivePermissions(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name) {
+		return getEffectivePermissions(world, getType(type), name);
+	}
+	@Deprecated
+	public static String getValue(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String key) {
+		return getValue(world, getType(type), name, key);
+	}
+	@Deprecated
+	public static void addGroup(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String groupToAdd) {
+		addGroup(world, getType(type), name, groupToAdd);
+	}
+	@Deprecated
+	public static void setGroup(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String groupToAdd) {
+		setGroup(world, getType(type), name, groupToAdd);
+	}
+	@Deprecated
+	public static void removeGroup(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String groupToRemove) {
+		removeGroup(world, getType(type), name, groupToRemove);
+	}
+	@Deprecated
+	public static boolean hasGroup(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String group) {
+		return hasGroup(world, getType(type), name, group);
+	}
+	@Deprecated
+	public static boolean hasGroupRecursive(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String group) {
+		return hasGroupRecursive(world, getType(type), name, group);
+	}
+	@Deprecated
+	public static void addPermission(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, Permission permissionToAdd) {
+		addPermission(world, getType(type), name, permissionToAdd);
+	}
+	@Deprecated
+	public static void removePermission(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String permissionToRemove) {
+		removePermission(world, getType(type), name, permissionToRemove);
+	}
+	@Deprecated
+	public static boolean hasPermission(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String node) {
+		return hasPermission(world, getType(type), name, node);
+	}
+	@Deprecated
+	public static void setValue(String world, de.bananaco.bpermissions.api.util.CalculableType type, String name, String key, String value) {
+		setValue(world, getType(type), name, key, value);
+	}
+
+	/*
 	 * Used for getting values
 	 */
 

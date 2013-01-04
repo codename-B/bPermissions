@@ -13,7 +13,8 @@ import java.util.Set;
  * Currently only User extends MapCalculable and Group extends Calculable
  * There is no need for direct per-group permission checking
  */
-public abstract class MapCalculable extends Calculable {
+// temporary extend for backwards compatability
+public abstract class MapCalculable extends de.bananaco.bpermissions.api.util.Calculable {
 
 	public MapCalculable(String name, Set<String> groups,
 			Set<Permission> permissions, String world) {

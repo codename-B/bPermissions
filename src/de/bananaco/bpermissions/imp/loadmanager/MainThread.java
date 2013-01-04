@@ -62,9 +62,12 @@ public class MainThread extends Thread implements TaskThread {
 	}
 	
 	public void setRunning(final boolean running) {
-		Runnable r = new Runnable() {
+		TaskRunnable r = new TaskRunnable() {
 			public void run() {
 				thread.running = running;
+			}
+			public TaskType getType() {
+				return TaskType.SERVER;
 			}
 		};
 		schedule(r);
@@ -75,16 +78,19 @@ public class MainThread extends Thread implements TaskThread {
 	}
 	
 	public void setStarted(final boolean started) {
-		Runnable r = new Runnable() {
+		TaskRunnable r = new TaskRunnable() {
 			public void run() {
 				thread.started = started;
 				Debugger.log("Set started: "+started);
+			}
+			public TaskType getType() {
+				return TaskType.SERVER;
 			}
 		};
 		schedule(r);
 	}
 	
-	public void schedule(Runnable r) {
+	public void schedule(TaskRunnable r) {
 		getTasks().add(r);
 	}
 

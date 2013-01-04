@@ -21,6 +21,7 @@ import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
 import de.bananaco.bpermissions.imp.loadmanager.MainThread;
+import de.bananaco.bpermissions.imp.loadmanager.TaskRunnable;
 /**
  * Here is the main YamlWorld class
  * This loads from the default users.yml and groups.yml on first
@@ -79,13 +80,16 @@ public class YamlWorld extends World {
 		try {
 			clear();
 			// load async
-			MainThread.getInstance().schedule(new Runnable() {
+			MainThread.getInstance().schedule(new TaskRunnable() {
 				public void run() {
 					try {
 						loadUnsafe();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+				public TaskType getType() {
+					return TaskType.LOAD;
 				}
 			});
 			// If it loaded correctly cancel the error
@@ -202,13 +206,16 @@ public class YamlWorld extends World {
 		save = true;
 		// async again
 		try {
-			MainThread.getInstance().schedule(new Runnable() {
+			MainThread.getInstance().schedule(new TaskRunnable() {
 				public void run() {
 					try {
 						saveUnsafe(false);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				}
+				public TaskType getType() {
+					return TaskType.SAVE;
 				}
 			});
 			save = false;

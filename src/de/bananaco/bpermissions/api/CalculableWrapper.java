@@ -18,8 +18,6 @@ public abstract class CalculableWrapper extends MapCalculable {
 		boolean allowed = Calculable.hasPermission(node, getMappedPermissions());
 		return allowed;
 	}
-
-	
 	
 	/*
 	 * These methods are added
