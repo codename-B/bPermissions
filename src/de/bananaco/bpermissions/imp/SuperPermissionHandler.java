@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -23,6 +24,7 @@ import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 /**
  * Handles all the superperms registering/unregistering
  * for PermissionAttachments (it's basically just somewhere
@@ -95,6 +97,14 @@ public class SuperPermissionHandler implements Listener {
 		// WHAT IS THIS I DONT EVEN
 		long finish = System.currentTimeMillis()-time;
 		Debugger.log("Setup superperms for "+player.getName()+". took "+finish+"ms.");
+	}
+	
+	@EventHandler
+	public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+		MainThread mt = MainThread.getInstance();
+		if(!mt.getStarted()) {
+			event.disallow(Result.KICK_OTHER, "bPermissions not enabled");
+		}
 	}
 
 	@EventHandler

@@ -17,6 +17,7 @@ import de.bananaco.bpermissions.api.Calculable;
 import de.bananaco.bpermissions.api.CalculableType;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 import de.bananaco.bpermissions.unit.PermissionsTest;
 import de.bananaco.permissions.ImportManager;
 import de.bananaco.permissions.fornoobs.BackupPermissionsCommand;
@@ -38,6 +39,8 @@ public class Permissions extends JavaPlugin {
 
 	protected static JavaPlugin instance = null;
 
+	private MainThread mt;
+	
 	@Override
 	public void onDisable() {
 		// Cancel tasks
@@ -46,6 +49,12 @@ public class Permissions extends JavaPlugin {
 		if(wm != null) {
 			for(World world : wm.getAllWorlds())
 				world.save();
+		}
+		mt.setRunning(false);
+		// accomodate async
+		System.out.println(blankFormat("Waiting for tasks to finish..."));
+		while(mt.hasTasks()) {
+			// wait
 		}
 		System.out.println(blankFormat("Disabled"));
 	}
@@ -58,6 +67,10 @@ public class Permissions extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		// start main thread
+		mt = MainThread.getInstance();
+		mt.start();
+		
 		instance = this;
 		// Only happens after onEnable(), prevent NPE's
 		config = new Config();
@@ -100,6 +113,9 @@ public class Permissions extends JavaPlugin {
 		Debugger.log(blankFormat("Enabled"));
 		// print dino
 		//printDinosaurs();
+		
+		// set main thread enabled
+		mt.setStarted(true);
 	}
 
 	public static void printDinosaurs() {

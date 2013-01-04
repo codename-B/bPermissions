@@ -20,6 +20,7 @@ import de.bananaco.bpermissions.api.Permission;
 import de.bananaco.bpermissions.api.User;
 import de.bananaco.bpermissions.api.World;
 import de.bananaco.bpermissions.api.WorldManager;
+import de.bananaco.bpermissions.imp.loadmanager.MainThread;
 /**
  * Here is the main YamlWorld class
  * This loads from the default users.yml and groups.yml on first
@@ -77,7 +78,16 @@ public class YamlWorld extends World {
 	public boolean load() {
 		try {
 			clear();
-			loadUnsafe();
+			// load async
+			MainThread.getInstance().schedule(new Runnable() {
+				public void run() {
+					try {
+						loadUnsafe();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 			// If it loaded correctly cancel the error
 			error = false;
 		} catch (Exception e) {
@@ -190,9 +200,17 @@ public class YamlWorld extends World {
 			return false;
 		}
 		save = true;
-		// no longer async, sorry!
+		// async again
 		try {
-			saveUnsafe(false);
+			MainThread.getInstance().schedule(new Runnable() {
+				public void run() {
+					try {
+						saveUnsafe(false);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 			save = false;
 		} catch (Exception e) {
 			e.printStackTrace();
