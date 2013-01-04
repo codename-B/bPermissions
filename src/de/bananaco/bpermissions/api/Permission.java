@@ -10,7 +10,7 @@ import java.util.Set;
  * The hashCode returns the same for a true and a false String, allowing for only storing
  * one in a HashSet which makes for very useful Permission calculation.
  */
-public class Permission {
+public class Permission extends de.bananaco.bpermissions.api.util.Permission {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	/**
@@ -20,11 +20,13 @@ public class Permission {
 	 * @return Set<Permission>
 	 */
 	public static Set<Permission> loadFromString(List<String> listPerms) {
-		Set<Permission> permissions = new HashSet();
-		if (listPerms != null)
-			for (String perm : listPerms)
+		Set<de.bananaco.bpermissions.api.Permission> permissions = new HashSet();
+		if (listPerms != null) {
+			for (String perm : listPerms) {
 				permissions.add(loadFromString(perm));
-					return permissions;
+			}
+		}
+		return permissions;
 	}
 
 	/**
