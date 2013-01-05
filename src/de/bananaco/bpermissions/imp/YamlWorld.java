@@ -77,6 +77,10 @@ public class YamlWorld extends World {
 
 
 	public boolean load() {
+		if(MainThread.getInstance() == null) {
+			Debugger.log("MainThread cancelled");
+			return false;
+		}
 		try {
 			// load async
 			MainThread.getInstance().schedule(new TaskRunnable() {
@@ -199,6 +203,10 @@ public class YamlWorld extends World {
 	}
 
 	public boolean save() {
+		if(MainThread.getInstance() == null) {
+			Debugger.log("MainThread cancelled");
+			return false;
+		}
 		if(error) {
 			Bukkit.getServer().broadcastMessage(ChatColor.RED+"Permissions for world:"+this.getName()+" did not load correctly, please consult server.log.");
 			return false;
