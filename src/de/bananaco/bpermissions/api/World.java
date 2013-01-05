@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.bukkit.ChatColor;
 
+import de.bananaco.bpermissions.imp.Debugger;
+
 /**
  * This is the class to extend for new implementations
  * of bPermissions.
@@ -17,18 +19,18 @@ import org.bukkit.ChatColor;
  * easily available (hopefully)...
  */
 public abstract class World {
-	
+
 	private final Map<String, Group> groups;
 	private final Map<String, User> users;
 	private final String world;
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public World(String world) {
 		this.world = world;
 		this.users = new HashMap();
 		this.groups = new HashMap();
 	}
-	
+
 	/**
 	 * Make sure you call .calculateEffectivePermissions
 	 * for all the users once this is done!
@@ -44,7 +46,7 @@ public abstract class World {
 	 * @return boolean
 	 */
 	public abstract boolean save();
-	
+
 	/**
 	 * Used to check if the World contains an entry for said Calculable
 	 * @param name
@@ -63,17 +65,17 @@ public abstract class World {
 		}
 		return false;
 	}
-	
+
 	public Group getGroup(String name) {
 		name = ChatColor.stripColor(name);
 		return (Group) get(name, CalculableType.GROUP);
 	}
-	
+
 	public User getUser(String name) {
 		name = ChatColor.stripColor(name);
 		return (User) get(name, CalculableType.USER);
 	}
-	
+
 	/**
 	 * Used to get the contained Calculable (contains should be used first)
 	 * @param name
@@ -87,27 +89,27 @@ public abstract class World {
 		// And now we check
 		if(type == CalculableType.USER) {
 			if(!users.containsKey(name)) {
-			add(new User(name, null, null, getName(), this));
-			// Don't forget to add the default group!
-			users.get(name).addGroup(getDefaultGroup());
-			// And calculate the effective Permissions!
-			//try {
-			//users.get(name).calculateEffectivePermissions();
-			//users.get(name).calculateEffectiveMeta();
-			//} catch (RecursiveGroupException e) {
-			//System.err.println(e.getMessage());
-			//}
+				add(new User(name, null, null, getName(), this));
+				// Don't forget to add the default group!
+				users.get(name).addGroup(getDefaultGroup());
+				// And calculate the effective Permissions!
+				//try {
+				//users.get(name).calculateEffectivePermissions();
+				//users.get(name).calculateEffectiveMeta();
+				//} catch (RecursiveGroupException e) {
+				//System.err.println(e.getMessage());
+				//}
 			}
 			return users.get(name);
 		} else if (type == CalculableType.GROUP) {
 			if(!groups.containsKey(name)) {
-			add(new Group(name, null, null, getName(), this));
+				add(new Group(name, null, null, getName(), this));
 			}
 			return groups.get(name);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Used to grab a complete set of the contained Calculable from
 	 * the World.
@@ -119,22 +121,41 @@ public abstract class World {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Set<Calculable> getAll(CalculableType type) {
 		Set<Calculable> entries = new HashSet();
+		Map<String, Calculable> data = getAllAsMap(type);
+		// catch null
+		if(data == null) {
+			return null;
+		}
 		// And now we grab
 		if(type == CalculableType.USER) {
-			for(String key : users.keySet()) {
-					entries.add(users.get(key));
+			for(String key : data.keySet()) {
+				entries.add(data.get(key));
 			}
 			return entries;
 		}
 		else if (type == CalculableType.GROUP) {
-			for(String key : groups.keySet()) {
-				entries.add(groups.get(key));
+			for(String key : data.keySet()) {
+				entries.add(data.get(key));
 			}
 			return entries;
 		}
+		data.clear();
 		return entries;
 	}
-	
+
+	private Map<String, Calculable> getAllAsMap(CalculableType type) {
+		try {
+			if(type == CalculableType.USER) {
+				return new HashMap(users);
+			} else if(type == CalculableType.GROUP) {
+				return new HashMap(groups);
+			}
+		} catch (Exception e) {
+			Debugger.log("Error getting "+type.name());
+		}
+		return null;
+	}
+
 	/**
 	 * This adds the Calculable to either groups or users depending
 	 * on if the calculable is an instance of either.
@@ -153,7 +174,7 @@ public abstract class World {
 		else
 			System.err.println("Calculable not instance of User or Group!");
 	}
-	
+
 	/**
 	 * Returns the world name
 	 * @return String
@@ -161,7 +182,7 @@ public abstract class World {
 	public String getName() {
 		return world;
 	}
-	
+
 	/**
 	 * Used to clear the Maps containing User and Group object
 	 * (useful for doing a clean load)
@@ -176,7 +197,7 @@ public abstract class World {
 		groups.clear();
 		users.clear();
 	}
-	
+
 	/**
 	 * Shows if the world is THIS world
 	 * @param world
@@ -185,17 +206,17 @@ public abstract class World {
 	public boolean equalsWorld(String world) {
 		return world.equalsIgnoreCase(this.world);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if(o == null)
 			return false;
-		
+
 		return o.hashCode() == hashCode();
 	}
 	/**
@@ -211,40 +232,40 @@ public abstract class World {
 			if(u.getMeta().size() == 0 &&
 					u.getPermissions().size() == 0 &&
 					(u.getGroupsAsString().size() == 0 ||
-						(u.getGroupsAsString().size() == 1 &&
-							u.getGroupsAsString().iterator().next().equals(getDefaultGroup()))))
-								removal.add(user);
+					(u.getGroupsAsString().size() == 1 &&
+					u.getGroupsAsString().iterator().next().equals(getDefaultGroup()))))
+				removal.add(user);
 		}	
 		// Remove the user if it's been flagged
 		for(String user : removal)
 			users.remove(user);
-		removal.clear();
-		// Iterate through the groups
-		for(String group : groups.keySet()) {
-			Group g = groups.get(group);
-			if(g.getMeta().size() == 0 &&
-				g.getPermissions().size() == 0 &&
-					g.getGroupsAsString().size() == 0)
+				removal.clear();
+				// Iterate through the groups
+				for(String group : groups.keySet()) {
+					Group g = groups.get(group);
+					if(g.getMeta().size() == 0 &&
+							g.getPermissions().size() == 0 &&
+							g.getGroupsAsString().size() == 0)
 						removal.add(group);
-		}
-		// Remove the group if it's been flagged
-		for(String group : removal)
-			groups.remove(group);
-		// And finally save the cleaned up files
-		save();
+				}
+				// Remove the group if it's been flagged
+				for(String group : removal)
+					groups.remove(group);
+						// And finally save the cleaned up files
+						save();
 	}
-	
+
 	public abstract void setDefaultGroup(String group);
-	
+
 	public abstract String getDefaultGroup();
-	
+
 	public abstract boolean setupPlayer(String player);
 
 	public boolean setupAll() {
 		// override to return true
 		return false;
 	}
-	
+
 	public boolean isOnline(User user) {
 		// override to return true;
 		return false;

@@ -13,7 +13,6 @@ public class YamlConfiguration extends org.bukkit.configuration.file.YamlConfigu
 	@Override
 	public void load(File file) throws FileNotFoundException, IOException,
 			InvalidConfigurationException {
-		new YamlFile(file, true);
 		super.load(file);
 	}
 

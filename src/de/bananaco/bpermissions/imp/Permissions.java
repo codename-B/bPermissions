@@ -47,10 +47,6 @@ public class Permissions extends JavaPlugin {
 		// Cancel tasks
 		getServer().getScheduler().cancelTasks(this);
 
-		if(wm != null) {
-			for(World world : wm.getAllWorlds())
-				world.save();
-		}
 		mt.setRunning(false);
 		// accomodate async
 		System.out.println(blankFormat("Waiting for tasks to finish..."));

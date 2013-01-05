@@ -78,11 +78,11 @@ public class YamlWorld extends World {
 
 	public boolean load() {
 		try {
-			clear();
 			// load async
 			MainThread.getInstance().schedule(new TaskRunnable() {
 				public void run() {
 					try {
+						clear();
 						loadUnsafe();
 					} catch (Exception e) {
 						e.printStackTrace();

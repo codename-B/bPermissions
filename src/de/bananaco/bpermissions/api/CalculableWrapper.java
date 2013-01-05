@@ -2,15 +2,17 @@ package de.bananaco.bpermissions.api;
 
 import java.util.Set;
 
+import de.bananaco.bpermissions.imp.Debugger;
+
 
 public abstract class CalculableWrapper extends MapCalculable {
-	
+
 	private WorldManager wm = WorldManager.getInstance();
-	
+
 	public CalculableWrapper(String name, Set<String> groups,
 			Set<Permission> permissions, String world) {
 		super(name, groups, permissions, world);
-		
+
 	}
 
 	public boolean hasPermission(String node) {
@@ -18,13 +20,13 @@ public abstract class CalculableWrapper extends MapCalculable {
 		boolean allowed = Calculable.hasPermission(node, getMappedPermissions());
 		return allowed;
 	}
-	
+
 	/*
 	 * These methods are added
 	 * to allow auto-saving of
 	 * the World on any changes
 	 */
-	
+
 	@Override
 	public void addGroup(String group) {
 		super.addGroup(group);
@@ -81,13 +83,23 @@ public abstract class CalculableWrapper extends MapCalculable {
 	}
 
 	public void setCalculablesWithGroupDirty() {
-		for(Calculable user : getWorldObject().getAll(CalculableType.USER)) {
-			if(user.hasGroupRecursive(getName()))
-				((User) user).setDirty(true);
+		Set<Calculable> users = getWorldObject().getAll(CalculableType.USER);
+		Set<Calculable> groups = getWorldObject().getAll(CalculableType.GROUP);
+		if(users == null || users.size() == 0) {
+			Debugger.log("Error setting users dirty");
+		} else {
+			for(Calculable user : users) {
+				if(user.hasGroupRecursive(getName()))
+					((User) user).setDirty(true);
+			}
 		}
-		for(Calculable group : getWorldObject().getAll(CalculableType.GROUP)) {
-			if(group.hasGroupRecursive(getName()))
-				((Group) group).setDirty(true);
+		if(groups == null || groups.size() == 0) {
+			Debugger.log("Error setting groups dirty");
+		} else {
+			for(Calculable group : groups) {
+				if(group.hasGroupRecursive(getName()))
+					((Group) group).setDirty(true);
+			}
 		}
 	}
 
