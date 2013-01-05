@@ -469,12 +469,20 @@ public class Permissions extends JavaPlugin {
 					for(World world : wm.getAllWorlds()) {
 						world.load();
 					}
-					Debugger.log("Waiting for tasks to complete.");
-					while(mt.hasTasks()) {
-						// wait for tasks to complete
-					}
-					world.setupAll();
-					sendMessage(sender, "All worlds reloaded!");
+					// async -> sync
+					mt.schedule(new TaskRunnable() {
+						public void run() {
+							Bukkit.getScheduler().scheduleSyncDelayedTask(instance, new Runnable() {
+								public void run() {
+									world.setupAll();
+								}
+							}, 0);
+						}
+						public TaskType getType() {
+							return TaskType.SERVER;
+						}
+					});
+					sendMessage(sender, "All worlds reloading!");
 					return true;
 				} else if(action.equalsIgnoreCase("cleanup")) {
 					sendMessage(sender, "Cleaning up files!");
