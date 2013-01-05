@@ -48,11 +48,6 @@ public class Permissions extends JavaPlugin {
 		getServer().getScheduler().cancelTasks(this);
 
 		mt.setRunning(false);
-		// accomodate async
-		System.out.println(blankFormat("Waiting for tasks to finish..."));
-		while(mt.hasTasks()) {
-			// wait
-		}
 		System.out.println(blankFormat("Disabled"));
 	}
 

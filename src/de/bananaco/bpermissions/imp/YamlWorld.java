@@ -34,8 +34,8 @@ public class YamlWorld extends World {
 	protected static final String META = "meta";
 	protected static final String USERS = "users";
 
-	protected YamlConfiguration uconfig = new YamlConfiguration();
-	protected YamlConfiguration gconfig = new YamlConfiguration();
+	protected YamlConfiguration uconfig = null;//new YamlConfiguration();
+	protected YamlConfiguration gconfig = null;//new YamlConfiguration();
 
 	private final File ufile;
 	private final File gfile;
@@ -117,6 +117,9 @@ public class YamlWorld extends World {
 		}
 		uconfig = new YamlConfiguration();
 		gconfig = new YamlConfiguration();
+		
+		YamlConfiguration uconfig = this.uconfig;
+		YamlConfiguration gconfig = this.gconfig;
 		
 		long t = System.currentTimeMillis();
 		uconfig.load(ufile);
@@ -239,6 +242,9 @@ public class YamlWorld extends World {
 			ufile.createNewFile();
 			gfile.createNewFile();
 		}
+
+		YamlConfiguration uconfig = this.uconfig;
+		YamlConfiguration gconfig = this.gconfig;
 
 		String def = getDefaultGroup();
 		gconfig.set("default", def);

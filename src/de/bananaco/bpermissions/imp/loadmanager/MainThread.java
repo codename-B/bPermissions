@@ -48,7 +48,8 @@ public class MainThread extends Thread implements TaskThread {
 					run = (TaskRunnable) tasks.get(0);
 					tasks.remove(0);
 					final TaskRunnable r = run;
-					if(r.getType() == TaskType.SERVER) {
+					if(r.getType() == TaskType.SERVER || r.getType() == TaskType.SAVE) {
+						// one save at a time
 						r.run();
 					} else {
 					new Thread() {
