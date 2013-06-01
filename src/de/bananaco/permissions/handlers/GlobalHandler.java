@@ -1,6 +1,7 @@
 package de.bananaco.permissions.handlers;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class GlobalHandler implements Carrier {
@@ -11,7 +12,7 @@ public class GlobalHandler implements Carrier {
         this.database = database;
     }
 
-    @EventHandler
+    @EventHandler(priority =  EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Handler.setup(event.getPlayer(), database);
     }

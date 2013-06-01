@@ -2,6 +2,7 @@ package de.bananaco.permissions.handlers;
 
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -15,14 +16,14 @@ public class WorldHandler implements Carrier {
         this.world = world.getName();
     }
 
-    @EventHandler
+    @EventHandler(priority =  EventPriority.LOW)
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (event.getPlayer().getWorld().getName().equals(world)) {
             Handler.setup(event.getPlayer(), database);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority =  EventPriority.LOW)
     public void onPlayerChangeWorld(PlayerChangedWorldEvent event) {
         if (event.getPlayer().getWorld().getName().equals(world)) {
             Handler.setup(event.getPlayer(), database);

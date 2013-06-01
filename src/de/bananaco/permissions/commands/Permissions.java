@@ -47,7 +47,7 @@ public class Permissions implements CommandExecutor {
                 ApiLayer.addPlayer(user2, world.getName(), mod);
                 ApiLayer.addPlayer(user3, world.getName(), def);
             }
-            sender.sendMessage("Creating some simplistic example files");
+            sender.sendMessage("Created some simplistic example files");
             return true;
         }
         return false;
