@@ -4,10 +4,7 @@ import de.bananaco.permissions.Packages;
 import de.bananaco.permissions.ppackage.PPackage;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +22,11 @@ public class FileDatabase implements Database {
         return false;
     }
 
-    public List<PPackage> getPackages(Player player) throws Exception {
+    public List<PPackage> getPackages(String player) throws Exception {
+        File file = new File(root, player + ".txt");
         List<PPackage> packages = new ArrayList<PPackage>();
-        if (hasEntry(player)) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(root, player.getName() + ".txt"))));
+        if (file.exists()) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String pack = null;
             while ((pack = br.readLine()) != null) {
                 if (getPackage(pack) != null) {
@@ -45,12 +43,12 @@ public class FileDatabase implements Database {
         return packages;
     }
 
-    public boolean hasEntry(Player player) {
-        return new File(root, player.getName() + ".txt").exists();
+    public boolean hasEntry(String player) {
+        return new File(root, player + ".txt").exists();
     }
 
-    public void createEntry(Player player) {
-        File file = new File(root, player.getName() + ".txt");
+    public void addEntry(String player, String entry) {
+        File file = new File(root, player + ".txt");
         if (!file.exists()) {
             try {
                 root.mkdirs();
@@ -59,15 +57,22 @@ public class FileDatabase implements Database {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void setEntry(Player player, List<PPackage> packages) {
-        File file = new File(root, player.getName() + ".txt");
-        // TODO fill in
+        // now write the entry
+        try {
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
+            pw.append(entry+"\n");
+            pw.close();;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public PPackage getPackage(String p) {
         return packageManager.getPackage(p);
+    }
+
+    public void addPackage(String v, String p) {
+        packageManager.addPackage(v, p);
     }
 
 }

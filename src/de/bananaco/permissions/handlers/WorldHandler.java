@@ -2,11 +2,10 @@ package de.bananaco.permissions.handlers;
 
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class WorldHandler implements Listener {
+public class WorldHandler implements Carrier {
 
     private final Database database;
     private final String world;
@@ -28,6 +27,14 @@ public class WorldHandler implements Listener {
         if (event.getPlayer().getWorld().getName().equals(world)) {
             Handler.setup(event.getPlayer(), database);
         }
+    }
+
+    public String getName() {
+        return world;
+    }
+
+    public Database getDatabase() {
+        return database;
     }
 
 }

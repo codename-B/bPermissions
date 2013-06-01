@@ -3,6 +3,10 @@ version: 3.0
 author: codename_B
 main: de.bananaco.permissions.Packages
 commands:
+  permissions:
+    usage: /<command> populate
+    permission: bpermissions.admin
+    description: various commands for non-power users
   purgedata:
     usage: /<command> packageName
     permission: bpermissions.admin

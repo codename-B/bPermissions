@@ -48,4 +48,12 @@ public class PPackage {
     public List<PPermission> getPermissions() {
         return new ArrayList<PPermission>(permissions);
     }
+
+    public List<String> getPermissionsAsString() {
+        List<String> permissions = new ArrayList<String>();
+        for(PPermission perm : this.permissions) {
+            permissions.add(perm.toString());
+        }
+        return permissions;
+    }
 }

@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Handler {
@@ -24,7 +25,8 @@ public class Handler {
     private final DBType packageType;
     private final DBType databaseType;
     // interfaces are awesome
-    private PackageManager packageManager = null;
+    public PackageManager packageManager = null;
+    public List<Carrier> carriers = new ArrayList<Carrier>();
     // mysql is not, but here it is anyway
     MySQLHandler handler = new MySQLHandler();
 
@@ -34,6 +36,12 @@ public class Handler {
         this.global = global;
         this.packageType = packageType;
         this.databaseType = databaseType;
+        setup();
+    }
+
+    private Carrier add(Carrier carrier) {
+        carriers.add(carrier);
+        return carrier;
     }
 
     private void setup() {
@@ -52,7 +60,7 @@ public class Handler {
                 database = new MySQLDatabase("global", handler, packageManager);
             }
             // because we use the handy events system we don't actually have to pass around references like crazy
-            Bukkit.getPluginManager().registerEvents(new GlobalHandler(database), plugin);
+            Bukkit.getPluginManager().registerEvents(add(new GlobalHandler(database)), plugin);
         } else {
             for (World world : Bukkit.getWorlds()) {
                 Database database = null;
@@ -61,7 +69,7 @@ public class Handler {
                 } else if (this.databaseType == DBType.MYSQL) {
                     database = new MySQLDatabase(world.getName(), handler, packageManager);
                 }
-                Bukkit.getPluginManager().registerEvents(new WorldHandler(database, world), plugin);
+                Bukkit.getPluginManager().registerEvents(add(new WorldHandler(database, world)), plugin);
             }
         }
     }
@@ -72,7 +80,7 @@ public class Handler {
             Bukkit.getScheduler().runTaskAsynchronously(Packages.instance, new Runnable() {
                 public void run() {
                     try {
-                        final List<PPackage> packages = database.getPackages(player);
+                        final List<PPackage> packages = database.getPackages(player.getName());
                         Bukkit.getScheduler().runTask(Packages.instance, new Runnable() {
                             public void run() {
                                 Bukkit.getPluginManager().callEvent(new PackageLoadEvent(player, packages));
@@ -85,7 +93,7 @@ public class Handler {
             });
         } else {
             try {
-                Bukkit.getPluginManager().callEvent(new PackageLoadEvent(player, database.getPackages(player)));
+                Bukkit.getPluginManager().callEvent(new PackageLoadEvent(player, database.getPackages(player.getName())));
             } catch (Exception e) {
                 e.printStackTrace();
             }

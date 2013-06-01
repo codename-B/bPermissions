@@ -28,4 +28,8 @@ public class MySQLPackageManager implements PackageManager {
         }
     }
 
+    public void addPackage(String v, String p) {
+
+    }
+
 }

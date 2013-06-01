@@ -1,10 +1,9 @@
 package de.bananaco.permissions.handlers;
 
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class GlobalHandler implements Listener {
+public class GlobalHandler implements Carrier {
 
     private Database database;
 
@@ -17,5 +16,12 @@ public class GlobalHandler implements Listener {
         Handler.setup(event.getPlayer(), database);
     }
 
+    public String getName() {
+        return "global";
+    }
+
+    public Database getDatabase() {
+        return database;
+    }
 
 }

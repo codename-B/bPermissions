@@ -1,5 +1,6 @@
 package de.bananaco.permissions;
 
+import de.bananaco.permissions.commands.Permissions;
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
 import de.bananaco.permissions.ppackage.PPermission;
@@ -20,8 +21,6 @@ import java.util.Map;
 public class Packages extends JavaPlugin implements Listener {
 
     private static String defaultPackage = "default";
-    private static Map<String, PPackage> packageMap = new HashMap<String, PPackage>();
-
     public static Packages instance = null;
 
     public static String getDefaultPackage() {
@@ -37,7 +36,7 @@ public class Packages extends JavaPlugin implements Listener {
     }
 
     private Map<String, PermissionAttachment> permissions = new HashMap<String, PermissionAttachment>();
-    private Handler handler = null;
+    public Handler handler = null;
     public Handler.DBType packageType;
     public Handler.DBType databaseType;
     public boolean global = true;
@@ -61,6 +60,8 @@ public class Packages extends JavaPlugin implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             register(player);
         }
+        // register commands
+        getCommand("permissions").setExecutor(new Permissions());
     }
 
     @Override

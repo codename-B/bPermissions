@@ -24,10 +24,10 @@ public class MySQLDatabase implements Database {
         return true;
     }
 
-    public List<PPackage> getPackages(Player player) throws Exception {
+    public List<PPackage> getPackages(String player) throws Exception {
         List<PPackage> packages = new ArrayList<PPackage>();
         if (hasEntry(player)) {
-            for (String pack : handler.getEntries(player.getName(), tag)) {
+            for (String pack : handler.getEntries(player, tag)) {
                 if (getPackage(pack) != null) {
                     packages.add(getPackage(pack));
                 }
@@ -41,20 +41,20 @@ public class MySQLDatabase implements Database {
         return packages;
     }
 
-    public boolean hasEntry(Player player) {
+    public boolean hasEntry(String player) {
         return false;
     }
 
-    public void createEntry(Player player) {
-
-    }
-
-    public void setEntry(Player player, List<PPackage> packages) {
+    public void addEntry(String player, String entry) {
 
     }
 
     public PPackage getPackage(String p) {
         return packageManager.getPackage(p);
+    }
+
+    public void addPackage(String v, String p) {
+        packageManager.addPackage(v, p);
     }
 
 

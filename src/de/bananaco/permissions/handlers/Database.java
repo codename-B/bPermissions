@@ -9,10 +9,10 @@ public interface Database extends PackageManager {
 
     public boolean isASync();
 
-    public List<PPackage> getPackages(Player player) throws Exception;
+    public List<PPackage> getPackages(String player) throws Exception;
 
-    public boolean hasEntry(Player player);
+    public boolean hasEntry(String player);
 
-    public void createEntry(Player player);
+    public void addEntry(String player, String entry);
 
 }

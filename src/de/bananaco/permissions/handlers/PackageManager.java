@@ -6,4 +6,6 @@ public interface PackageManager {
 
     public PPackage getPackage(String p);
 
+    public void addPackage(String name, String pack);
+
 }
