@@ -22,18 +22,28 @@ public class FileDatabase implements Database {
         return false;
     }
 
+    private List<String> getPackages(String player, File file) throws Exception {
+        List<String> packages = new ArrayList<String>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        String pack = null;
+        while ((pack = br.readLine()) != null) {
+            if(!pack.isEmpty()) {
+                packages.add(pack);
+            }
+        }
+        br.close();
+        return packages;
+    }
+
     public List<PPackage> getPackages(String player) throws Exception {
         File file = new File(root, player + ".txt");
         List<PPackage> packages = new ArrayList<PPackage>();
         if (file.exists()) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-            String pack = null;
-            while ((pack = br.readLine()) != null) {
-                if (getPackage(pack) != null) {
+            for(String pack : getPackages(player, file)) {
+                if(getPackage(pack) != null) {
                     packages.add(getPackage(pack));
                 }
             }
-            br.close();
         } else {
             // load default
             if (getPackage(Packages.getDefaultPackage()) != null) {
@@ -59,9 +69,14 @@ public class FileDatabase implements Database {
         }
         // now write the entry
         try {
+            List<String> packages = getPackages(player, file);
+            // sanity checking
+            if(packages.contains(entry)) {
+                return;
+            }
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
             pw.append(entry+"\n");
-            pw.close();;
+            pw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

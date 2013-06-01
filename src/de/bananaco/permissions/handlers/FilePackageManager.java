@@ -46,6 +46,10 @@ public class FilePackageManager implements PackageManager {
         if(permissions == null) {
             permissions = new ArrayList<String>();
         }
+        // sanity checking
+        if(permissions.contains(v)) {
+            return;
+        }
         permissions.add(v);
         yamlConfiguration.set(p.toLowerCase(), permissions);
         try {

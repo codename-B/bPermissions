@@ -36,9 +36,16 @@ public class Permissions implements CommandExecutor {
                     } else if(perm.contains(".ban") || perm.contains(".kick") || perm.contains(".mod") || perm.contains(".fly")) {
                         ApiLayer.addToPackage("moderator", perm);
                     } else {
-                        ApiLayer.addToPackage("user", perm);
+                        ApiLayer.addToPackage("admin", perm);
                     }
                 }
+                String user1 = "codename_B";
+                String user2 = "Notch";
+                String user3 = "pyraetos";
+                // now hook the ApiLayer
+                ApiLayer.addPlayer(user1, world.getName(), admin);
+                ApiLayer.addPlayer(user2, world.getName(), mod);
+                ApiLayer.addPlayer(user3, world.getName(), def);
             }
             sender.sendMessage("Creating some simplistic example files");
             return true;
