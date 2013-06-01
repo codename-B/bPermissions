@@ -1,36 +1,8 @@
-name: bPermissions
-version: 2.10.1
+name: bPermissions3
+version: 3.0
 author: codename_B
-website: http://bpermissions.com/
-main: de.bananaco.bpermissions.imp.Permissions
+main: de.bananaco.permissions.Permissions
 commands:
-  exec:
-    aliases: [e, ex]
-    description: executes the "shorthand" commands
-    usage: /<command> all
   permissions:
-    aliases: [p, bp, perm]
-    description: reloads the nodes
-    usage: /<command> save|reload|examplefiles|backup
-  user:
-    aliases: [u, usr]
-    description: messes with users
-    usage: /<command> (see documentation)
-  group:
-    aliases: [g, grp]
-    description: messes with groups
-    usage: /<command> (see documentation)
-  world:
-    aliases: [w, wrl]
-    description: selects a world
-    usage: /<command> world
-  promote:
-    aliases: [p, pr]
-    description: promote a player
-    usage: /<command> player (track) (world)
-  demote:
-    aliases: [d, de]
-    description: demote a player
-    usage: /<command> player (track) (world)
-
-
+    usage: /<command>
+    description: access all things
