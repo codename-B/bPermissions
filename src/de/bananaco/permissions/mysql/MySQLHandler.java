@@ -76,7 +76,7 @@ public class MySQLHandler {
 
     // PackageManager stuff
 
-    public List<PPackage> getPPackages() {
+    public PPackage getPPackage(String p) {
         return null;
     }
 
