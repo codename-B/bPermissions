@@ -31,11 +31,16 @@ public class FileDatabase implements Database {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(root, player.getName()+".txt"))));
             String pack = null;
             while((pack = br.readLine()) != null) {
-                packages.add(getPackage(pack));
+                if(getPackage(pack) != null) {
+                    packages.add(getPackage(pack));
+                }
             }
+            br.close();
         } else {
-           // load default
-            packages.add(getPackage(Packages.getDefaultPackage()));
+            // load default
+            if(getPackage(Packages.getDefaultPackage()) != null) {
+                packages.add(getPackage(Packages.getDefaultPackage()));
+            }
         }
         return packages;
     }
@@ -58,6 +63,7 @@ public class FileDatabase implements Database {
 
     public void setEntry(Player player, List<PPackage> packages) {
         File file = new File(root, player.getName()+".txt");
+        // TODO fill in
     }
 
     public PPackage getPackage(String p) {

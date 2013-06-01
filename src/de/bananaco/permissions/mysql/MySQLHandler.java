@@ -90,10 +90,6 @@ public class MySQLHandler {
 
     }
 
-    public List<String> getEntries(String player) {
-        return null;
-    }
-
     public List<String> getEntries(String player, String world) {
         return null;
     }
