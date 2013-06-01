@@ -7,6 +7,7 @@ import java.util.Map;
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
 import de.bananaco.permissions.ppackage.PPermission;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -36,8 +37,10 @@ public class Packages extends JavaPlugin implements Listener {
     }
 
     private Map<String, PermissionAttachment> permissions = new HashMap<String, PermissionAttachment>();
+    private Handler handler = null;
     public Handler.DBType packageType;
     public Handler.DBType databaseType;
+    public boolean global = true;
 
 	@Override
 	public void onEnable() {
@@ -45,13 +48,28 @@ public class Packages extends JavaPlugin implements Listener {
         // register events
 		getServer().getPluginManager().registerEvents(this, this);
         // default package is set in config.yml
-        getConfig().set("defaultPackage", getConfig().getString("defaultPackage", defaultPackage));
+        getConfig().set("defaultPackage", defaultPackage = getConfig().getString("defaultPackage", defaultPackage));
+        getConfig().set("global", global = getConfig().getBoolean("global", global));
         packageType = getType(getConfig().getString("packageType", getType(Handler.DBType.FILE)));
         databaseType = getType(getConfig().getString("databaseType", getType(Handler.DBType.FILE)));
         getConfig().set("packageType", getType(packageType));
         getConfig().set("databaseType", getType(databaseType));
         saveConfig();
+        // now we can instantiate the handler
+        handler = new Handler(this, global, packageType, databaseType);
+        // register all
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            register(player);
+        }
 	}
+
+    @Override
+    public void onDisable() {
+        // unregister all
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            unregister(player);
+        }
+    }
 
     // called externally by whatever package handling method is available, can also be called on world change
     @EventHandler
@@ -61,12 +79,23 @@ public class Packages extends JavaPlugin implements Listener {
 
     @EventHandler(priority =  EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        permissions.put(event.getPlayer().getName(), event.getPlayer().addAttachment(this));
+        register(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        permissions.remove(event.getPlayer().getName());
+        unregister(event.getPlayer());
+    }
+
+    private void register(Player player) {
+        permissions.put(player.getName(), player.addAttachment(this));
+    }
+
+    private void unregister(Player player) {
+        PermissionAttachment attachment = permissions.remove(player.getName());
+        for (String key : attachment.getPermissions().keySet()) {
+            attachment.unsetPermission(key);
+        }
     }
 
     // thanks for this method PermissionsBukkit

@@ -26,20 +26,22 @@ public class MySQLHandler {
         // and which ones to load in the first place too...
         packageType = plugin.packageType;
         databaseType = plugin.databaseType;
-        // now load
-        plugin.getConfig().set("mysql.user", user = plugin.getConfig().getString("mysql.user", "user"));
-        plugin.getConfig().set("mysql.database", database = plugin.getConfig().getString("mysql.database", "database"));
-        plugin.getConfig().set("mysql.password", password = plugin.getConfig().getString("mysql.password", "password"));
-        plugin.getConfig().set("mysql.port", port = plugin.getConfig().getString("mysql.port", "port"));
-        plugin.getConfig().set("mysql.hostname", hostname = plugin.getConfig().getString("mysql.hostname", "hostname"));
-        // save changes
-        plugin.saveConfig();
-        // handle mysql table creation if necessary
-        if(packageType == Handler.DBType.MYSQL && !hasTable(PACKAGE_TABLE)) {
-            createPackageTable();
-        }
-        if(databaseType == Handler.DBType.MYSQL && !hasTable(DATA_TABLE)) {
-            createDatabaseTable();
+        if(packageType == Handler.DBType.MYSQL || databaseType == Handler.DBType.MYSQL) {
+            // now load
+            plugin.getConfig().set("mysql.user", user = plugin.getConfig().getString("mysql.user", "user"));
+            plugin.getConfig().set("mysql.database", database = plugin.getConfig().getString("mysql.database", "database"));
+            plugin.getConfig().set("mysql.password", password = plugin.getConfig().getString("mysql.password", "password"));
+            plugin.getConfig().set("mysql.port", port = plugin.getConfig().getString("mysql.port", "port"));
+            plugin.getConfig().set("mysql.hostname", hostname = plugin.getConfig().getString("mysql.hostname", "hostname"));
+            // save changes
+            plugin.saveConfig();
+            // handle mysql table creation if necessary
+            if(packageType == Handler.DBType.MYSQL && !hasTable(PACKAGE_TABLE)) {
+                createPackageTable();
+            }
+            if(databaseType == Handler.DBType.MYSQL && !hasTable(DATA_TABLE)) {
+                createDatabaseTable();
+            }
         }
     }
 
