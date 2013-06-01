@@ -84,7 +84,7 @@ public class MySQLHandler {
 
     // Database stuff
 
-    public void addEntry(String player, String value) {
+    public void removeEntry(String player, String world, String value) {
 
     }
 
