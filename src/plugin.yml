@@ -1,8 +1,21 @@
 name: bPermissions3
 version: 3.0
 author: codename_B
-main: de.bananaco.permissions.Permissions
+main: de.bananaco.permissions.Packages
 commands:
-  permissions:
-    usage: /<command>
-    description: access all things
+  purgedata:
+    usage: /<command> packageName
+    permission: bpermissions.admin
+    description: wipes a package from the database
+  purgepackage:
+    usage: /<command> playerName
+    permission: bpermissions.admin
+    description: removes a player from the database
+  addpackage:
+    usage: /<command> playerName packageName (world?)
+    permission: bpermissions.admin
+    description: adds the package to the player, and adds them to the database if they don't have an entry
+permissions:
+  bpermissions.admin:
+    default: op
+    description: use all bPermissions3 commands in one easy permission node
