@@ -1,4 +1,5 @@
 package de.bananaco.permissions;
+
 import de.bananaco.permissions.ppackage.PPackage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;

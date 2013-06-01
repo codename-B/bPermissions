@@ -3,8 +3,6 @@ package de.bananaco.permissions.mysql;
 import de.bananaco.permissions.Packages;
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class MySQLHandler {
         // and which ones to load in the first place too...
         packageType = plugin.packageType;
         databaseType = plugin.databaseType;
-        if(packageType == Handler.DBType.MYSQL || databaseType == Handler.DBType.MYSQL) {
+        if (packageType == Handler.DBType.MYSQL || databaseType == Handler.DBType.MYSQL) {
             // now load
             plugin.getConfig().set("mysql.user", user = plugin.getConfig().getString("mysql.user", "user"));
             plugin.getConfig().set("mysql.database", database = plugin.getConfig().getString("mysql.database", "database"));
@@ -36,10 +34,10 @@ public class MySQLHandler {
             // save changes
             plugin.saveConfig();
             // handle mysql table creation if necessary
-            if(packageType == Handler.DBType.MYSQL && !hasTable(PACKAGE_TABLE)) {
+            if (packageType == Handler.DBType.MYSQL && !hasTable(PACKAGE_TABLE)) {
                 createPackageTable();
             }
-            if(databaseType == Handler.DBType.MYSQL && !hasTable(DATA_TABLE)) {
+            if (databaseType == Handler.DBType.MYSQL && !hasTable(DATA_TABLE)) {
                 createDatabaseTable();
             }
         }
@@ -50,7 +48,7 @@ public class MySQLHandler {
     // table management stuff
 
     public void createPackageTable() {
-        String query = "CREATE TABLE "+PACKAGE_TABLE+" (\n" +
+        String query = "CREATE TABLE " + PACKAGE_TABLE + " (\n" +
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         package VARCHAR(32),\n" +
                 "         permission VARCHAR(32),\n" +
@@ -59,7 +57,7 @@ public class MySQLHandler {
     }
 
     public void createDatabaseTable() {
-        String query = "CREATE TABLE "+DATA_TABLE+" (\n" +
+        String query = "CREATE TABLE " + DATA_TABLE + " (\n" +
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         player VARCHAR(32),\n" +
                 "         world VARCHAR(32),\n" +
@@ -69,7 +67,7 @@ public class MySQLHandler {
     }
 
     public boolean hasTable(String table) {
-        String query = "IF object_id('"+table+"', 'U') is not null\n" +
+        String query = "IF object_id('" + table + "', 'U') is not null\n" +
                 "       PRINT 'true!'\n" +
                 "       ELSE\n" +
                 "       PRINT 'false'";

@@ -4,7 +4,6 @@ import de.bananaco.permissions.mysql.MySQLHandler;
 import de.bananaco.permissions.ppackage.PPackage;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MySQLPackageManager implements PackageManager {
@@ -17,11 +16,11 @@ public class MySQLPackageManager implements PackageManager {
     }
 
     public PPackage getPackage(String p) {
-        if(cache.containsKey(p)) {
+        if (cache.containsKey(p)) {
             return cache.get(p);
         }
         PPackage pack = handler.getPPackage(p);
-        if(pack != null) {
+        if (pack != null) {
             cache.put(p, pack);
             return cache.get(p);
         } else {

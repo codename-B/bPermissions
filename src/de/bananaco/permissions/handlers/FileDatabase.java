@@ -27,18 +27,18 @@ public class FileDatabase implements Database {
 
     public List<PPackage> getPackages(Player player) throws Exception {
         List<PPackage> packages = new ArrayList<PPackage>();
-        if(hasEntry(player)) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(root, player.getName()+".txt"))));
+        if (hasEntry(player)) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(root, player.getName() + ".txt"))));
             String pack = null;
-            while((pack = br.readLine()) != null) {
-                if(getPackage(pack) != null) {
+            while ((pack = br.readLine()) != null) {
+                if (getPackage(pack) != null) {
                     packages.add(getPackage(pack));
                 }
             }
             br.close();
         } else {
             // load default
-            if(getPackage(Packages.getDefaultPackage()) != null) {
+            if (getPackage(Packages.getDefaultPackage()) != null) {
                 packages.add(getPackage(Packages.getDefaultPackage()));
             }
         }
@@ -46,23 +46,23 @@ public class FileDatabase implements Database {
     }
 
     public boolean hasEntry(Player player) {
-        return new File(root, player.getName()+".txt").exists();
+        return new File(root, player.getName() + ".txt").exists();
     }
 
     public void createEntry(Player player) {
-        File file = new File(root, player.getName()+".txt");
-        if(!file.exists()) {
+        File file = new File(root, player.getName() + ".txt");
+        if (!file.exists()) {
             try {
                 root.mkdirs();
                 file.createNewFile();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
     public void setEntry(Player player, List<PPackage> packages) {
-        File file = new File(root, player.getName()+".txt");
+        File file = new File(root, player.getName() + ".txt");
         // TODO fill in
     }
 

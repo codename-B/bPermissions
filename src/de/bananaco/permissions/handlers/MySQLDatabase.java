@@ -5,10 +5,6 @@ import de.bananaco.permissions.mysql.MySQLHandler;
 import de.bananaco.permissions.ppackage.PPackage;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +26,15 @@ public class MySQLDatabase implements Database {
 
     public List<PPackage> getPackages(Player player) throws Exception {
         List<PPackage> packages = new ArrayList<PPackage>();
-        if(hasEntry(player)) {
-            for(String pack : handler.getEntries(player.getName(), tag)) {
-                if(getPackage(pack) != null) {
+        if (hasEntry(player)) {
+            for (String pack : handler.getEntries(player.getName(), tag)) {
+                if (getPackage(pack) != null) {
                     packages.add(getPackage(pack));
                 }
             }
         } else {
             // load default
-            if(getPackage(Packages.getDefaultPackage()) != null) {
+            if (getPackage(Packages.getDefaultPackage()) != null) {
                 packages.add(getPackage(Packages.getDefaultPackage()));
             }
         }

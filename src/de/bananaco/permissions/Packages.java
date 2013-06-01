@@ -1,9 +1,5 @@
 package de.bananaco.permissions;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
 import de.bananaco.permissions.ppackage.PPermission;
@@ -16,6 +12,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Packages extends JavaPlugin implements Listener {
 
@@ -42,11 +42,11 @@ public class Packages extends JavaPlugin implements Listener {
     public Handler.DBType databaseType;
     public boolean global = true;
 
-	@Override
-	public void onEnable() {
+    @Override
+    public void onEnable() {
         instance = this;
         // register events
-		getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(this, this);
         // default package is set in config.yml
         getConfig().set("defaultPackage", defaultPackage = getConfig().getString("defaultPackage", defaultPackage));
         getConfig().set("global", global = getConfig().getBoolean("global", global));
@@ -58,15 +58,15 @@ public class Packages extends JavaPlugin implements Listener {
         // now we can instantiate the handler
         handler = new Handler(this, global, packageType, databaseType);
         // register all
-        for(Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             register(player);
         }
-	}
+    }
 
     @Override
     public void onDisable() {
         // unregister all
-        for(Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
             unregister(player);
         }
     }
@@ -77,7 +77,7 @@ public class Packages extends JavaPlugin implements Listener {
         setPermissions(event.getPlayer(), event.getPackages());
     }
 
-    @EventHandler(priority =  EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         register(event.getPlayer());
     }
@@ -113,7 +113,7 @@ public class Packages extends JavaPlugin implements Listener {
         }
         // load from the data we have
         for (PPackage pack : packages) {
-            for(PPermission perm : pack.getPermissions()) {
+            for (PPermission perm : pack.getPermissions()) {
                 attachment.setPermission(perm.getName().toLowerCase(), perm.isTrue());
             }
         }

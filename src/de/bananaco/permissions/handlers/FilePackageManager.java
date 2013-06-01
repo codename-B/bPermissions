@@ -23,11 +23,11 @@ public class FilePackageManager implements PackageManager {
     }
 
     public PPackage getPackage(String p) {
-        if(cache.containsKey(p)) {
+        if (cache.containsKey(p)) {
             return cache.get(p);
         }
         List<String> permissions = null;
-        if((permissions = yamlConfiguration.getStringList(p.toLowerCase())) != null) {
+        if ((permissions = yamlConfiguration.getStringList(p.toLowerCase())) != null) {
             cache.put(p, PPackage.loadPackage(p.toLowerCase(), permissions));
             return cache.get(p);
         } else {
