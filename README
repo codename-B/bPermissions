@@ -1,15 +1,7 @@
-Version 2.3 of bPermissions brings about completely new commands structures
+Version 3.0 of bPermissions brings a lot of new and exciting features.
 
-Commands are now a sequence of commands rather than one horribly long string!
+bPermissions 3.0 is coded from scratch. It doesn't use any of the 2.x features. Brand new, coded for scratch and aimed more at big and professional servers!
 
-Examples:
-/world home
-/user codename_B
-/user addgroup admin
+For now we do not have too much to say about the project other than you will love it. More information will come here on the page. If you have any interesting ideas open a ticket or send in a pull request.
 
-Negative permissions?
-Just prefix the permission node with the "^" symbol for example "^node2.node" will mean that player.hasPermission("node2.node") will return false nomatter what.
-
-Spacing?
-Yes, unfortunately the expanding config file means spacing has had to be added to the config files.
-Remember, if you can't format yaml correctly, you can always do everything by the commands!
+The 2.x project will still be available and updated to the latest builds and still be up to date like normal. This project will now be lead by a fellow developer, rymate1234. He will be an Author of the project page. A new project will be made for bPermissions 3.0 because of the vast changes in coding and structure.
