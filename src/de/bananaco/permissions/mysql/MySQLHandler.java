@@ -161,7 +161,7 @@ public class MySQLHandler {
     public void addEntry(String player, String world, String value) {
         String query = "INSERT INTO "+DATA_TABLE+"\n" +
                 "('player', 'world', 'package')\n" +
-                "VALUES (\"+player+\", \"+world+\", \"+value+\")";
+                "VALUES ("+player+", "+world+", "+value+")";
         try {
             Statement s = c.createStatement();
             s.execute(query);
