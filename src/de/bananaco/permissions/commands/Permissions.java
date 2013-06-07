@@ -44,6 +44,7 @@ public class Permissions implements CommandExecutor {
                 String user3 = "pyraetos";
                 // now hook the ApiLayer
                 ApiLayer.addPlayer(user1, world.getName(), admin);
+                ApiLayer.addPlayer(user1, world.getName(), mod);
                 ApiLayer.addPlayer(user2, world.getName(), mod);
                 ApiLayer.addPlayer(user3, world.getName(), def);
             }
