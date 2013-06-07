@@ -56,14 +56,15 @@ public class MySQLHandler {
         }
     }
 
-     // table management stuff
+    // table management stuff
 
     public void createPackageTable() {
+        // works
         String query = "CREATE TABLE " + PACKAGE_TABLE + " (\n" +
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         package VARCHAR(32),\n" +
                 "         permission VARCHAR(32),\n" +
-                "         cur_timestamp TIMESTAMP(8)\n" +
+                "         cur_timestamp TIMESTAMP(6)\n" +
                 "       );";
         try {
             Statement s = c.createStatement();
@@ -74,12 +75,13 @@ public class MySQLHandler {
     }
 
     public void createDatabaseTable() {
+        // works
         String query = "CREATE TABLE " + DATA_TABLE + " (\n" +
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         player VARCHAR(32),\n" +
                 "         world VARCHAR(32),\n" +
                 "         package VARCHAR(32),\n" +
-                "         cur_timestamp TIMESTAMP(8)\n" +
+                "         cur_timestamp TIMESTAMP(6)\n" +
                 "       );";
         try {
             Statement s = c.createStatement();
@@ -90,23 +92,22 @@ public class MySQLHandler {
     }
 
     public boolean hasTable(String table) {
-        String query = "IF object_id('" + table + "', 'U') is not null\n" +
-                "       PRINT 'true'\n" +
-                "       ELSE\n" +
-                "       PRINT 'false'";
+        // works
+        String query = "SHOW TABLES LIKE '" + table + "'";
         try {
-            // TODO how do I actually do this? lol
             Statement s = c.createStatement();
-            s.executeQuery(query);
+            ResultSet results = s.executeQuery(query);
+            if(results.getFetchSize() > 0) {
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    // PackageManager stuff
-
     public PPackage getPPackage(String p) {
+        // probably works
         String query = "SELECT permission FROM " + PACKAGE_TABLE + " WHERE package='" + p + "'";
         List<String> permissions = new ArrayList<String>();
         try {
@@ -122,21 +123,8 @@ public class MySQLHandler {
         return PPackage.loadPackage(p, permissions);
     }
 
-    // Database stuff
-
-    public void insertEntry(String p, String permission) {
-        // TODO fill in
-    }
-
-    public void removeEntry(String player, String world, String value) {
-        // TODO fill in
-    }
-
-    public void addEntry(String player, String world, String value) {
-        // TODO fill in
-    }
-
     public List<String> getEntries(String player, String tag) {
+        // probably works
         String query = "SELECT package FROM " + DATA_TABLE + " WHERE player='" + player + "' AND world='" + tag + "'";
         List<String> packages = new ArrayList<String>();
         try {
@@ -151,4 +139,21 @@ public class MySQLHandler {
         }
         return packages;
     }
+
+    public void addEntry(String p, String permission) {
+        // TODO fill in
+    }
+
+    public void addEntry(String player, String world, String value) {
+        // TODO fill in
+    }
+
+    public void removeEntries(String p) {
+        // TODO fill in
+    }
+
+    public void removeEntries(String player, String world) {
+        // TODO fill in
+    }
+
 }

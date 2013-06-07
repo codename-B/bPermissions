@@ -37,6 +37,7 @@ public class Handler {
         this.packageType = packageType;
         this.databaseType = databaseType;
         setup();
+        handler.loadSettings(plugin);
     }
 
     private Carrier add(Carrier carrier) {
