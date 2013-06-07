@@ -42,19 +42,19 @@ public class MySQLDatabase implements Database {
     }
 
     public boolean hasEntry(String player) {
-        return false;
+        return handler.getEntries(player, tag) != null;
     }
 
     public void addEntry(String player, String entry) {
-
+        handler.addEntry(player, tag, entry);
     }
 
     public PPackage getPackage(String p) {
         return packageManager.getPackage(p);
     }
 
-    public void addPackage(String v, String p) {
-        packageManager.addPackage(v, p);
+    public void addPackage(String name, String perm) {
+        packageManager.addPackage(name, perm);
     }
 
 

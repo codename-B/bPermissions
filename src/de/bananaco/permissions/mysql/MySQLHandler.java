@@ -120,6 +120,9 @@ public class MySQLHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(permissions.size() == 0) {
+            return null;
+        }
         return PPackage.loadPackage(p, permissions);
     }
 
@@ -137,23 +140,54 @@ public class MySQLHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if(packages.size() == 0) {
+            return null;
+        }
         return packages;
     }
 
     public void addEntry(String p, String permission) {
-        // TODO fill in
+        String query = "INSERT INTO "+PACKAGE_TABLE+"\n" +
+                "("+p+", "+permission+")\n" +
+                "VALUES ('package', 'permission')";
+        try {
+            Statement s = c.createStatement();
+            s.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addEntry(String player, String world, String value) {
-        // TODO fill in
+        String query = "INSERT INTO "+DATA_TABLE+"\n" +
+                "("+player+", "+world+", "+value+")\n" +
+                "VALUES ('player', 'world', 'package')";
+        try {
+            Statement s = c.createStatement();
+            s.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeEntries(String p) {
-        // TODO fill in
+        String query = "DELETE FROM "+PACKAGE_TABLE+" WHERE package='"+p+"'";
+        try {
+            Statement s = c.createStatement();
+            s.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeEntries(String player, String world) {
-        // TODO fill in
+        String query = "DELETE FROM "+DATA_TABLE+" WHERE player='"+player+"' AND world='"+world+"'";
+        try {
+            Statement s = c.createStatement();
+            s.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

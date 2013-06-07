@@ -28,8 +28,8 @@ public class MySQLPackageManager implements PackageManager {
         }
     }
 
-    public void addPackage(String v, String p) {
-
+    public void addPackage(String p, String perm) {
+        handler.addEntry(p, perm);
     }
 
 }
