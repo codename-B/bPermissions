@@ -148,8 +148,8 @@ public class MySQLHandler {
 
     public void addEntry(String p, String permission) {
         String query = "INSERT INTO "+PACKAGE_TABLE+"\n" +
-                "("+p+", "+permission+")\n" +
-                "VALUES ('package', 'permission')";
+                "('package', 'permission')"+
+                "VALUES ("+p+", "+permission+")\n";
         try {
             Statement s = c.createStatement();
             s.execute(query);
@@ -160,8 +160,8 @@ public class MySQLHandler {
 
     public void addEntry(String player, String world, String value) {
         String query = "INSERT INTO "+DATA_TABLE+"\n" +
-                "("+player+", "+world+", "+value+")\n" +
-                "VALUES ('player', 'world', 'package')";
+                "('player', 'world', 'package')\n" +
+                "VALUES (\"+player+\", \"+world+\", \"+value+\")";
         try {
             Statement s = c.createStatement();
             s.execute(query);
