@@ -68,7 +68,7 @@ public class MySQLHandler {
 
     public boolean hasTable(String table) {
         String query = "IF object_id('" + table + "', 'U') is not null\n" +
-                "       PRINT 'true!'\n" +
+                "       PRINT 'true'\n" +
                 "       ELSE\n" +
                 "       PRINT 'false'";
         return true;
@@ -77,20 +77,22 @@ public class MySQLHandler {
     // PackageManager stuff
 
     public PPackage getPPackage(String p) {
+        String query = "SELECT permission FROM " + PACKAGE_TABLE + " WHERE package='" + p + "'";
         return null;
     }
 
     // Database stuff
 
     public void removeEntry(String player, String world, String value) {
-
+        // TODO fill in
     }
 
     public void addEntry(String player, String world, String value) {
-
+        // TODO fill in
     }
 
-    public List<String> getEntries(String player, String world) {
+    public List<String> getEntries(String player, String tag) {
+        String query = "SELECT package FROM " + DATA_TABLE + " WHERE player='" + player + "' AND world='" + tag + "'";
         return null;
     }
 }
