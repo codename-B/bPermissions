@@ -146,6 +146,9 @@ public class MySQLHandler {
     }
 
     public void addEntry(String p, String permission) {
+        if(hasEntry(p, permission)) {
+            return;
+        }
         try {
             PreparedStatement ps = c.prepareStatement("INSERT INTO "+PACKAGE_TABLE+" (package, permission) VALUES (?, ?);");
             ps.setString(1, p);
@@ -157,6 +160,9 @@ public class MySQLHandler {
     }
 
     public void addEntry(String player, String world, String value) {
+        if(hasEntry(player, world, value)) {
+            return;
+        }
         try {
             PreparedStatement ps = c.prepareStatement("INSERT INTO "+DATA_TABLE+" (player, world, package) VALUES (?, ?, ?);");
             ps.setString(1, player);
@@ -166,6 +172,31 @@ public class MySQLHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean hasEntry(String p, String permission) {
+        String query = "SELECT permission FROM " + PACKAGE_TABLE + " WHERE package='" + p + "' AND permission='"+permission+"'";
+        List<String> permissions = new ArrayList<String>();
+        try {
+            Statement s = c.createStatement();
+            ResultSet results = s.executeQuery(query);
+            return results.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean hasEntry(String player, String world, String value) {
+        String query = "SELECT package FROM " + DATA_TABLE + " WHERE player='" + player + "' AND world='" + world + "' AND package='"+value+"'";
+        try {
+            Statement s = c.createStatement();
+            ResultSet results = s.executeQuery(query);
+            return results.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void removeEntries(String p) {
