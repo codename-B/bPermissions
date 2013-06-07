@@ -1,5 +1,6 @@
 package de.bananaco.permissions;
 
+import de.bananaco.permissions.commands.AddPackage;
 import de.bananaco.permissions.commands.Permissions;
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
@@ -61,7 +62,8 @@ public class Packages extends JavaPlugin implements Listener {
             register(player);
         }
         // register commands
-        getCommand("permissions").setExecutor(new Permissions());
+        // getCommand("permissions").setExecutor(new Permissions());
+        getCommand("addpackage").setExecutor(new AddPackage());
     }
 
     @Override

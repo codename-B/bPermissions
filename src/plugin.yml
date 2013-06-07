@@ -3,14 +3,6 @@ version: 3.0
 author: codename_B
 main: de.bananaco.permissions.Packages
 commands:
-  permissions:
-    usage: /<command>
-    permission: bpermissions.admin
-    description: various debugging and administration commands
-  addentry:
-    usage: /<command> package permission
-    permission: bpermissions.admin
-    description: add an entry to the database
   addpackage:
     usage: /<command> player package (world)
     permission: bpermissions.admin

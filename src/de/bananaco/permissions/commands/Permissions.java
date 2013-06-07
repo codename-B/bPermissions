@@ -18,7 +18,6 @@ public class Permissions implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-
             return true;
         }
         if(args.length == 1 && args[0].equalsIgnoreCase("populate")) {
