@@ -4,6 +4,10 @@ import de.bananaco.permissions.Packages;
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLHandler {
@@ -19,6 +23,8 @@ public class MySQLHandler {
     // which tables to check and create if not exist
     private Handler.DBType packageType;
     private Handler.DBType databaseType;
+    // the connection, which should be null unless something is enabled
+    private Connection c = null;
 
     public void loadSettings(Packages plugin) {
         // and which ones to load in the first place too...
@@ -33,19 +39,24 @@ public class MySQLHandler {
             plugin.getConfig().set("mysql.hostname", hostname = plugin.getConfig().getString("mysql.hostname", "hostname"));
             // save changes
             plugin.saveConfig();
+            // enable connection
+            MySQL MySQL = new MySQL(hostname, port, database, user, password);
+            c = MySQL.open();
             // handle mysql table creation if necessary
             if (packageType == Handler.DBType.MYSQL && !hasTable(PACKAGE_TABLE)) {
-                createPackageTable();
+                if(!hasTable(PACKAGE_TABLE)) {
+                    createPackageTable();
+                }
             }
             if (databaseType == Handler.DBType.MYSQL && !hasTable(DATA_TABLE)) {
-                createDatabaseTable();
+                if(!hasTable(DATA_TABLE)) {
+                    createDatabaseTable();
+                }
             }
         }
     }
 
-    // TODO fill in SQL queries for these things
-
-    // table management stuff
+     // table management stuff
 
     public void createPackageTable() {
         String query = "CREATE TABLE " + PACKAGE_TABLE + " (\n" +
@@ -54,6 +65,12 @@ public class MySQLHandler {
                 "         permission VARCHAR(32),\n" +
                 "         cur_timestamp TIMESTAMP(8)\n" +
                 "       );";
+        try {
+            Statement s = c.createStatement();
+            s.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void createDatabaseTable() {
@@ -64,6 +81,12 @@ public class MySQLHandler {
                 "         package VARCHAR(32),\n" +
                 "         cur_timestamp TIMESTAMP(8)\n" +
                 "       );";
+        try {
+            Statement s = c.createStatement();
+            s.execute(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean hasTable(String table) {
@@ -71,17 +94,39 @@ public class MySQLHandler {
                 "       PRINT 'true'\n" +
                 "       ELSE\n" +
                 "       PRINT 'false'";
-        return true;
+        try {
+            // TODO how do I actually do this? lol
+            Statement s = c.createStatement();
+            s.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     // PackageManager stuff
 
     public PPackage getPPackage(String p) {
         String query = "SELECT permission FROM " + PACKAGE_TABLE + " WHERE package='" + p + "'";
-        return null;
+        List<String> permissions = new ArrayList<String>();
+        try {
+            Statement s = c.createStatement();
+            ResultSet results = s.executeQuery(query);
+            while(results.next()) {
+                String perm = results.getString("permission");
+                permissions.add(perm);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return PPackage.loadPackage(p, permissions);
     }
 
     // Database stuff
+
+    public void insertEntry(String p, String permission) {
+        // TODO fill in
+    }
 
     public void removeEntry(String player, String world, String value) {
         // TODO fill in
@@ -93,6 +138,17 @@ public class MySQLHandler {
 
     public List<String> getEntries(String player, String tag) {
         String query = "SELECT package FROM " + DATA_TABLE + " WHERE player='" + player + "' AND world='" + tag + "'";
-        return null;
+        List<String> packages = new ArrayList<String>();
+        try {
+            Statement s = c.createStatement();
+            ResultSet results = s.executeQuery(query);
+            while(results.next()) {
+                String pack = results.getString("package");
+                packages.add(pack);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return packages;
     }
 }
