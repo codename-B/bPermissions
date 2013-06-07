@@ -1,5 +1,5 @@
 name: bPermissions
-version: 3.0
+version: 3.0a
 author: codename_B
 main: de.bananaco.permissions.Packages
 commands:
