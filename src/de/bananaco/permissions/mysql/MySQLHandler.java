@@ -5,6 +5,7 @@ import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -64,7 +65,6 @@ public class MySQLHandler {
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         package VARCHAR(32),\n" +
                 "         permission VARCHAR(32),\n" +
-                "         cur_timestamp TIMESTAMP(6)\n" +
                 "       );";
         try {
             Statement s = c.createStatement();
@@ -81,7 +81,6 @@ public class MySQLHandler {
                 "         player VARCHAR(32),\n" +
                 "         world VARCHAR(32),\n" +
                 "         package VARCHAR(32),\n" +
-                "         cur_timestamp TIMESTAMP(6)\n" +
                 "       );";
         try {
             Statement s = c.createStatement();
@@ -147,24 +146,23 @@ public class MySQLHandler {
     }
 
     public void addEntry(String p, String permission) {
-        String query = "INSERT INTO "+PACKAGE_TABLE+"\n" +
-                "('package', 'permission')"+
-                "VALUES ("+p+", "+permission+")\n";
         try {
-            Statement s = c.createStatement();
-            s.execute(query);
+            PreparedStatement ps = c.prepareStatement("INSERT INTO "+PACKAGE_TABLE+" (package, permission) VALUES (?, ?);");
+            ps.setString(1, p);
+            ps.setString(2, permission);
+            ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void addEntry(String player, String world, String value) {
-        String query = "INSERT INTO "+DATA_TABLE+"\n" +
-                "('player', 'world', 'package')\n" +
-                "VALUES ("+player+", "+world+", "+value+")";
         try {
-            Statement s = c.createStatement();
-            s.execute(query);
+            PreparedStatement ps = c.prepareStatement("INSERT INTO "+DATA_TABLE+" (player, world, package) VALUES (?, ?, ?);");
+            ps.setString(1, player);
+            ps.setString(2, world);
+            ps.setString(3, value);
+            ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
