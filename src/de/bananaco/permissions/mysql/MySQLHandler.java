@@ -64,7 +64,7 @@ public class MySQLHandler {
         String query = "CREATE TABLE " + PACKAGE_TABLE + " (\n" +
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         package VARCHAR(32),\n" +
-                "         permission VARCHAR(32),\n" +
+                "         permission VARCHAR(32)\n" +
                 "       );";
         try {
             Statement s = c.createStatement();
@@ -80,7 +80,7 @@ public class MySQLHandler {
                 "         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
                 "         player VARCHAR(32),\n" +
                 "         world VARCHAR(32),\n" +
-                "         package VARCHAR(32),\n" +
+                "         package VARCHAR(32)\n" +
                 "       );";
         try {
             Statement s = c.createStatement();
