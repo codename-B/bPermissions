@@ -97,7 +97,7 @@ public class MySQLHandler {
         try {
             Statement s = c.createStatement();
             ResultSet results = s.executeQuery(query);
-            if(results.getFetchSize() > 0) {
+            if(results.next()) {
                 return true;
             }
         } catch (Exception e) {
