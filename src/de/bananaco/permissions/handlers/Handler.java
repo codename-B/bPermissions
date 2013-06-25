@@ -27,7 +27,6 @@ public class Handler {
 
     private final Packages plugin;
     private final boolean global;
-    private final boolean meta;
     private final DBType packageType;
     private final DBType databaseType;
     // interfaces are awesome
@@ -35,12 +34,13 @@ public class Handler {
     public List<Carrier> carriers = new ArrayList<Carrier>();
     // mysql is not, but here it is anyway
     MySQLHandler handler = new MySQLHandler();
+    MetaHandler meta = null;
 
     public Handler(Packages plugin, boolean global, boolean meta, DBType packageType, DBType databaseType) {
         this.plugin = plugin;
         // variables set in config.yml
         this.global = global;
-        this.meta = meta;
+        this.meta = meta?new MetaHandler(plugin):null;
         this.packageType = packageType;
         this.databaseType = databaseType;
         setup();
@@ -67,6 +67,9 @@ public class Handler {
             } else if (this.databaseType == DBType.MYSQL) {
                 database = new MySQLDatabase("global", handler, packageManager);
             }
+            if(meta != null) {
+                meta.setGlobalMeta(database);
+            }
             // because we use the handy events system we don't actually have to pass around references like crazy
             Bukkit.getPluginManager().registerEvents(add(new GlobalHandler(database)), plugin);
         } else {
@@ -76,6 +79,9 @@ public class Handler {
                     database = new FileDatabase(new File(plugin.getDataFolder(), world.getName()), packageManager);
                 } else if (this.databaseType == DBType.MYSQL) {
                     database = new MySQLDatabase(world.getName(), handler, packageManager);
+                }
+                if(meta != null) {
+                    meta.setWorldMeta(database, world.getName());
                 }
                 Bukkit.getPluginManager().registerEvents(add(new WorldHandler(database, world)), plugin);
             }
