@@ -8,8 +8,6 @@ import java.util.List;
 
 public class ApiLayer {
 
-    public static void
-
     public static boolean existsPackage(String name) {
         return Packages.instance.handler.packageManager.getPackage(name) != null;
     }

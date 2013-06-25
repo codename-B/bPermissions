@@ -36,10 +36,19 @@ public class Packages extends JavaPlugin implements Listener {
         return key.name().toLowerCase();
     }
 
+    public static Handler.MetaType getMeta(String key) {
+        return Handler.MetaType.valueOf(key);
+    }
+
+    public static String getMeta(Handler.MetaType key) {
+        return key.name().toLowerCase();
+    }
+
     private Map<String, PermissionAttachment> permissions = new HashMap<String, PermissionAttachment>();
     public Handler handler = null;
     public Handler.DBType packageType;
     public Handler.DBType databaseType;
+    public Handler.MetaType metaType;
     public boolean global = true;
 
     @Override
@@ -52,11 +61,12 @@ public class Packages extends JavaPlugin implements Listener {
         getConfig().set("global", global = getConfig().getBoolean("global", global));
         packageType = getType(getConfig().getString("packageType", getType(Handler.DBType.FILE)));
         databaseType = getType(getConfig().getString("databaseType", getType(Handler.DBType.FILE)));
+        metaType = getMeta(getConfig().getString("metaType", getMeta(Handler.MetaType.NONE)));
         getConfig().set("packageType", getType(packageType));
         getConfig().set("databaseType", getType(databaseType));
         saveConfig();
         // now we can instantiate the handler
-        handler = new Handler(this, global, packageType, databaseType);
+        handler = new Handler(this, global, metaType.equals(Handler.MetaType.FILE), packageType, databaseType);
         // register all
         for (Player player : Bukkit.getOnlinePlayers()) {
             register(player);

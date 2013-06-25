@@ -6,4 +6,6 @@ public interface MetaData {
 
     public void setMeta(String pack, String key, String meta);
 
+    public String calculateMeta(String player, String key);
+
 }

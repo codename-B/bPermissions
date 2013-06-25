@@ -14,6 +14,9 @@ public class FileMetaData extends MetaWrapper {
         this.file = file;
         yamlConfiguration = new YamlConfiguration();
         try {
+            if(!file.getParentFile().exists()) {
+                file.mkdirs();
+            }
             if(!file.exists()) {
                 file.createNewFile();
             }
