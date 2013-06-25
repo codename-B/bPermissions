@@ -24,10 +24,6 @@
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>spout-repo</id>
-            <url>http://nexus.spout.org/content/groups/public</url>
-        </repository>
     </repositories>
 
     <build>
@@ -59,7 +55,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.5-R0.1</version>
+            <version>1.5.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

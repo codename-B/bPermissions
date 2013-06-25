@@ -75,7 +75,11 @@ public class FileDatabase implements Database {
                 return;
             }
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
-            pw.append(entry+"\n");
+            // add the existing to the file first
+            for(String pack : packages) {
+                pw.println(pack);
+            }
+            pw.println(entry);
             pw.close();
         } catch (Exception e) {
             e.printStackTrace();

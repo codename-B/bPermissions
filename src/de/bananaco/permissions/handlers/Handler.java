@@ -20,8 +20,14 @@ public class Handler {
         MYSQL;
     }
 
+    public static enum MetaType {
+        FILE,
+        NONE;
+    }
+
     private final Packages plugin;
     private final boolean global;
+    private final boolean meta;
     private final DBType packageType;
     private final DBType databaseType;
     // interfaces are awesome
@@ -30,10 +36,11 @@ public class Handler {
     // mysql is not, but here it is anyway
     MySQLHandler handler = new MySQLHandler();
 
-    public Handler(Packages plugin, boolean global, DBType packageType, DBType databaseType) {
+    public Handler(Packages plugin, boolean global, boolean meta, DBType packageType, DBType databaseType) {
         this.plugin = plugin;
         // variables set in config.yml
         this.global = global;
+        this.meta = meta;
         this.packageType = packageType;
         this.databaseType = databaseType;
         setup();
