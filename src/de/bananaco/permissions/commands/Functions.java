@@ -1,5 +1,6 @@
 package de.bananaco.permissions.commands;
 
+import de.bananaco.permissions.ApiLayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -47,7 +48,11 @@ public class Functions implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(ApiLayer.isGlobal()) {
 
+        } else {
+
+        }
         return true;
     }
 
@@ -56,10 +61,9 @@ public class Functions implements CommandExecutor {
         return true;
     }
 
-    public boolean executeGlobal(CommandSender sender, FunctionType type, ActionType action, String value) {
+    public boolean executeGlobal(CommandSender sender, FunctionType type, ActionType action, String value, String data) {
         // error messages for letting people know about stuff
         if(type.equals(FunctionType.PACKAGE)) {
-
             return error(sender, type, action);
         }
         if(type.equals(FunctionType.PLAYER)) {
@@ -68,7 +72,7 @@ public class Functions implements CommandExecutor {
         return true;
     }
 
-    public boolean executeWorld(CommandSender sender, String world, FunctionType type, ActionType action) {
+    public boolean executeWorld(CommandSender sender, String world, FunctionType type, ActionType action, String value, String data) {
         // error messages for letting people know about stuff
         if(type.equals(FunctionType.PACKAGE)) {
             return error(sender, type, action);
