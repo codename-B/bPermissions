@@ -38,7 +38,7 @@ public class Packages extends JavaPlugin implements Listener {
     }
 
     public static Handler.MetaType getMeta(String key) {
-        return Handler.MetaType.valueOf(key);
+        return Handler.MetaType.valueOf(key.toUpperCase());
     }
 
     public static String getMeta(Handler.MetaType key) {
