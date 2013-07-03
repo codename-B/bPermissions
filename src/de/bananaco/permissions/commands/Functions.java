@@ -10,7 +10,9 @@ public class Functions implements CommandExecutor {
 
     static enum FunctionType {
         PLAYER(new String[] {"pl", "player"}),
-        PACKAGE(new String[] {"pa", "pack", "package"});
+        PACKAGE(new String[] {"pa", "pack", "package"}),
+        NULL(new String[0]);
+
         private final String[] aliases;
         private FunctionType(String[] aliases) {
             this.aliases = aliases;
@@ -30,7 +32,9 @@ public class Functions implements CommandExecutor {
     static enum ActionType {
         ADD(new String[] {"ad", "pl", "add"}),
         REMOVE(new String[] {"rm", "remo", "remove", "remov"}),
-        SET(new String[] {"s", "se", "set"});
+        SET(new String[] {"s", "se", "set"}),
+        NULL(new String[0]);
+
         private final String[] aliases;
         private ActionType(String[] aliases) {
             this.aliases = aliases;
@@ -49,9 +53,24 @@ public class Functions implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(ApiLayer.isGlobal()) {
-
+            if(args.length > 3) {
+                return error(sender, FunctionType.NULL, ActionType.NULL);
+            } else {
+                FunctionType type = FunctionType.getType(args[0]);
+                ActionType action = ActionType.getType(args[1]);
+                String value = args.length>=3?args[3]:null;
+                String data = args.length>=4?args[4]:null;
+                return executeGlobal(sender, type, action, value, data);
+            }
         } else {
-
+            if(args.length > 4) {
+                String world = args[0];
+                FunctionType type = FunctionType.getType(args[1]);
+                ActionType action = ActionType.getType(args[2]);
+                String value = args.length>=4?args[3]:null;
+                String data = args.length>=5?args[4]:null;
+                return executeWorld(sender, world, type, action, value, data);
+            }
         }
         return true;
     }
@@ -80,7 +99,7 @@ public class Functions implements CommandExecutor {
         if(type.equals(FunctionType.PLAYER)) {
             return error(sender, type, action);
         }
-        return true;
+        return error(sender, type, action);
     }
 
 }

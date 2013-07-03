@@ -65,6 +65,7 @@ public class Packages extends JavaPlugin implements Listener {
         metaType = getMeta(getConfig().getString("metaType", getMeta(Handler.MetaType.NONE)));
         getConfig().set("packageType", getType(packageType));
         getConfig().set("databaseType", getType(databaseType));
+        getConfig().set("metaType", getMeta(metaType));
         saveConfig();
         // now we can instantiate the handler
         handler = new Handler(this, global, metaType.equals(Handler.MetaType.FILE), packageType, databaseType);
