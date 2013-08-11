@@ -124,6 +124,13 @@ public class Functions implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED+"Please specify a package");
                 return true;
             }
+            if(action.equals(ActionType.ADD)) {
+
+            } else if(action.equals(ActionType.REMOVE)) {
+
+            } else if(action.equals(ActionType.SET)) {
+
+            }
 
         }
         return error(sender, type, action);
