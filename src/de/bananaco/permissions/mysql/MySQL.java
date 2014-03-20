@@ -1,4 +1,4 @@
-de.bananaco.permissions.mysql;
+package de.bananaco.permissions.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
