@@ -23,13 +23,13 @@ public class MySQLPackageManager implements PackageManager {
         if (pack != null) {
             cache.put(p, pack);
             return cache.get(p);
-        } else {
-            return null;
         }
+        return null;
     }
 
     public void addPackage(String p, String perm) {
         handler.addEntry(p, perm);
+        cache.clear();
     }
 
 }

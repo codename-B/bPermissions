@@ -1,7 +1,9 @@
 name: bPermissions
-version: 3.0.1a
+version: ${project.version}
+api-version: '1.21'
 author: codename_B
 main: de.bananaco.permissions.Packages
+website: https://github.com/codename-B/bPermissions
 commands:
   addpackage:
     usage: /<command> player package (world)

@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class FilePackageManager implements PackageManager {
@@ -19,7 +20,7 @@ public class FilePackageManager implements PackageManager {
         this.file = file;
         yamlConfiguration = new YamlConfiguration();
         try {
-            if(!file.exists()) {
+            if (!file.exists()) {
                 file.createNewFile();
             }
             yamlConfiguration.load(file);
@@ -28,32 +29,34 @@ public class FilePackageManager implements PackageManager {
         }
     }
 
+    private String normalizePackage(String p) {
+        return p.toLowerCase(Locale.ROOT);
+    }
+
     public PPackage getPackage(String p) {
-        if (cache.containsKey(p)) {
-            return cache.get(p);
+        String key = normalizePackage(p);
+        if (cache.containsKey(key)) {
+            return cache.get(key);
         }
-        List<String> permissions = null;
-        if ((permissions = yamlConfiguration.getStringList(p.toLowerCase())) != null && permissions.size() > 0) {
-            cache.put(p, PPackage.loadPackage(p.toLowerCase(), permissions));
-            return cache.get(p);
-        } else {
-            return null;
+        List<String> permissions = yamlConfiguration.getStringList(key);
+        if (permissions != null && permissions.size() > 0) {
+            cache.put(key, PPackage.loadPackage(key, permissions));
+            return cache.get(key);
         }
+        return null;
     }
 
     public void addPackage(String p, String v) {
-        List<String> permissions = yamlConfiguration.getStringList(p.toLowerCase());
-        if(permissions == null) {
-            permissions = new ArrayList<String>();
-        }
-        // sanity checking
-        if(permissions.contains(v)) {
+        String key = normalizePackage(p);
+        List<String> permissions = new ArrayList<String>(yamlConfiguration.getStringList(key));
+        if (permissions.contains(v)) {
             return;
         }
         permissions.add(v);
-        yamlConfiguration.set(p.toLowerCase(), permissions);
+        yamlConfiguration.set(key, permissions);
         try {
             yamlConfiguration.save(file);
+            cache.remove(key);
         } catch (Exception e) {
             e.printStackTrace();
         }

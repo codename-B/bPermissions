@@ -1,7 +1,6 @@
 package de.bananaco.permissions;
 
 import de.bananaco.permissions.commands.AddPackage;
-import de.bananaco.permissions.commands.Functions;
 import de.bananaco.permissions.commands.Permissions;
 import de.bananaco.permissions.handlers.Handler;
 import de.bananaco.permissions.ppackage.PPackage;
@@ -17,8 +16,10 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class Packages extends JavaPlugin implements Listener {
 
@@ -45,7 +46,7 @@ public class Packages extends JavaPlugin implements Listener {
         return key.name().toLowerCase();
     }
 
-    private Map<String, PermissionAttachment> permissions = new HashMap<String, PermissionAttachment>();
+    private final Map<UUID, PermissionAttachment> permissions = new HashMap<UUID, PermissionAttachment>();
     public Handler handler = null;
     public Handler.DBType packageType;
     public Handler.DBType databaseType;
@@ -55,9 +56,21 @@ public class Packages extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
-        // register events
         getServer().getPluginManager().registerEvents(this, this);
-        // default package is set in config.yml
+        reloadPermissionsState();
+        getCommand("permissions").setExecutor(new Permissions());
+        getCommand("addpackage").setExecutor(new AddPackage());
+    }
+
+    public void reloadPermissionsState() {
+        if (handler != null) {
+            handler.unregister();
+            handler = null;
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            unregister(player);
+        }
+        reloadConfig();
         getConfig().set("defaultPackage", defaultPackage = getConfig().getString("defaultPackage", defaultPackage));
         getConfig().set("global", global = getConfig().getBoolean("global", global));
         packageType = getType(getConfig().getString("packageType", getType(Handler.DBType.FILE)));
@@ -67,26 +80,24 @@ public class Packages extends JavaPlugin implements Listener {
         getConfig().set("databaseType", getType(databaseType));
         getConfig().set("metaType", getMeta(metaType));
         saveConfig();
-        // now we can instantiate the handler
         handler = new Handler(this, global, metaType.equals(Handler.MetaType.FILE), packageType, databaseType);
-        // register all
         for (Player player : Bukkit.getOnlinePlayers()) {
             register(player);
+            handler.loadPlayer(player);
         }
-        // register commands
-        getCommand("permissions").setExecutor(new Functions());
-        getCommand("addpackage").setExecutor(new AddPackage());
     }
 
     @Override
     public void onDisable() {
-        // unregister all
+        if (handler != null) {
+            handler.unregister();
+            handler = null;
+        }
         for (Player player : Bukkit.getOnlinePlayers()) {
             unregister(player);
         }
     }
 
-    // called externally by whatever package handling method is available, can also be called on world change
     @EventHandler
     public void onPackageLoad(PackageLoadEvent event) {
         setPermissions(event.getPlayer(), event.getPackages());
@@ -103,30 +114,32 @@ public class Packages extends JavaPlugin implements Listener {
     }
 
     private void register(Player player) {
-        permissions.put(player.getName(), player.addAttachment(this));
+        PermissionAttachment existing = permissions.remove(player.getUniqueId());
+        if (existing != null) {
+            player.removeAttachment(existing);
+        }
+        permissions.put(player.getUniqueId(), player.addAttachment(this));
     }
 
     private void unregister(Player player) {
-        PermissionAttachment attachment = permissions.remove(player.getName());
-        for (String key : attachment.getPermissions().keySet()) {
-            attachment.unsetPermission(key);
+        PermissionAttachment attachment = permissions.remove(player.getUniqueId());
+        if (attachment != null) {
+            player.removeAttachment(attachment);
         }
     }
 
-    // thanks for this method PermissionsBukkit
     private void setPermissions(Player player, List<PPackage> packages) {
         if (player == null) {
             return;
         }
-        PermissionAttachment attachment = permissions.get(player.getName());
+        PermissionAttachment attachment = permissions.get(player.getUniqueId());
         if (attachment == null) {
             System.err.println("Calculating permissions on " + player.getName() + ": attachment was null");
             return;
         }
-        for (String key : attachment.getPermissions().keySet()) {
+        for (String key : new HashSet<String>(attachment.getPermissions().keySet())) {
             attachment.unsetPermission(key);
         }
-        // load from the data we have
         for (PPackage pack : packages) {
             for (PPermission perm : pack.getPermissions()) {
                 attachment.setPermission(perm.getName().toLowerCase(), perm.isTrue());

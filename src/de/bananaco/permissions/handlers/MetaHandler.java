@@ -3,27 +3,29 @@ package de.bananaco.permissions.handlers;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MetaHandler {
 
-    private Map<String, MetaData> worlds = null;
+    private final Map<String, MetaData> worlds = new HashMap<String, MetaData>();
     private MetaData global = null;
 
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
     public MetaHandler(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
     public String getMeta(String world, String player, String key) {
-        if(global != null) {
+        if (global != null) {
             return global.calculateMeta(player, key);
-        } else if(worlds.get(world) != null) {
-            return worlds.get(world).calculateMeta(player, key);
-        } else {
-            return null;
         }
+        MetaData worldMeta = worlds.get(world);
+        if (worldMeta != null) {
+            return worldMeta.calculateMeta(player, key);
+        }
+        return null;
     }
 
     public void setGlobalMeta(Database data) {
@@ -31,7 +33,7 @@ public class MetaHandler {
     }
 
     public void setWorldMeta(Database data, String world) {
-        MetaData meta = new FileMetaData(new File(plugin.getDataFolder(), world+"_meta.yml"), data);
+        MetaData meta = new FileMetaData(new File(plugin.getDataFolder(), world + "_meta.yml"), data);
         worlds.put(world, meta);
     }
 

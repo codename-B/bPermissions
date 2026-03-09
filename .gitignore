@@ -2,3 +2,5 @@
 target/*
 META-INF/*
 bPermissions.iml
+/.m2
+/.tools
